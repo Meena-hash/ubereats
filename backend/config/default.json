@@ -1,0 +1,7 @@
+{
+    "mysqlHost": "uber-eats.cnq82wvpmctf.us-east-2.rds.amazonaws.com",
+    "user": "admin",
+    "password": "myPassword",
+    "database": "ubereats",
+    "jwtSecret": "ubereats"
+}
