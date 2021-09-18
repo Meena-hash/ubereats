@@ -1,5 +1,4 @@
 const express = require("express");
-
 const db = require("./config/db");
 
 db.authenticate()

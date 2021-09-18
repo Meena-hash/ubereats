@@ -13,6 +13,10 @@ const Restaurants = db.define(
       allowNull: false,
       unique: true,
     },
+    location: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
     email: {
       type: Sequelize.STRING,
       allowNull: false,
