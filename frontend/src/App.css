@@ -4,7 +4,7 @@
   padding: 0;
 }
 /* Navbar */
-.navbar {
+/* .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -15,7 +15,7 @@
   top: 0;
   border-bottom: solid 1px var(--primary-color);
   opacity: 0.9;
-}
+} */
 ul {
   list-style: none;
 }
@@ -24,7 +24,7 @@ ul {
   background: black;
   color: #fff;
 }
-.navbar ul {
+/* .navbar ul {
   display: flex;
   list-style: none;
 }
@@ -41,7 +41,7 @@ ul {
 
 .navbar .welcome span {
   margin-right: 0.6rem;
-}
+} */
 :root {
   --primary-color: #28a745;
   --dark-color: black;
@@ -113,9 +113,26 @@ div[tabindex="0"]:focus {
 .m {
   margin: 0.5rem;
 }
-
+.m-1 {
+  margin: 1rem;
+}
+.m-2 {
+  margin: 2rem;
+}
+.m-3 {
+  margin: 3rem;
+}
+.my {
+  margin: 0.5rem 0;
+}
 .my-1 {
   margin: 1rem 0;
+}
+.my-2 {
+  margin: 2rem 0;
+}
+.my-3 {
+  margin: 3rem 0;
 }
 .btn-danger,
 .bg-danger,
@@ -129,7 +146,6 @@ button {
   background: green;
   color: white;
   display: flex;
-  width: 100%;
   justify-content: center;
 }
 
@@ -152,7 +168,7 @@ button {
   opacity: 0.8;
 }
 .form .form-group {
-  margin: 1.2rem 0;
+  margin: 0.5rem 0;
 }
 
 .form .form-text {
@@ -160,7 +176,8 @@ button {
   margin-top: 0.3rem;
   color: #888;
 }
-.centered {
+.centered,
+.profile {
   /* Center vertically and horizontally */
   position: absolute;
   bottom: 25%;
@@ -205,6 +222,16 @@ footer {
   color: lightgreen;
 }
 
+.dash-buttons a {
+  display: block;
+  width: 30%;
+  margin-bottom: 0.2rem;
+}
+
+.login,
+.signup {
+  width: 100%;
+}
 /* .container {
   display: flex;
   align-items: center;
@@ -227,4 +254,21 @@ a {
 }
 .copyright {
   float: left;
+}
+
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 50%;
+}
+
+td,
+th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
 }

@@ -52,7 +52,11 @@ const ULogin = ({ login, isAuthenticated }) => {
             />
           </div>
 
-          <input type="submit" className="btn btn-primary" value="Login" />
+          <input
+            type="submit"
+            className="btn btn-primary login"
+            value="Login"
+          />
         </form>
         <p className="my-1">
           Don't have an account? <Link to="user/register">Sign Up</Link>

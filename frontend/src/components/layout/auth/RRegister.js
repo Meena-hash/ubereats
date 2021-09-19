@@ -25,7 +25,7 @@ const RRegister = ({ setAlert, register, isAuthenticated }) => {
     }
   };
   if (isAuthenticated) {
-    return <Redirect to="/dashboard"> </Redirect>;
+    return <Redirect to="/restaurant/profile"> </Redirect>;
   }
   return (
     <Fragment>
@@ -90,10 +90,14 @@ const RRegister = ({ setAlert, register, isAuthenticated }) => {
               minLength="6"
             />
           </div>
-          <input type="submit" className="btn btn-primary" value="Register" />
+          <input
+            type="submit"
+            className="btn btn-primary signup"
+            value="Register"
+          />
         </form>
         <p className="my-1">
-          Already have an account? <Link to="restaurant/login">Sign In</Link>
+          Already have an account? <Link to="/restaurant/login">Sign In</Link>
         </p>
       </div>
     </Fragment>

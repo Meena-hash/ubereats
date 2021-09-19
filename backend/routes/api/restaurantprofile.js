@@ -30,45 +30,13 @@ router.post("/basic", auth, async (req, res) => {
   let restaurant = await Restaurant.findOne({
     where: { id: req.restaurant.id },
   });
-  const { name, location, description } = req.body;
+  const { name, location, description, email, ph_no } = req.body;
 
   let profileFields = {};
   profileFields.restaurantid = restaurant.id;
   profileFields.name = name;
   profileFields.location = location;
   profileFields.description = description;
-
-  try {
-    let profile = await RestaurantProfile.findOne({
-      where: { restaurantid: restaurant.id },
-    });
-    if (profile) {
-      profile = await RestaurantProfile.update(profileFields, {
-        where: { restaurantid: restaurant.id },
-      });
-      profile = await RestaurantProfile.findOne({
-        where: { restaurantid: restaurant.id },
-      });
-      return res.json(profile);
-    }
-    profile = new RestaurantProfile(profileFields);
-    await profile.save();
-    return res.json(profile);
-  } catch (err) {
-    console.log(err.message);
-    res.status(500).send("Server error");
-  }
-});
-
-// Update Contact Information (email id, phone number)
-router.post("/contact", auth, async (req, res) => {
-  let restaurant = await Restaurant.findOne({
-    where: { id: req.restaurant.id },
-  });
-  const { email, ph_no } = req.body;
-
-  let profileFields = {};
-  profileFields.restaurantid = restaurant.id;
   profileFields.email = email;
   profileFields.ph_no = ph_no;
 
@@ -93,6 +61,7 @@ router.post("/contact", auth, async (req, res) => {
     res.status(500).send("Server error");
   }
 });
+
 // get all dishes by restaurant id
 router.get("/dish", auth, async (req, res) => {
   try {

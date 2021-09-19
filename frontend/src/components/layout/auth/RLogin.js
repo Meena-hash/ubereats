@@ -17,7 +17,7 @@ const RLogin = ({ login, isAuthenticated }) => {
     login(email, password);
   };
   if (isAuthenticated) {
-    return <Redirect to="/dashboard"> </Redirect>;
+    return <Redirect to="/restaurant/profile"> </Redirect>;
   }
   return (
     <Fragment>
@@ -54,7 +54,11 @@ const RLogin = ({ login, isAuthenticated }) => {
             />
           </div>
 
-          <input type="submit" className="btn btn-primary" value="Login" />
+          <input
+            type="submit"
+            className="btn btn-primary login"
+            value="Login"
+          />
         </form>
         <p className="my-1">
           Don't have an account? <Link to="/restaurant/register">Sign Up</Link>

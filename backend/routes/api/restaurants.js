@@ -6,6 +6,7 @@ const Restaurant = require("../../models/Restaurant");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const config = require("config");
+const RestaurantProfile = require("../../models/RestaurantProfile");
 
 router.post(
   "/",
@@ -40,14 +41,19 @@ router.post(
       });
       const salt = await bcrypt.genSalt(10);
       restaurant.password = await bcrypt.hash(password, salt);
-      console.log("-------");
-      console.log(restaurant);
       await restaurant.save();
       const payload = {
         restaurant: {
           id: restaurant.id,
         },
       };
+      let profile = new RestaurantProfile({
+        restaurantid: restaurant.id,
+        name: restaurant.name,
+        location: restaurant.location,
+        email: restaurant.email,
+      });
+      await profile.save();
       jwt.sign(
         payload,
         config.get("jwtSecret"),

@@ -16,6 +16,7 @@ const initialState = {
   isAuthenticated: null,
   loading: true,
   user: null,
+  urole: null,
 };
 
 export default function authReducer(state = initialState, action) {
@@ -24,19 +25,40 @@ export default function authReducer(state = initialState, action) {
     case USER_LOADED:
       return { ...state, isAuthenticated: true, loading: false, user: payload };
     case RESTAURANT_REGISTER_SUCCESS:
-    case USER_REGISTER_SUCCESS:
-    case USER_LOGIN_SUCCESS:
     case RESTAURANT_LOGIN_SUCCESS:
       localStorage.setItem("token", payload.token);
-      return { ...state, ...payload, isAuthenticated: true, loading: false };
+      return {
+        ...state,
+        ...payload,
+        isAuthenticated: true,
+        loading: false,
+        urole: "restaurant",
+      };
+    case USER_REGISTER_SUCCESS:
+    case USER_LOGIN_SUCCESS:
+      localStorage.setItem("token", payload.token);
+      return {
+        ...state,
+        ...payload,
+        isAuthenticated: true,
+        loading: false,
+        urole: "user",
+      };
     case RESTAURANT_REGISTER_FAIL:
     case USER_REGISTER_FAIL:
     case AUTH_ERROR:
     case LOGOUT_SUCCESS:
     case RESTAURANT_LOGIN_FAIL:
     case USER_LOGIN_FAIL:
+      console.log("removing user");
       localStorage.removeItem("token");
-      return { ...state, token: null, isAuthenticated: false, loading: false };
+      return {
+        ...state,
+        token: null,
+        isAuthenticated: false,
+        loading: false,
+        urole: null,
+      };
     default:
       return state;
   }
