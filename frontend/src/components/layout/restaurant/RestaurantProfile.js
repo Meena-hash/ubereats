@@ -2,10 +2,10 @@ import React, { Fragment, useEffect } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { getCurrentProfile } from "../../../actions/restaurantprofile";
-import RestaurantActions from "./RestaurantActions";
 import Spinner from "../Spinner";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
-
+import Dishes from "./Dishes";
+import "./RestaurantProfile.css";
 const RestaurantProfile = ({
   getCurrentProfile,
   auth: { user },
@@ -18,42 +18,26 @@ const RestaurantProfile = ({
   return loading && profile === null ? (
     <Spinner />
   ) : (
-    <Fragment>
-      <center>
-        <h1 class="large text-primary">Profile</h1>
-        <br />
-        <p class="lead">
-          <i class="fas fa-user"></i> Welcome {user && user.name}
-        </p>
+    <>
+      <Fragment>
         {profile !== null ? (
           <Fragment>
+            <div class="profilec">
+              <div class="bottom-left">{user && user.name}</div>
+              <div class="top-right">
+                <a href="/restaurant/edit-profile">
+                  <i class="fas fa-edit"></i>
+                </a>
+              </div>
+            </div>
+            <i class="fas fa-map-marker-alt"> {profile.location}</i>
             <br />
-            <table>
-              <tr>
-                <td>Name</td>
-                <td>{profile.name}</td>
-              </tr>
-              <tr>
-                <td>Location</td>
-                <td>{profile.location}</td>
-              </tr>
-              <tr>
-                <td>Description</td>
-                <td>{profile.description}</td>
-              </tr>
-              <tr>
-                <td>Phone</td>
-                <td>{profile.ph_no}</td>
-              </tr>
-              <tr>
-                <td>Email</td>
-                <td>{profile.email}</td>
-              </tr>
-            </table>
+            <i class="fas fa-tag"> {profile.description}</i>
             <br />
-            <Link to="/restaurant/edit-profile">
-              <i class="fas fa-user-circle text-primary"></i> Edit Profile
-            </Link>
+            <i class="fas fa-phone-volume"> {profile.ph_no}</i>
+            <br />
+            <i class="fas fa-envelope-open"> {profile.email}</i>
+            <Dishes />
           </Fragment>
         ) : (
           <Fragment>
@@ -65,8 +49,8 @@ const RestaurantProfile = ({
             </Link>
           </Fragment>
         )}
-      </center>
-    </Fragment>
+      </Fragment>
+    </>
   );
 };
 

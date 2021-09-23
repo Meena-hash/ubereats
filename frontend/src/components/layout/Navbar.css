@@ -11,7 +11,10 @@
   font-size: 2rem;
   background: none;
 }
-
+.icons {
+  width: 20px;
+  height: 20px;
+}
 .nav-menu {
   background-color: white;
   width: 250px;

@@ -15,4 +15,16 @@ export const SidebarData = [
     icon: <AiIcons.AiFillProfile> </AiIcons.AiFillProfile>,
     cName: "nav-text",
   },
+  {
+    title: "Dishes",
+    path: "/restaurant/dishes",
+    icon: <FaIcons.FaMoneyBill> </FaIcons.FaMoneyBill>,
+    cName: "nav-text",
+  },
+  {
+    title: "Add Dish",
+    path: "/restaurant/add/dishes",
+    icon: <FaIcons.FaPalette> </FaIcons.FaPalette>,
+    cName: "nav-text",
+  },
 ];

@@ -8,7 +8,9 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import "./Navbar.css";
 import { Row, Col } from "react-bootstrap";
-const Navbar = ({ auth: { isAuthenticated, loading } }) => {
+import { logout } from "../../actions/restaurantauth";
+
+const Navbar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
   const [sidebar, setSidebar] = useState(false);
   const showSidebar = () => setSidebar(!sidebar);
   const guestLinks = <ul></ul>;
@@ -16,7 +18,14 @@ const Navbar = ({ auth: { isAuthenticated, loading } }) => {
     <>
       <div className="navbar">
         <Link to="#" className="menu-bars"></Link>
-        <FaIcons.FaBars onClick={showSidebar} />
+        <FaIcons.FaBars class="icons" onClick={showSidebar} />
+        <div className="header">
+          <br />
+          <img
+            src="https://d1a3f4spazzrp4.cloudfront.net/arch-frontend/1.1.1/d1a3f4spazzrp4.cloudfront.net/eats/eats-logo-1a01872c77.svg"
+            alt=""
+          ></img>
+        </div>
       </div>
       <nav className={sidebar ? "nav-menu active" : "nav-menu"}>
         <ul className="nav-menu-items">
@@ -33,7 +42,7 @@ const Navbar = ({ auth: { isAuthenticated, loading } }) => {
               <img src={avatar} alt="Avatar" class="avatar" />
             </Col>
             <Row>
-              <Col xs="2">Meena</Col>
+              <Col xs="2">{user && user.name}</Col>
             </Row>
             <Row>
               <Col cs="2">
@@ -62,6 +71,16 @@ const Navbar = ({ auth: { isAuthenticated, loading } }) => {
               </li>
             );
           })}
+          <li className="nav-text">
+            {/* later replace with dashboard */}
+            <a onClick={logout} href="/restaurant/login">
+              <i style={{ color: "black" }} className="fas fa-sign-out-alt"></i>
+              {""}
+              <span style={{ color: "black" }} className="hide-sm">
+                Logout
+              </span>
+            </a>
+          </li>
         </ul>
       </nav>
     </>
@@ -81,4 +100,4 @@ Navbar.propTypes = {
 const mapStateToProps = (state) => ({
   auth: state.auth,
 });
-export default connect(mapStateToProps)(Navbar);
+export default connect(mapStateToProps, { logout })(Navbar);

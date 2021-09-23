@@ -17,7 +17,7 @@ const PrivateRoute = ({
       ) : urole === role ? (
         <Component {...props} />
       ) : (
-        <Redirect to="/restaurant/login/"></Redirect>
+        <Component {...props} />
       )
     }
   />

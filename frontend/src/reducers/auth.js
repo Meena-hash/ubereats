@@ -50,7 +50,6 @@ export default function authReducer(state = initialState, action) {
     case LOGOUT_SUCCESS:
     case RESTAURANT_LOGIN_FAIL:
     case USER_LOGIN_FAIL:
-      console.log("removing user");
       localStorage.removeItem("token");
       return {
         ...state,

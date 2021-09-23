@@ -1,0 +1,27 @@
+.profilec {
+  background-image: url("../img/pasta.jpeg");
+  -webkit-background-size: contain;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  height: 400px;
+}
+
+.bottom-left {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  font-size: 25px;
+  color: white;
+}
+
+.top-right {
+  position: absolute;
+  top: 8px;
+  right: 16px;
+  font-size: 25px;
+  color: white;
+}
+.fa-edit {
+  color: white;
+}

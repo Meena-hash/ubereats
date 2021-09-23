@@ -145,6 +145,7 @@ router.post("/create/dish", auth, async (req, res) => {
         .status(400)
         .json({ msg: "Dish already exists. Invalid request" });
     }
+
     dish = new Dish(dishFields);
     await dish.save();
     return res.json(dish);
@@ -155,7 +156,7 @@ router.post("/create/dish", auth, async (req, res) => {
 });
 
 router.delete("/dish/:dish_id", auth, async (req, res) => {
-  let dish = await Dish.findOne({ where: { id: req.params.user_id } });
+  let dish = await Dish.findOne({ where: { id: req.params.dish_id } });
   if (!dish) {
     return res
       .status(400)

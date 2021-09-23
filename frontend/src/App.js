@@ -10,7 +10,9 @@ import React, { Fragment, useEffect } from "react";
 import { Provider } from "react-redux";
 import store from "./store";
 import Alert from "./components/layout/Alert";
+import AddDishes from "./components/layout/restaurant/AddDishes";
 import { loadRestaurantUser } from "./actions/restaurantauth";
+import Dishes from "./components/layout/restaurant/Dishes";
 // import { loadUser } from "./actions/userauth";
 import setAuthToken from "./utils/setAuthToken";
 import RestaurantProfile from "./components/layout/restaurant/RestaurantProfile";
@@ -21,8 +23,7 @@ if (localStorage.token) {
 }
 const App = () => {
   useEffect(() => {
-    store.dispatch(loadRestaurantUser());
-    // store.dispatch(loadUser());
+    store.dispatch(loadRestaurantUser);
   }, []);
   return (
     <Provider store={store}>
@@ -51,6 +52,23 @@ const App = () => {
                 exact
                 path="/restaurant/edit-profile"
                 component={EditProfile}
+                role="restaurant"
+              ></PrivateRoute>
+              <PrivateRoute
+                exact
+                path="/restaurant/dishes"
+                component={Dishes}
+                role="restaurant"
+              ></PrivateRoute>
+              <PrivateRoute
+                exact
+                path="/restaurant/add/dishes"
+                component={AddDishes}
+                role="restaurant"
+              ></PrivateRoute>
+              <PrivateRoute
+                exact
+                path="/restaurant/edit/dishes"
                 role="restaurant"
               ></PrivateRoute>
             </Switch>
