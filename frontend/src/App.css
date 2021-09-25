@@ -323,9 +323,6 @@ post-form .post-form-header {
   padding: 0.5rem;
 }
 
-.round-img {
-  /* border-radius: 10%; */
-}
 .column {
   float: left;
   width: 50%;
@@ -358,3 +355,30 @@ post-form .post-form-header {
   align-items: center;
   width: 50%;
 }
+table {
+  white-space: nowrap;
+  justify-content: left;
+}
+.boxed {
+  border: 1px solid black;
+  width: fit-content;
+  height: fit-content;
+  background-color: lightgrey;
+}
+
+.show > .dropdown-menu {
+  display: block;
+  position: absolute;
+}
+.nohide {
+  display: block;
+  height: auto;
+  position: relative;
+  display: block;
+  z-index: -1;
+
+  overflow: auto !important;
+  width: 670px;
+}
+
+/* The switch - the box around the slider */

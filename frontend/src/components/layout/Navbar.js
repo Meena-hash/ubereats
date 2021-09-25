@@ -39,7 +39,7 @@ const Navbar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
           </li>
           <div style={{ marginLeft: "2rem" }}>
             <Col xs="2">
-              <img src={avatar} alt="Avatar" class="avatar" />
+              <img src={avatar} alt="Avatar" className="avatar" />
             </Col>
             <Row>
               <Col xs="2">{user && user.name}</Col>

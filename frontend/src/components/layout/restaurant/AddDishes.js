@@ -62,7 +62,7 @@ const AddDishes = ({ addDish, history }) => {
             onChange={(e) => onChange(e)}
           ></textarea>
         </div>
-        <div class="form-group">
+        <div className="form-group">
           <select
             name="category"
             value={category}
@@ -81,7 +81,7 @@ Course"
             <option value="Beverages">Beverages</option>
           </select>
         </div>
-        <div class="form-group">
+        <div className="form-group">
           <select name="type" value={type} onChange={(e) => onChange(e)}>
             <option value="0">* Select Category</option>
             <option value="veg">veg</option>

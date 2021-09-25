@@ -2,9 +2,12 @@ const express = require("express");
 const router = express.Router();
 const auth = require("../../middleware/restaurant_auth");
 const RestaurantProfile = require("../../models/RestaurantProfile");
+const UserProfile = require("../../models/UserProfile");
 const Restaurant = require("../../models/Restaurant");
 const Dish = require("../../models/Dish");
 const { v4: uuidv4 } = require("uuid");
+const Orders = require("../../models/Order");
+const db = require("../../config/db");
 
 router.get("/", auth, async (req, res) => {
   try {
@@ -172,6 +175,74 @@ router.delete("/dish/:dish_id", auth, async (req, res) => {
     }
   } else {
     return res.status(400).json({ msg: "Invalid request" });
+  }
+});
+
+router.get("/orders", auth, async (req, res) => {
+  try {
+    UserProfile.hasMany(Orders);
+    Orders.belongsTo(UserProfile, { foreignKey: "userprofileid" });
+    let orders = await Orders.findAll({
+      where: { restaurant_id_order: req.restaurant.id },
+      attributes: { exclude: ["userProfileProfileid"] },
+      include: [
+        {
+          model: UserProfile,
+          as: "user_profile",
+          required: true,
+        },
+      ],
+      raw: true,
+    });
+    return res.json(orders);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send("Server error");
+  }
+});
+
+router.put("/update/delivery/:order_id/:del_status", auth, async (req, res) => {
+  try {
+    UserProfile.hasMany(Orders);
+    Orders.belongsTo(UserProfile, { foreignKey: "userprofileid" });
+    let delivery = {};
+    delivery.delivery_status = req.params.del_status;
+    if (req.params.del_status === "delivered") {
+      delivery.order_type = "delivered";
+    }
+    if (req.params.del_status === "cancelled") {
+      delivery.order_type = "cancelled";
+    }
+    let order = await Orders.update(delivery, {
+      where: { id: req.params.order_id },
+    });
+    order = await Orders.findOne({
+      where: { id: req.params.order_id },
+      attributes: { exclude: ["userProfileProfileid"] },
+      include: [
+        {
+          model: UserProfile,
+          as: "user_profile",
+          required: true,
+        },
+      ],
+    });
+
+    return res.json([order]);
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send("Server error");
+  }
+});
+router.get("/get/order/dishes/:order_id", auth, async (req, res) => {
+  try {
+    let dishes = await db.query(
+      `call ubereats.getOrderSummary(${req.params.order_id})`
+    );
+    return res.json(dishes);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send("Server error");
   }
 });
 module.exports = router;

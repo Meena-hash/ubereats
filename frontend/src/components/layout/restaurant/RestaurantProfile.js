@@ -22,21 +22,21 @@ const RestaurantProfile = ({
       <Fragment>
         {profile !== null ? (
           <Fragment>
-            <div class="profilec">
-              <div class="bottom-left">{user && user.name}</div>
-              <div class="top-right">
+            <div className="profilec">
+              <div className="bottom-left">{user && user.name}</div>
+              <div className="top-right">
                 <a href="/restaurant/edit-profile">
-                  <i class="fas fa-edit"></i>
+                  <i className="fas fa-edit"></i>
                 </a>
               </div>
             </div>
-            <i class="fas fa-map-marker-alt"> {profile.location}</i>
+            <i className="fas fa-map-marker-alt"> {profile.location}</i>
             <br />
-            <i class="fas fa-tag"> {profile.description}</i>
+            <i className="fas fa-tag"> {profile.description}</i>
             <br />
-            <i class="fas fa-phone-volume"> {profile.ph_no}</i>
+            <i className="fas fa-phone-volume"> {profile.ph_no}</i>
             <br />
-            <i class="fas fa-envelope-open"> {profile.email}</i>
+            <i className="fas fa-envelope-open"> {profile.email}</i>
             <Dishes />
           </Fragment>
         ) : (
@@ -45,7 +45,7 @@ const RestaurantProfile = ({
             <p>You have not yet setup profile, please add some info</p>
             <br />
             <Link to="/restaurant/create-profile">
-              <i class="fas fa-user-circle text-primary"></i> Create Profile
+              <i className="fas fa-user-circle text-primary"></i> Create Profile
             </Link>
           </Fragment>
         )}

@@ -35,6 +35,7 @@ const Dishes = ({
       }
       setFormData(dishData);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const [formData, setFormData] = useState(initialState);
   const [show, setShow] = useState(false);
@@ -62,25 +63,25 @@ const Dishes = ({
         <br />
         <hr />
 
-        <div class="row" name="dishes">
+        <div className="row" name="dishes">
           {dishes &&
             dishes.map((item) => {
               return (
                 <>
-                  <div class="column">
-                    <div class="row rows">
-                      <div class="column">
-                        <img class="imagecol" src={pasta1} alt="" />
+                  <div className="column">
+                    <div className="row rows">
+                      <div className="column">
+                        <img className="imagecol" src={pasta1} alt="" />
                       </div>
-                      <div class="column">
+                      <div className="column">
                         <h4>{item.name}</h4>
                         <i
-                          class="fas fa-trash-alt"
+                          className="fas fa-trash-alt"
                           onClick={() => deleteDish(item.id)}
                         ></i>
 
                         <i
-                          class="fas fa-edit"
+                          className="fas fa-edit"
                           style={{ color: "black" }}
                           onClick={() => {
                             edit(item.id);
@@ -181,23 +182,23 @@ Course"
                           <Fragment />
                         )}
 
-                        <p class="post-date">
+                        <p className="post-date">
                           <b>Description: </b>
                           {item.description}
                         </p>
-                        <p class="post-date">
+                        <p className="post-date">
                           <b>Ingredients: </b>
                           {item.ingredients}
                         </p>
-                        <p class="post-date">
+                        <p className="post-date">
                           <b>Category: </b>
                           {item.category}
                         </p>
-                        <p class="post-date">
+                        <p className="post-date">
                           <b>Type: </b>
                           {item.type}
                         </p>
-                        <p class="post-date">
+                        <p className="post-date">
                           <b>Price: </b>
                           {item.price}
                         </p>

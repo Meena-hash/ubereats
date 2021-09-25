@@ -18,6 +18,8 @@ import setAuthToken from "./utils/setAuthToken";
 import RestaurantProfile from "./components/layout/restaurant/RestaurantProfile";
 import Navbar from "./components/layout/Navbar";
 import EditProfile from "./components/layout/restaurant/EditProfile";
+import ViewOrder from "./components/layout/restaurant/ViewOrder";
+import Orders from "./components/layout/restaurant/Orders";
 if (localStorage.token) {
   setAuthToken(localStorage.token);
 }
@@ -41,7 +43,16 @@ const App = () => {
               <Route exact path="/user/register" component={URegister}></Route>
               <Route exact path="/user/login" component={ULogin}></Route>
               <Route exact path="/restaurant/login" component={RLogin}></Route>
-
+              <PrivateRoute
+                exact
+                path="/restaurant/view/order"
+                component={ViewOrder}
+              ></PrivateRoute>
+              <PrivateRoute
+                exact
+                path="/restaurant/orders"
+                component={Orders}
+              ></PrivateRoute>
               <PrivateRoute
                 exact
                 path="/restaurant/profile"

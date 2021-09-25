@@ -8,7 +8,11 @@ import {
   ADD_DISH,
   GET_DISH_BY_ID,
   USER_LOADED,
+  GET_ALL_ORDERS_BY_REST_ID,
   EDIT_DISH,
+  VIEW_ORDER,
+  UPDATE_DELIVERY_STATUS,
+  GET_DISHES_OF_ORDER,
 } from "./types";
 
 // Get current users profile
@@ -29,6 +33,7 @@ export const getCurrentProfile = () => async (dispatch) => {
       type: USER_LOADED,
       payload: user.data,
     });
+    dispatch(getAllOrdersByRestaurant());
   } catch (error) {
     dispatch({
       type: PROFILE_ERROR,
@@ -166,7 +171,6 @@ export const editDish = (formData, history) => async (dispatch) => {
       payload: res.data,
     });
     dispatch(setAlert("Dish Edited", "success"));
-    console.log("history");
     history.push("/restaurant/home");
   } catch (error) {
     const errors = error.response.data.errors;
@@ -182,3 +186,79 @@ export const editDish = (formData, history) => async (dispatch) => {
     });
   }
 };
+
+export const getAllOrdersByRestaurant = () => async (dispatch) => {
+  const config = {
+    headers: { "Content-Type": "application/json" },
+  };
+  try {
+    const res = await axios.get("/api/restaurant/profile/orders", config);
+    dispatch({
+      type: GET_ALL_ORDERS_BY_REST_ID,
+      payload: res.data,
+    });
+  } catch (error) {
+    const errors = error.response.data.errors;
+    if (errors) {
+      errors.forEach((error) => dispatch(setAlert(error.msg, "danger")));
+    }
+    dispatch({
+      type: PROFILE_ERROR,
+      payload: {
+        msg: error.response.statusText,
+        status: error.response.status,
+      },
+    });
+  }
+};
+
+export const viewOrder = (orderId, history) => async (dispatch) => {
+  try {
+    const config = {
+      headers: { "Content-Type": "application/json" },
+    };
+    const dishes = await axios.get(
+      `/api/restaurant/profile/get/order/dishes/${orderId}`,
+      config
+    );
+    dispatch({
+      type: GET_DISHES_OF_ORDER,
+      payload: dishes.data,
+    });
+    dispatch({
+      type: VIEW_ORDER,
+      payload: orderId,
+    });
+    history.push("/restaurant/view/order");
+  } catch (error) {
+    const errors = error.response.data.errors;
+    if (errors) {
+      errors.forEach((error) => dispatch(setAlert(error.msg, "danger")));
+    }
+    dispatch({
+      type: PROFILE_ERROR,
+      payload: {
+        msg: error.response.statusText,
+        status: error.response.status,
+      },
+    });
+  }
+};
+
+export const updateDeliveryStatus =
+  (order_id, delivery_status) => async (dispatch) => {
+    const config = {
+      headers: { "Content-Type": "application/json" },
+    };
+    try {
+      const res = await axios.put(
+        `/api/restaurant/profile/update/delivery/${order_id}/${delivery_status}`,
+        config
+      );
+
+      dispatch({
+        type: UPDATE_DELIVERY_STATUS,
+        payload: res.data,
+      });
+    } catch (error) {}
+  };

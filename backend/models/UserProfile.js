@@ -8,6 +8,7 @@ const User_Profile = db.define(
       type: Sequelize.INTEGER,
       references: "users", // <<< Note, its table's name, not object name
       referencesKey: "id", // <<< Note, its a column name
+      primaryKey: true,
     },
     name: {
       type: Sequelize.STRING,
@@ -40,7 +41,7 @@ const User_Profile = db.define(
     email: {
       type: Sequelize.STRING,
       allowNull: false,
-      primaryKey: true,
+      unique: true,
     },
     ph_no: {
       type: Sequelize.STRING,

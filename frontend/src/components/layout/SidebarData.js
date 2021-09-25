@@ -1,7 +1,6 @@
 import React from "react";
 import * as FaIcons from "react-icons/fa";
 import * as AiIcons from "react-icons/ai";
-import * as IoIcons from "react-icons/io";
 export const SidebarData = [
   {
     title: "Home",
@@ -25,6 +24,12 @@ export const SidebarData = [
     title: "Add Dish",
     path: "/restaurant/add/dishes",
     icon: <FaIcons.FaPalette> </FaIcons.FaPalette>,
+    cName: "nav-text",
+  },
+  {
+    title: "Orders",
+    path: "/restaurant/orders",
+    icon: <FaIcons.FaFirstOrder> </FaIcons.FaFirstOrder>,
     cName: "nav-text",
   },
 ];
