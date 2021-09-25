@@ -95,7 +95,7 @@ const Orders = ({
                           ></i>
                         </small>
                       </div>
-                      <p class="mb-1">Date: {item.date}</p>
+                      <p className="mb-1">Date: {item.date}</p>
                       <small className="text-muted">Total: {item.total}$</small>
                       <br />
                       <small className="text-muted">Tip: {item.tip}$</small>

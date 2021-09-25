@@ -18,9 +18,8 @@ const Navbar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
     <>
       <div className="navbar">
         <Link to="#" className="menu-bars"></Link>
-        <FaIcons.FaBars class="icons" onClick={showSidebar} />
+        <FaIcons.FaBars className="icons" onClick={showSidebar} />
         <div className="header">
-          <br />
           <img
             src="https://d1a3f4spazzrp4.cloudfront.net/arch-frontend/1.1.1/d1a3f4spazzrp4.cloudfront.net/eats/eats-logo-1a01872c77.svg"
             alt=""

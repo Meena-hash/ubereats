@@ -375,7 +375,7 @@ table {
   height: auto;
   position: relative;
   display: block;
-  z-index: -1;
+  /* z-index: -1; */
 
   overflow: auto !important;
   width: 670px;

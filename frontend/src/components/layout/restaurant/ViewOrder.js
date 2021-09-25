@@ -34,7 +34,7 @@ const ViewOrder = ({
               alt=""
               style={{ width: "100%", height: "300px" }}
             />
-            <h2>Order {order[0].id}</h2>
+            <h2>Order #{order[0].id}</h2>
             {order[0].type === "deliver" ? (
               <>
                 <small style={{ color: "green" }}>
@@ -52,8 +52,7 @@ const ViewOrder = ({
                   </select>
 
                   <small style={{ color: "black" }}>
-                    {" "}
-                    Aug 11,2019 at 12.06PM
+                    &nbsp;{new Date(order[0].date).toString()}
                   </small>
                 </small>
               </>
@@ -74,8 +73,7 @@ const ViewOrder = ({
                   </select>
 
                   <small style={{ color: "black" }}>
-                    {" "}
-                    Aug 11,2019 at 12.06PM
+                    &nbsp;{new Date(order[0].date).toString()}
                   </small>
                 </small>
               </>
