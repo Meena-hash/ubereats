@@ -48,11 +48,15 @@ const ViewOrder = ({
                       {order[0].delivery_status.charAt(0).toUpperCase() +
                         order[0].delivery_status.slice(1)}
                     </option>
-                    <option value="order received">Order received</option>
-                    <option value="preparing">Preparing</option>
-                    <option value="on the way">On the way</option>
-                    <option value="delivered">Delivered</option>
-                    <option value="cancelled">Cancel</option>
+                    {order[0].delivery_status !== "cancelled" && (
+                      <>
+                        <option value="order received">Order received</option>
+                        <option value="preparing">Preparing</option>
+                        <option value="on the way">On the way</option>
+                        <option value="delivered">Delivered</option>
+                        <option value="cancelled">Cancel</option>
+                      </>
+                    )}
                   </select>
 
                   <small style={{ color: "black" }}>
@@ -73,11 +77,15 @@ const ViewOrder = ({
                       {order[0].pickup_status.charAt(0).toUpperCase() +
                         order[0].pickup_status.slice(1)}
                     </option>
-                    <option value="order received">Order Received</option>
-                    <option value="preparing">Preparing</option>
-                    <option value="pick up ready">Pick up ready</option>
-                    <option value="pickedup">Pickedup</option>
-                    <option value="cancelled">Cancel</option>
+                    {order[0].pickup_status !== "cancelled" && (
+                      <>
+                        <option value="order received">Order Received</option>
+                        <option value="preparing">Preparing</option>
+                        <option value="pick up ready">Pick up ready</option>
+                        <option value="pickedup">Pickedup</option>
+                        <option value="cancelled">Cancel</option>
+                      </>
+                    )}
                   </select>
 
                   <small style={{ color: "black" }}>
