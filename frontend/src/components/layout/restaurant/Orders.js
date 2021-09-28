@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import "./Orders.css";
 import { withRouter } from "react-router-dom/cjs/react-router-dom.min";
 import Spinner from "../Spinner";
@@ -7,6 +7,7 @@ import {
   getAllOrdersByRestaurant,
   viewOrder,
 } from "../../../actions/restaurantprofile";
+import { getUserByID } from "../../../actions/userprofile";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
@@ -14,17 +15,24 @@ const Orders = ({
   getCurrentProfile,
   getAllOrdersByRestaurant,
   restaurantprofile: { orders, loading },
+  auth: { urole },
   viewOrder,
+  getUserByID,
   history,
 }) => {
   const [orderData, setOrderData] = useState(orders);
+  console.log("order:", orderData);
+  const [filter, setFilter] = useState("");
   useEffect(() => {
     getAllOrdersByRestaurant();
     getCurrentProfile();
-  }, [getCurrentProfile, getAllOrdersByRestaurant]);
+
+    if (orders) setOrderData(orders);
+    console.log("after effect", orderData);
+  }, []);
   return loading && orders === null ? (
     <Spinner />
-  ) : (
+  ) : !loading && orders && urole === "restaurant" ? (
     <div>
       <nav>
         <h1>Orders</h1>
@@ -33,57 +41,90 @@ const Orders = ({
       <>
         <>
           <div className="navbar order">
-            <i
-              className="fas fa-check-circle navorder"
-              onClick={() => {
+            <a
+              className="nav-link active"
+              href
+              onClick={(e) => {
+                e.preventDefault();
                 orders && setOrderData(orders);
+                setFilter("All Orders");
               }}
             >
-              All
-            </i>{" "}
-            <i
-              className="fas fa-check-circle navorder"
-              onClick={() => {
+              <i className="fas fa-check-circle navorder">All</i>
+            </a>
+            <a
+              href
+              className="nav-link"
+              onClick={(e) => {
+                e.preventDefault();
                 orders &&
                   setOrderData(
                     orders.filter((item) => item.order_type === "new")
                   );
+                setFilter("New Orders");
               }}
             >
-              New
-            </i>{" "}
-            <i
-              className="fas fa-truck navorder"
-              onClick={() => {
+              <i className="fas fa-check-circle navorder">New</i>
+            </a>{" "}
+            <a
+              href
+              className="nav-link"
+              onClick={(e) => {
+                e.preventDefault();
                 orders &&
                   setOrderData(
                     orders.filter((item) => item.order_type === "delivered")
                   );
+                setFilter("Delivered Orders");
               }}
             >
-              Delivered
-            </i>
-            <i
-              className="fas fa-ban navorder"
-              onClick={() => {
+              <i className="fas fa-truck navorder">Delivered</i>
+            </a>
+            <a
+              href
+              className="nav-link"
+              onClick={(e) => {
+                e.preventDefault();
                 orders &&
                   setOrderData(
                     orders.filter((item) => item.order_type === "cancelled")
                   );
+                setFilter("Cancelled Orders");
               }}
             >
-              Cancelled
-            </i>
+              <i className="fas fa-ban navorder">Cancelled</i>
+            </a>
           </div>
+          <br />
+          <h5>{filter}</h5>
           {orderData &&
             orderData.map((item) => {
               return (
                 <>
-                  <br />
                   <hr />
                   <div className="list-group">
                     <div className="list-group-item list-group-item-action flex-column align-items-start">
-                      <h4>{item["user_profile.name"]}</h4>
+                      <h4>
+                        {item["user_profile.name"]}
+                        <small className="text-muted">
+                          {" "}
+                          <i
+                            class="fas fa-eye"
+                            style={{ color: "black" }}
+                            onClick={() => {
+                              getUserByID(
+                                item["user_profile.profileid"],
+                                "restaurant",
+                                history
+                              );
+                            }}
+                          >
+                            {" "}
+                            View Profile
+                          </i>
+                        </small>
+                      </h4>
+
                       <div className="d-flex w-100 justify-content-between">
                         <h5>OrderId:{item.id}</h5>
                         <small className="text-muted">
@@ -107,6 +148,8 @@ const Orders = ({
         </>
       </>
     </div>
+  ) : (
+    <Fragment></Fragment>
   );
 };
 Orders.propTypes = {
@@ -114,12 +157,16 @@ Orders.propTypes = {
   getAllOrdersByRestaurant: PropTypes.func.isRequired,
   restaurantprofile: PropTypes.object.isRequired,
   viewOrder: PropTypes.func.isRequired,
+  getUserByID: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
 };
 const mapStateToProps = (state) => ({
   restaurantprofile: state.restaurantprofile,
+  auth: state.auth,
 });
 export default connect(mapStateToProps, {
   getCurrentProfile,
   getAllOrdersByRestaurant,
   viewOrder,
+  getUserByID,
 })(withRouter(Orders));

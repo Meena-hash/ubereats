@@ -1,8 +1,9 @@
-import React, { Fragment, useState } from "react";
-import { addDish } from "../../../actions/restaurantprofile";
+import React, { Fragment, useState, useEffect } from "react";
+import { addDish, getCurrentProfile } from "../../../actions/restaurantprofile";
 import { withRouter } from "react-router-dom/cjs/react-router-dom.min";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import Spinner from "../Spinner";
 const initialState = {
   name: "",
   ingredients: "",
@@ -11,7 +12,15 @@ const initialState = {
   category: "",
   type: "",
 };
-const AddDishes = ({ addDish, history }) => {
+const AddDishes = ({
+  getCurrentProfile,
+  auth: { urole, user, loading },
+  addDish,
+  history,
+}) => {
+  useEffect(() => {
+    getCurrentProfile();
+  }, [getCurrentProfile]);
   const [formData, setFormData] = useState(initialState);
   const { name, ingredients, price, description, category, type } = formData;
   const onChange = async (e) =>
@@ -20,7 +29,9 @@ const AddDishes = ({ addDish, history }) => {
     e.preventDefault();
     addDish(formData, history);
   };
-  return (
+  return loading && user === null ? (
+    <Spinner />
+  ) : !loading && urole === "restaurant" ? (
     <Fragment>
       <form className="form profile" onSubmit={(e) => onSubmit(e)}>
         <center>
@@ -69,25 +80,20 @@ const AddDishes = ({ addDish, history }) => {
             onChange={(e) => onChange(e)}
           >
             <option value="0">* Select Category</option>
-            <option value="Appetizer">Appetizer</option>
-            <option value="Salads">Salads</option>
-            <option
-              value="Main
-Course"
-            >
-              Main Course
-            </option>
-            <option value="Desserts">Desserts</option>
-            <option value="Beverages">Beverages</option>
+            <option value="appetizer">Appetizer</option>
+            <option value="salad">Salad</option>
+            <option value="main course">Main Course</option>
+            <option value="dessert">Dessert</option>
+            <option value="beverage">Beverage</option>
           </select>
         </div>
         <div className="form-group">
           <select name="type" value={type} onChange={(e) => onChange(e)}>
             <option value="0">* Select Category</option>
-            <option value="veg">veg</option>
-            <option value="non-veg">non-veg</option>
-            <option value="vegan">vegan</option>
-            <option value="all">all</option>
+            <option value="veg">Veg</option>
+            <option value="non-veg">Non-veg</option>
+            <option value="vegan">Vegan</option>
+            <option value="all">All</option>
           </select>
         </div>
         <center>
@@ -96,11 +102,19 @@ Course"
         </center>
       </form>
     </Fragment>
+  ) : (
+    <Fragment></Fragment>
   );
 };
 
 AddDishes.prototypes = {
   addDish: PropTypes.func.isRequired,
+  getCurrentProfile: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
 };
-
-export default connect(null, { addDish })(withRouter(AddDishes));
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+});
+export default connect(mapStateToProps, { getCurrentProfile, addDish })(
+  withRouter(AddDishes)
+);

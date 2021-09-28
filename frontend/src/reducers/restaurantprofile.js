@@ -10,6 +10,8 @@ import {
   VIEW_ORDER,
   UPDATE_DELIVERY_STATUS,
   GET_DISHES_OF_ORDER,
+  EDIT_DISH,
+  SET_USERID_FROM_RESTAURANT,
 } from "../actions/types";
 const initialState = {
   profile: null,
@@ -21,11 +23,18 @@ const initialState = {
   error: {},
   order: null,
   dishesOfOrder: [],
+  customerid: null,
 };
 
 export default function restprofReducer(state = initialState, action) {
   const { type, payload } = action;
   switch (type) {
+    case SET_USERID_FROM_RESTAURANT:
+      return {
+        ...state,
+        loading: false,
+        customerid: payload,
+      };
     case GET_DISH_BY_ID:
       return {
         ...state,
@@ -48,6 +57,19 @@ export default function restprofReducer(state = initialState, action) {
       };
     case GET_ALL_DISHES:
       return { ...state, loading: false, dishes: payload };
+    case EDIT_DISH:
+      console.log([
+        payload,
+        ...state.dishes.filter((dish) => dish.id !== payload.id),
+      ]);
+      return {
+        ...state,
+        loading: false,
+        dishes: [
+          payload,
+          ...state.dishes.filter((dish) => dish.id !== payload.id),
+        ],
+      };
     case ADD_DISH:
       return { ...state, loading: false, dishes: [payload, ...state.dishes] };
     case GET_PROFILE:

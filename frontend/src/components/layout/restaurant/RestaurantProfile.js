@@ -8,7 +8,7 @@ import Dishes from "./Dishes";
 import "./RestaurantProfile.css";
 const RestaurantProfile = ({
   getCurrentProfile,
-  auth: { user },
+  auth: { user, urole },
   restaurantprofile: { profile, loading },
 }) => {
   useEffect(() => {
@@ -22,14 +22,25 @@ const RestaurantProfile = ({
       <Fragment>
         {profile !== null ? (
           <Fragment>
-            <div className="profilec">
-              <div className="bottom-left">{user && user.name}</div>
-              <div className="top-right">
-                <a href="/restaurant/edit-profile">
-                  <i className="fas fa-edit"></i>
-                </a>
+            {!loading && urole === "restaurant" && (
+              <div className="profilec">
+                <div className="bottom-left">{user && user.name}</div>
+
+                {/* <div className="bottom-right">
+                  {" "}
+                </div> */}
+                <div className="top-right">
+                  <a href="/restaurant/edit-profile">
+                    <i className="fas fa-edit"></i>
+                  </a>
+                </div>
               </div>
-            </div>
+            )}
+            <i className="fas fa-clock">
+              {" "}
+              Open everyday from {profile.from_time} to {profile.to_time}
+            </i>
+            <br />
             <i className="fas fa-map-marker-alt"> {profile.location}</i>
             <br />
             <i className="fas fa-tag"> {profile.description}</i>
@@ -42,11 +53,14 @@ const RestaurantProfile = ({
         ) : (
           <Fragment>
             <br />
-            <p>You have not yet setup profile, please add some info</p>
+            <p>Profile is not set up yet.</p>
             <br />
-            <Link to="/restaurant/create-profile">
-              <i className="fas fa-user-circle text-primary"></i> Create Profile
-            </Link>
+            {!loading && urole === "restaurant" && (
+              <Link to="/restaurant/create-profile">
+                <i className="fas fa-user-circle text-primary"></i> Create
+                Profile
+              </Link>
+            )}
           </Fragment>
         )}
       </Fragment>

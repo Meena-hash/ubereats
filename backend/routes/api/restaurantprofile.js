@@ -5,7 +5,6 @@ const RestaurantProfile = require("../../models/RestaurantProfile");
 const UserProfile = require("../../models/UserProfile");
 const Restaurant = require("../../models/Restaurant");
 const Dish = require("../../models/Dish");
-const { v4: uuidv4 } = require("uuid");
 const Orders = require("../../models/Order");
 const db = require("../../config/db");
 
@@ -33,7 +32,8 @@ router.post("/basic", auth, async (req, res) => {
   let restaurant = await Restaurant.findOne({
     where: { id: req.restaurant.id },
   });
-  const { name, location, description, email, ph_no } = req.body;
+  const { name, location, description, email, ph_no, from_time, to_time } =
+    req.body;
 
   let profileFields = {};
   profileFields.restaurantid = restaurant.id;
@@ -42,14 +42,26 @@ router.post("/basic", auth, async (req, res) => {
   profileFields.description = description;
   profileFields.email = email;
   profileFields.ph_no = ph_no;
+  profileFields.from_time = from_time;
+  profileFields.to_time = to_time;
+  let contactFields = {};
+  contactFields.email = email;
+  contactFields.ph_no = ph_no;
+  contactFields.name = name;
 
   try {
     let profile = await RestaurantProfile.findOne({
       where: { restaurantid: restaurant.id },
     });
+    let user = await Restaurant.findOne({
+      where: { id: restaurant.id },
+    });
     if (profile) {
       profile = await RestaurantProfile.update(profileFields, {
         where: { restaurantid: restaurant.id },
+      });
+      user = await Restaurant.update(contactFields, {
+        where: { id: restaurant.id },
       });
       profile = await RestaurantProfile.findOne({
         where: { restaurantid: restaurant.id },
@@ -105,7 +117,6 @@ router.post("/update/dish", auth, async (req, res) => {
 
   if (restaurant_idx === req.restaurant.id) {
     try {
-      console.log(id);
       let dish = await Dish.findOne({
         where: { id: id },
       });
@@ -130,7 +141,6 @@ router.post("/update/dish", auth, async (req, res) => {
 router.post("/create/dish", auth, async (req, res) => {
   const { name, ingredients, price, description, category, type } = req.body;
   let dishFields = {};
-  dishFields.id = uuidv4();
   dishFields.name = name;
   dishFields.ingredients = ingredients;
   dishFields.price = price;
@@ -148,13 +158,12 @@ router.post("/create/dish", auth, async (req, res) => {
         .status(400)
         .json({ msg: "Dish already exists. Invalid request" });
     }
-
     dish = new Dish(dishFields);
     await dish.save();
     return res.json(dish);
   } catch (error) {
     console.log(error.message);
-    res.status(500).send("Server error");
+    res.status(500).send(error);
   }
 });
 

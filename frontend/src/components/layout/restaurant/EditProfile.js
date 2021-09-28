@@ -2,6 +2,7 @@ import React, { useState, Fragment, useEffect } from "react";
 import { withRouter } from "react-router-dom/cjs/react-router-dom.min";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import Spinner from "../Spinner";
 import {
   createProfile,
   getCurrentProfile,
@@ -13,15 +14,19 @@ const initialState = {
   images: "",
   email: "",
   ph_no: "",
+  from_time: "",
+  to_time: "",
 };
 const EditProfile = ({
+  auth: { urole },
   restaurantprofile: { profile, loading },
   createProfile,
   getCurrentProfile,
   history,
 }) => {
   const [formData, setFormData] = useState(initialState);
-  const { name, email, location, description, ph_no } = formData;
+  const { name, email, location, description, ph_no, from_time, to_time } =
+    formData;
   const [displayContactInformation, toggleContactInformation] = useState(false);
   useEffect(() => {
     if (!profile) getCurrentProfile();
@@ -34,13 +39,16 @@ const EditProfile = ({
       setFormData(profileData);
     }
   }, [loading, getCurrentProfile, profile]);
-  const onChange = async (e) =>
+  const onChange = async (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
   const onSubmit = (e) => {
     e.preventDefault();
     createProfile(formData, history, true);
   };
-  return (
+  return loading && urole === null ? (
+    <Spinner />
+  ) : !loading && urole === "restaurant" ? (
     <Fragment>
       <form className="form profile" onSubmit={(e) => onSubmit(e)}>
         <center>
@@ -77,7 +85,29 @@ const EditProfile = ({
             onChange={(e) => onChange(e)}
           ></textarea>
         </div>
-
+        <div className="form-group">
+          <i className="fas fa-clock"> From &nbsp;</i>
+          <input
+            type="time"
+            name="from_time"
+            value={from_time}
+            onChange={(e) => onChange(e)}
+            min="1"
+            max="24"
+          />
+        </div>
+        <div className="form-group">
+          <i className="fas fa-clock"> To &nbsp;</i>
+          <input
+            type="time"
+            name="to_time"
+            value={to_time}
+            onChange={(e) => onChange(e)}
+            min="1"
+            max="24"
+          />
+        </div>
+        {/*  */}
         <div className="my-2">
           <button
             onClick={() => toggleContactInformation(!displayContactInformation)}
@@ -117,6 +147,8 @@ const EditProfile = ({
         </center>
       </form>
     </Fragment>
+  ) : (
+    <Fragment></Fragment>
   );
 };
 
@@ -128,6 +160,7 @@ EditProfile.propTypes = {
 
 const mapStateToProps = (state) => ({
   restaurantprofile: state.restaurantprofile,
+  auth: state.auth,
 });
 
 export default connect(mapStateToProps, { createProfile, getCurrentProfile })(

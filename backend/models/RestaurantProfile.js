@@ -27,6 +27,12 @@ const Restaurant_Profile = db.define(
     ph_no: {
       type: Sequelize.STRING,
     },
+    from_time: {
+      type: Sequelize.TIME,
+    },
+    to_time: {
+      type: Sequelize.TIME,
+    },
   },
   {
     timestamps: false,

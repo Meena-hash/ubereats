@@ -7,7 +7,6 @@ const User = require("../../models/User");
 
 router.get("/", auth, async (req, res) => {
   try {
-    console.log(req.user);
     const profile = await UserProfile.findOne({
       where: {
         profileid: req.user.id,
@@ -16,7 +15,23 @@ router.get("/", auth, async (req, res) => {
     if (!profile) {
       return res.status(400).json({ msg: "there is no profile for this user" });
     }
-    res.json(profile);
+    return res.json(profile);
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send("Server error");
+  }
+});
+router.get("/:user_id", async (req, res) => {
+  try {
+    const profile = await UserProfile.findOne({
+      where: {
+        profileid: req.params.user_id,
+      },
+    });
+    if (!profile) {
+      return res.status(400).json({ msg: "there is no profile for this user" });
+    }
+    return res.json(profile);
   } catch (err) {
     console.log(err.message);
     res.status(500).send("Server error");
@@ -25,7 +40,18 @@ router.get("/", auth, async (req, res) => {
 // Update basic details (name, date of birth, city, state, country, nickname)
 router.post("/basic", auth, async (req, res) => {
   let user = await User.findOne({ where: { id: req.user.id } });
-  const { name, street, city, state, country, nickname, about, dob } = req.body;
+  const {
+    name,
+    street,
+    city,
+    state,
+    country,
+    nickname,
+    about,
+    dob,
+    email,
+    ph_no,
+  } = req.body;
 
   let profileFields = {};
   profileFields.profileid = user.id;
@@ -37,6 +63,8 @@ router.post("/basic", auth, async (req, res) => {
   profileFields.nickname = nickname;
   profileFields.about = about;
   profileFields.dob = dob;
+  profileFields.email = email;
+  profileFields.ph_no = ph_no;
 
   try {
     let profile = await UserProfile.findOne({
@@ -47,7 +75,6 @@ router.post("/basic", auth, async (req, res) => {
         where: { profileid: user.id },
       });
       profile = await UserProfile.findOne({ where: { profileid: user.id } });
-      console.log(profile);
       return res.json(profile);
     }
     profile = new UserProfile(profileFields);

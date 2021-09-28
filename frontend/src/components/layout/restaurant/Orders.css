@@ -11,6 +11,9 @@ body {
   overflow: auto;
   height: 50px;
 }
+.nav-link {
+  background-color: rgb(143, 140, 140);
+}
 
 .order a {
   float: left;
@@ -31,11 +34,11 @@ body {
   text-align: center;
 }
 .order a:hover {
-  background-color: #000;
+  background-color: darkgray;
 }
 
 .order a.active {
-  background-color: #04aa6d;
+  background-color: darkgrey;
 }
 
 @media screen and (max-width: 500px) {

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Route, Redirect } from "react-router-dom/cjs/react-router-dom.min";
@@ -14,10 +14,10 @@ const PrivateRoute = ({
     render={(props) =>
       !isAuthenticated && !loading ? (
         <Redirect to="/restaurant/login/"></Redirect>
-      ) : urole === role ? (
+      ) : role === "both" || urole === role ? (
         <Component {...props} />
       ) : (
-        <Component {...props} />
+        <Fragment>Not allowed to access</Fragment>
       )
     }
   />

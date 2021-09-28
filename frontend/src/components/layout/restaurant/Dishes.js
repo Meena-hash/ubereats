@@ -2,6 +2,7 @@ import React, { Fragment, useEffect, useState } from "react";
 import { withRouter } from "react-router-dom/cjs/react-router-dom.min";
 import { connect } from "react-redux";
 import { Button, Modal } from "react-bootstrap";
+import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import PropTypes from "prop-types";
 import {
   getDishByID,
@@ -10,17 +11,11 @@ import {
 } from "../../../actions/restaurantprofile";
 import { deleteDish } from "../../../actions/restaurantprofile";
 import pasta1 from "../img/pasta1.jpeg";
-const initialState = {
-  name: null,
-  ingredients: null,
-  description: null,
-  category: null,
-  type: null,
-  price: 0,
-};
+
 const Dishes = ({
   getCurrentProfile,
-  restaurantprofile: { dishes, dish },
+  restaurantprofile: { loading, dishes, dish },
+  auth: { urole },
   deleteDish,
   getDishByID,
   editDish,
@@ -28,41 +23,44 @@ const Dishes = ({
 }) => {
   useEffect(() => {
     getCurrentProfile();
-    if (dish) {
-      const dishData = { ...initialState };
-      for (const key in dish) {
-        if (key in dishData) dishData[key] = dish[key];
-      }
-      setFormData(dishData);
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const [formData, setFormData] = useState(initialState);
   const [show, setShow] = useState(false);
   const handleClose = () => {
     setShow(false);
   };
   const edit = (id) => {
-    setFormData(getDishByID(id));
-    handleShow();
+    getDishByID(id);
   };
   const handleShow = () => {
     setShow(true);
-    if (dish) setFormData(dish[0]);
   };
-  const onChange = async (e) =>
-    setFormData({ ...dish[0], [e.target.name]: e.target.value });
+  const onChange = async (e) => {
+    dish[0][e.target.name] = e.target.value;
+  };
+
   const onSubmit = (e) => {
     e.preventDefault();
-    editDish(formData, history);
+    editDish(dish[0], history);
+    handleClose();
   };
   return (
     <>
       <center>
-        {/*  <div class="post bg-white p-1 my-1 cent"> */}
         <br />
         <hr />
-
+        {urole === "restaurant" && (
+          <div className="col-md-2">
+            <button className="btn btn-primary">
+              <i class="fas fa-plus" style={{ color: "black" }}>
+                {" "}
+                <Link to="/restaurant/add/dishes" style={{ color: "black" }}>
+                  Add Dish
+                </Link>
+              </i>
+            </button>
+          </div>
+        )}
         <div className="row" name="dishes">
           {dishes &&
             dishes.map((item) => {
@@ -85,9 +83,11 @@ const Dishes = ({
                           style={{ color: "black" }}
                           onClick={() => {
                             edit(item.id);
+
+                            handleShow();
                           }}
                         />
-                        {dish ? (
+                        {!loading && dish && dish[0].id === item.id ? (
                           <Fragment>
                             <Modal show={show} onHide={handleClose}>
                               <Modal.Header>
@@ -120,20 +120,24 @@ const Dishes = ({
                                 </label>
                                 <select
                                   name="category"
-                                  defaultValue={dish[0].category}
+                                  defaultValue={
+                                    dish[0].category.charAt(0).toUpperCase() +
+                                    dish[0].category.slice(1)
+                                  }
                                   onChange={(e) => onChange(e)}
                                 >
-                                  <option value="0">{dish[0].category}</option>
-                                  <option value="Appetizer">Appetizer</option>
-                                  <option value="Salads">Salads</option>
-                                  <option
-                                    value="Main
-Course"
-                                  >
-                                    Main Course
+                                  <option value="0">
+                                    {dish[0].category.charAt(0).toUpperCase() +
+                                      dish[0].category.slice(1)}
                                   </option>
-                                  <option value="Desserts">Desserts</option>
-                                  <option value="Beverages">Beverages</option>
+                                  {/* 'appetizer','salad','main course', 'dessert','beverage') ; */}
+                                  <option value="appetizer">Appetizer</option>
+                                  <option value="salad">Salad</option>
+                                  <option value="main course">
+                                    Main course
+                                  </option>
+                                  <option value="dessert">Dessert</option>
+                                  <option value="beverage">Beverage</option>
                                 </select>
                                 <br />
                                 <label for="type">
@@ -141,14 +145,20 @@ Course"
                                 </label>
                                 <select
                                   name="type"
-                                  value={dish[0].type}
+                                  defaultValue={
+                                    dish[0].type.charAt(0).toUpperCase() +
+                                    dish[0].type.slice(1)
+                                  }
                                   onChange={(e) => onChange(e)}
                                 >
-                                  <option value="0">{dish[0].type}</option>
-                                  <option value="veg">veg</option>
-                                  <option value="non-veg">non-veg</option>
-                                  <option value="vegan">vegan</option>
-                                  <option value="all">all</option>
+                                  <option value="0">
+                                    {dish[0].type.charAt(0).toUpperCase() +
+                                      dish[0].type.slice(1)}
+                                  </option>
+                                  <option value="veg">Veg</option>
+                                  <option value="non-veg">Non-veg</option>
+                                  <option value="vegan">Vegan</option>
+                                  <option value="all">All</option>
                                 </select>
                                 <br />
                                 <label for="price">
@@ -209,7 +219,6 @@ Course"
               );
             })}
         </div>
-        {/* </div> */}
       </center>
     </>
   );
@@ -220,9 +229,11 @@ Dishes.propTypes = {
   deleteDish: PropTypes.func.isRequired,
   getDishByID: PropTypes.func.isRequired,
   editDish: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
 };
 const mapStateToProps = (state) => ({
   restaurantprofile: state.restaurantprofile,
+  auth: state.auth,
 });
 const mapDispatchToProps = {
   getCurrentProfile,

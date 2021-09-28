@@ -5,7 +5,6 @@ import {
   USER_LOGIN_SUCCESS,
   AUTH_ERROR,
   USER_LOADED,
-  USER_LOGIN_FAIL,
 } from "./types";
 import { setAlert } from "./alert";
 import setAuthToken from "../utils/setAuthToken";
@@ -41,7 +40,7 @@ export const register = (name, email, password) => async (dispatch) => {
     });
     dispatch(loadUser());
   } catch (err) {
-    const errors = err.response.data.errors;
+    const errors = err.response.data.error;
     if (errors) {
       errors.forEach((error) => dispatch(setAlert(error.msg, "danger")));
     }
@@ -66,12 +65,12 @@ export const login = (email, password) => async (dispatch) => {
     });
     dispatch(loadUser());
   } catch (error) {
-    const errors = error.response.data.errors;
-    if (errors) {
-      errors.forEach((error) => dispatch(setAlert(error.msg, "danger")));
-    }
-    dispatch({
-      type: USER_LOGIN_FAIL,
-    });
+    // const errors = error.response.data.errors;
+    // if (errors) {
+    //   errors.forEach((error) => dispatch(setAlert(error.msg, "danger")));
+    // }
+    // dispatch({
+    //   type: USER_LOGIN_FAIL,
+    // });
   }
 };

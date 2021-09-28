@@ -12,6 +12,7 @@ import Spinner from "../Spinner";
 const ViewOrder = ({
   getCurrentProfile,
   updateDeliveryStatus,
+  auth: { urole },
   restaurantprofile: { order, loading, dishesOfOrder },
 }) => {
   useEffect(() => {
@@ -26,7 +27,7 @@ const ViewOrder = ({
     <Spinner />
   ) : (
     <Fragment>
-      {order !== null ? (
+      {order !== null && urole === "restaurant" ? (
         <>
           <nav>
             <img
@@ -43,10 +44,13 @@ const ViewOrder = ({
                     style={{ color: "green" }}
                     onChange={(e) => onChange(order[0].id, e)}
                   >
-                    <option value="0">{order[0].delivery_status}</option>
-                    <option value="received">Order Received</option>
+                    <option value="0">
+                      {order[0].delivery_status.charAt(0).toUpperCase() +
+                        order[0].delivery_status.slice(1)}
+                    </option>
+                    <option value="order received">Order received</option>
                     <option value="preparing">Preparing</option>
-                    <option value="otw">On the way</option>
+                    <option value="on the way">On the way</option>
                     <option value="delivered">Delivered</option>
                     <option value="cancelled">Cancel</option>
                   </select>
@@ -64,11 +68,15 @@ const ViewOrder = ({
                     style={{ color: "green" }}
                     onChange={(e) => onChange(order[0].id, e)}
                   >
-                    <option value="0">{order[0].pickup_status}</option>
-                    <option value="received">Order Received</option>
+                    <option value="0">
+                      {" "}
+                      {order[0].pickup_status.charAt(0).toUpperCase() +
+                        order[0].pickup_status.slice(1)}
+                    </option>
+                    <option value="order received">Order Received</option>
                     <option value="preparing">Preparing</option>
-                    <option value="ready">Pick Up Ready</option>
-                    <option value="pickedup">PickedUp</option>
+                    <option value="pick up ready">Pick up ready</option>
+                    <option value="pickedup">Pickedup</option>
                     <option value="cancelled">Cancel</option>
                   </select>
 
@@ -113,7 +121,7 @@ const ViewOrder = ({
         <Fragment>
           <h1>
             {" "}
-            No order selected.{" "}
+            No order selected/Not authorized to view this page.{" "}
             <Redirect to="/restaurant/orders">Orders</Redirect>
           </h1>
         </Fragment>
@@ -124,10 +132,12 @@ const ViewOrder = ({
 ViewOrder.propTypes = {
   getCurrentProfile: PropTypes.func.isRequired,
   restaurantprofile: PropTypes.object.isRequired,
+  auth: PropTypes.object.isRequired,
   updateDeliveryStatus: PropTypes.func.isRequired,
 };
 const mapStateToProps = (state) => ({
   restaurantprofile: state.restaurantprofile,
+  auth: state.auth,
 });
 export default connect(mapStateToProps, {
   getCurrentProfile,

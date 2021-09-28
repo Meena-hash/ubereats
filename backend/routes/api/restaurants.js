@@ -1,4 +1,3 @@
-const { v4: uuidv4 } = require("uuid");
 const express = require("express");
 const router = express.Router();
 const { check, validationResult } = require("express-validator");
@@ -33,7 +32,6 @@ router.post(
           .json({ errors: [{ msg: "Restaurant already exists" }] });
       }
       restaurant = new Restaurant({
-        id: uuidv4(),
         name,
         email,
         location,
@@ -64,8 +62,8 @@ router.post(
         }
       );
     } catch (error) {
-      console.log(error.message);
-      res.status(500).send("Server error");
+      console.log(error);
+      res.status(500).send(error);
     }
   }
 );

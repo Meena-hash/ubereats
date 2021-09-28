@@ -3,7 +3,7 @@ import {
   RESTAURANT_REGISTER_SUCCESS,
   RESTAURANT_REGISTER_FAIL,
   AUTH_ERROR,
-  USER_LOADED,
+  RESTAURANT_USER_LOADED,
   RESTAURANT_LOGIN_FAIL,
   RESTAURANT_LOGIN_SUCCESS,
   LOGOUT_SUCCESS,
@@ -19,7 +19,7 @@ export const loadRestaurantUser = () => async (dispatch) => {
   try {
     const res = await axios.get("/api/restaurant/auth");
     dispatch({
-      type: USER_LOADED,
+      type: RESTAURANT_USER_LOADED,
       payload: res.data,
     });
   } catch (error) {

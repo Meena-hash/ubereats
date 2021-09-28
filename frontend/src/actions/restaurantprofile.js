@@ -7,7 +7,7 @@ import {
   DELETE_DISH,
   ADD_DISH,
   GET_DISH_BY_ID,
-  USER_LOADED,
+  RESTAURANT_USER_LOADED,
   GET_ALL_ORDERS_BY_REST_ID,
   EDIT_DISH,
   VIEW_ORDER,
@@ -30,7 +30,7 @@ export const getCurrentProfile = () => async (dispatch) => {
     });
     const user = await axios.get("/api/restaurant/auth");
     dispatch({
-      type: USER_LOADED,
+      type: RESTAURANT_USER_LOADED,
       payload: user.data,
     });
     dispatch(getAllOrdersByRestaurant());
@@ -83,12 +83,13 @@ export const createProfile =
 
 export const deleteDish = (id) => async (dispatch) => {
   try {
-    axios.delete(`/api/restaurant/profile/dish/${id}`);
+    await axios.delete(`/api/restaurant/profile/dish/${id}`);
     dispatch({
       type: DELETE_DISH,
       payload: id,
     });
     dispatch(setAlert("Dish deleted", "success"));
+    // dispatch(getCurrentProfile());
   } catch (error) {
     const errors = error.response.data.errors;
     if (errors) {
@@ -119,19 +120,21 @@ export const addDish = (formData, history) => async (dispatch) => {
       payload: res.data,
     });
     dispatch(setAlert("Dish Created", "success"));
-    history.push("/restaurant/dishes");
+    // dispatch(getCurrentProfile());
+    history.push("/restaurant/profile");
   } catch (error) {
-    const errors = error.response.data.errors;
-    if (errors) {
-      errors.forEach((error) => dispatch(setAlert(error.msg, "danger")));
-    }
-    dispatch({
-      type: PROFILE_ERROR,
-      payload: {
-        msg: error.response.statusText,
-        status: error.response.status,
-      },
-    });
+    console.log(error);
+    // const errors = error.response.data.errors;
+    // if (errors) {
+    //   errors.forEach((error) => dispatch(setAlert(error.msg, "danger")));
+    // }
+    // dispatch({
+    //   type: PROFILE_ERROR,
+    //   payload: {
+    //     msg: error.response.statusText,
+    //     status: error.response.status,
+    //   },
+    // });
   }
 };
 
@@ -161,7 +164,7 @@ export const editDish = (formData, history) => async (dispatch) => {
     headers: { "Content-Type": "application/json" },
   };
   try {
-    const res = axios.post(
+    const res = await axios.post(
       "/api/restaurant/profile/update/dish",
       formData,
       config
@@ -170,20 +173,12 @@ export const editDish = (formData, history) => async (dispatch) => {
       type: EDIT_DISH,
       payload: res.data,
     });
+
     dispatch(setAlert("Dish Edited", "success"));
-    history.push("/restaurant/home");
+    dispatch(getCurrentProfile());
+    history.push("/restaurant/profile");
   } catch (error) {
-    const errors = error.response.data.errors;
-    if (errors) {
-      errors.forEach((error) => dispatch(setAlert(error.msg, "danger")));
-    }
-    dispatch({
-      type: PROFILE_ERROR,
-      payload: {
-        msg: error.response.statusText,
-        status: error.response.status,
-      },
-    });
+    console.log(error);
   }
 };
 

@@ -1,4 +1,3 @@
-const { v4: uuidv4 } = require("uuid");
 const express = require("express");
 const router = express.Router();
 const { check, validationResult } = require("express-validator");
@@ -31,7 +30,6 @@ router.post(
           .json({ errors: [{ msg: "User already exists" }] });
       }
       user = new User({
-        id: uuidv4(),
         name,
         email,
         password,
