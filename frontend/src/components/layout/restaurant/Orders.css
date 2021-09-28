@@ -49,3 +49,6 @@ body {
     text-align: left;
   }
 }
+.fas {
+  cursor: pointer;
+}

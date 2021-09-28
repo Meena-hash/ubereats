@@ -21,15 +21,16 @@ const Orders = ({
   history,
 }) => {
   const [orderData, setOrderData] = useState(orders);
-  console.log("order:", orderData);
-  const [filter, setFilter] = useState("");
+  const [filter, setFilter] = useState("All Orders");
   useEffect(() => {
     getAllOrdersByRestaurant();
     getCurrentProfile();
-
-    if (orders) setOrderData(orders);
-    console.log("after effect", orderData);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  useEffect(() => {
+    setOrderData(orders);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [orders]);
   return loading && orders === null ? (
     <Spinner />
   ) : !loading && orders && urole === "restaurant" ? (
@@ -41,20 +42,19 @@ const Orders = ({
       <>
         <>
           <div className="navbar order">
-            <a
-              className="nav-link active"
-              href
+            <i
+              className="fas fa-check-circle navorder"
               onClick={(e) => {
                 e.preventDefault();
                 orders && setOrderData(orders);
                 setFilter("All Orders");
               }}
             >
-              <i className="fas fa-check-circle navorder">All</i>
-            </a>
-            <a
-              href
-              className="nav-link"
+              {" "}
+              All
+            </i>
+            <i
+              className="fas fa-cart-plus navorder"
               onClick={(e) => {
                 e.preventDefault();
                 orders &&
@@ -64,11 +64,11 @@ const Orders = ({
                 setFilter("New Orders");
               }}
             >
-              <i className="fas fa-check-circle navorder">New</i>
-            </a>{" "}
-            <a
-              href
-              className="nav-link"
+              New
+            </i>
+
+            <i
+              className="fas fa-truck navorder"
               onClick={(e) => {
                 e.preventDefault();
                 orders &&
@@ -78,11 +78,11 @@ const Orders = ({
                 setFilter("Delivered Orders");
               }}
             >
-              <i className="fas fa-truck navorder">Delivered</i>
-            </a>
-            <a
-              href
-              className="nav-link"
+              Delivered
+            </i>
+
+            <i
+              className="fas fa-ban navorder"
               onClick={(e) => {
                 e.preventDefault();
                 orders &&
@@ -92,8 +92,8 @@ const Orders = ({
                 setFilter("Cancelled Orders");
               }}
             >
-              <i className="fas fa-ban navorder">Cancelled</i>
-            </a>
+              Cancelled
+            </i>
           </div>
           <br />
           <h5>{filter}</h5>

@@ -382,3 +382,6 @@ table {
 }
 
 /* The switch - the box around the slider */
+.fas {
+  cursor: pointer;
+}

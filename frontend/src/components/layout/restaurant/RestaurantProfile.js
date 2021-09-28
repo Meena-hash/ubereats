@@ -25,10 +25,6 @@ const RestaurantProfile = ({
             {!loading && urole === "restaurant" && (
               <div className="profilec">
                 <div className="bottom-left">{user && user.name}</div>
-
-                {/* <div className="bottom-right">
-                  {" "}
-                </div> */}
                 <div className="top-right">
                   <a href="/restaurant/edit-profile">
                     <i className="fas fa-edit"></i>
