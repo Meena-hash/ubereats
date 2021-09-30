@@ -37,7 +37,7 @@ const UserProfile = ({
   return loading && profile === null ? (
     <>
       <Spinner />
-      {urole === "restaurant" && (
+      {urole && urole === "restaurant" && (
         <Redirect to={"/restaurant/orders"} delay={30000} />
       )}
     </>

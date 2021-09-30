@@ -8,6 +8,7 @@ import {
   RESTAURANT_LOGIN_SUCCESS,
   LOGOUT_SUCCESS,
   CLEAR_PROFILE,
+  CLEAR_USER_PROFILE,
 } from "./types";
 import { setAlert } from "./alert";
 import setAuthToken from "../utils/setAuthToken";
@@ -86,5 +87,8 @@ export const logout = () => async (dispatch) => {
   });
   dispatch({
     type: CLEAR_PROFILE,
+  });
+  dispatch({
+    type: CLEAR_USER_PROFILE,
   });
 };

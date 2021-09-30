@@ -1,13 +1,17 @@
 import React from "react";
 import ReactDOM from "react-dom";
-
+import { Container } from "react-bootstrap";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Container fluid>
+      <App />
+    </Container>
+    ,
   </React.StrictMode>,
+
   document.getElementById("root")
 );
 
