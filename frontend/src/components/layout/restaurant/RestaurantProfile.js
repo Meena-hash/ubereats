@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { getCurrentProfile } from "../../../actions/restaurantprofile";
@@ -6,10 +6,13 @@ import Spinner from "../Spinner";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import Dishes from "./Dishes";
 import "./RestaurantProfile.css";
+import { uploadImageRestaurant } from "../../../actions/restaurantprofile";
+
 const RestaurantProfile = ({
   getCurrentProfile,
   auth: { user, urole },
   restaurantprofile: { profile, loading },
+  uploadImageRestaurant,
 }) => {
   useEffect(() => {
     getCurrentProfile();
@@ -23,7 +26,10 @@ const RestaurantProfile = ({
         {profile !== null ? (
           <Fragment>
             {!loading && urole === "restaurant" && (
-              <div className="profilec">
+              <div
+                className="profilec"
+                style={{ backgroundImage: `url(${profile.images})` }}
+              >
                 <div className="bottom-left">{user && user.name}</div>
                 <div className="top-right">
                   <a href="/restaurant/edit-profile">
@@ -68,12 +74,14 @@ RestaurantProfile.propTypes = {
   getCurrentProfile: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
   restaurantprofile: PropTypes.object.isRequired,
+  uploadImageRestaurant: PropTypes.func.isRequired,
 };
 const mapStateToProps = (state) => ({
   auth: state.auth,
   restaurantprofile: state.restaurantprofile,
 });
 
-export default connect(mapStateToProps, { getCurrentProfile })(
-  RestaurantProfile
-);
+export default connect(mapStateToProps, {
+  uploadImageRestaurant,
+  getCurrentProfile,
+})(RestaurantProfile);

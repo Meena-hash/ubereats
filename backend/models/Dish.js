@@ -29,6 +29,9 @@ const Dish = db.define(
     type: {
       type: Sequelize.ENUM("veg", "non-veg", "vegan", "all"),
     },
+    images: {
+      type: Sequelize.STRING,
+    },
     restaurant_idx: {
       type: Sequelize.INTEGER,
       references: "restaurants",

@@ -3,5 +3,8 @@
     "user": "admin",
     "password": "myPassword",
     "database": "ubereats",
-    "jwtSecret": "ubereats"
+    "jwtSecret": "ubereats",
+    "cloud-name":"meena273",
+    "api-key": "912573625963145",
+    "secret-key":"5c1yIXuUgsKcNBgp_E-9jbCDfDM"
 }

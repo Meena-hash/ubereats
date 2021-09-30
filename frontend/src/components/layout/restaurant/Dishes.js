@@ -41,9 +41,30 @@ const Dishes = ({
 
   const onSubmit = (e) => {
     e.preventDefault();
-    editDish(dish[0], history);
+    const picFormData = new FormData();
+    picFormData.append("image", values.picFile);
+    editDish(dish[0], picFormData, history);
     handleClose();
   };
+
+  // image
+  const [values, setValues] = useState({
+    imagePreviewUrl: "",
+    picFile: null,
+  });
+  let fileInput = React.createRef();
+
+  const handleImageChange = (e) => {
+    e.preventDefault();
+    let reader = new FileReader();
+    let inFile = e.target.files[0];
+    reader.onloadend = () => {
+      setValues({ ...values, picFile: inFile, imagePreviewUrl: reader.result });
+    };
+    reader.readAsDataURL(inFile);
+    // fileInput.current.click();
+  };
+
   return (
     <>
       <center>
@@ -69,7 +90,7 @@ const Dishes = ({
                   <div className="column">
                     <div className="row rows">
                       <div className="column">
-                        <img className="imagecol" src={pasta1} alt="" />
+                        <img className="imagecol" src={item.images} alt="" />
                       </div>
                       <div className="column">
                         <h4>{item.name}</h4>
@@ -94,6 +115,23 @@ const Dishes = ({
                                 <Modal.Title>{dish[0].name}</Modal.Title>
                               </Modal.Header>
                               <Modal.Body>
+                                <div>
+                                  <p>Change image</p>
+                                  <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleImageChange}
+                                    ref={fileInput}
+                                  />
+                                  <img
+                                    src={values.imagePreviewUrl}
+                                    alt=""
+                                    style={{
+                                      objectFit: "cover",
+                                      width: "20%",
+                                    }}
+                                  />
+                                </div>
                                 <label for="description">
                                   <b> Description </b>
                                 </label>

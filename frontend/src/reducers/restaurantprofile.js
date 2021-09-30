@@ -10,6 +10,8 @@ import {
   VIEW_ORDER,
   UPDATE_DELIVERY_STATUS,
   GET_DISHES_OF_ORDER,
+  UPLOAD_IMAGE_RESTAURANT,
+  UPLOAD_IMAGE_DISH,
   EDIT_DISH,
   SET_USERID_FROM_RESTAURANT,
 } from "../actions/types";
@@ -57,11 +59,8 @@ export default function restprofReducer(state = initialState, action) {
       };
     case GET_ALL_DISHES:
       return { ...state, loading: false, dishes: payload };
+    case UPLOAD_IMAGE_DISH:
     case EDIT_DISH:
-      console.log([
-        payload,
-        ...state.dishes.filter((dish) => dish.id !== payload.id),
-      ]);
       return {
         ...state,
         loading: false,
@@ -70,8 +69,10 @@ export default function restprofReducer(state = initialState, action) {
           ...state.dishes.filter((dish) => dish.id !== payload.id),
         ],
       };
+
     case ADD_DISH:
       return { ...state, loading: false, dishes: [payload, ...state.dishes] };
+    case UPLOAD_IMAGE_RESTAURANT:
     case GET_PROFILE:
       return { ...state, profile: payload, loading: false };
     case UPDATE_DELIVERY_STATUS:

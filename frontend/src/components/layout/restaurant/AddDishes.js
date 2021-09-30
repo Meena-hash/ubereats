@@ -4,6 +4,7 @@ import { withRouter } from "react-router-dom/cjs/react-router-dom.min";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import Spinner from "../Spinner";
+import { uploadImageDish } from "../../../actions/restaurantprofile";
 const initialState = {
   name: "",
   ingredients: "",
@@ -17,6 +18,7 @@ const AddDishes = ({
   auth: { urole, user, loading },
   addDish,
   history,
+  uploadImageDish,
 }) => {
   useEffect(() => {
     getCurrentProfile();
@@ -27,7 +29,25 @@ const AddDishes = ({
     setFormData({ ...formData, [e.target.name]: e.target.value });
   const onSubmit = (e) => {
     e.preventDefault();
-    addDish(formData, history);
+    const picFormData = new FormData();
+    picFormData.append("image", values.picFile);
+    addDish(formData, picFormData, history);
+  };
+  const [values, setValues] = useState({
+    imagePreviewUrl: formData.images,
+    picFile: null,
+  });
+  let fileInput = React.createRef();
+
+  const handleImageChange = (e) => {
+    e.preventDefault();
+    let reader = new FileReader();
+    let inFile = e.target.files[0];
+    reader.onloadend = () => {
+      setValues({ ...values, picFile: inFile, imagePreviewUrl: reader.result });
+    };
+    reader.readAsDataURL(inFile);
+    // fileInput.current.click();
   };
   return loading && user === null ? (
     <Spinner />
@@ -38,6 +58,22 @@ const AddDishes = ({
           {" "}
           <h1 className="large text-primary">Add a Dish</h1>
         </center>
+        <div className="form-group">
+          <div>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              ref={fileInput}
+            />
+            <img
+              src={values.imagePreviewUrl}
+              alt=""
+              style={{ objectFit: "cover", width: "20%" }}
+            />
+          </div>
+        </div>
+
         <div className="form-group">
           <input
             type="text"
@@ -111,10 +147,13 @@ AddDishes.prototypes = {
   addDish: PropTypes.func.isRequired,
   getCurrentProfile: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
+  uploadImageDish: PropTypes.func.isRequired,
 };
 const mapStateToProps = (state) => ({
   auth: state.auth,
 });
-export default connect(mapStateToProps, { getCurrentProfile, addDish })(
-  withRouter(AddDishes)
-);
+export default connect(mapStateToProps, {
+  uploadImageDish,
+  getCurrentProfile,
+  addDish,
+})(withRouter(AddDishes));
