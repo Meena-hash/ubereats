@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router();
+const db = require("../../config/db");
 const auth = require("../../middleware/restaurant_auth");
 const RestaurantProfile = require("../../models/RestaurantProfile");
 const UserProfile = require("../../models/UserProfile");
 const Restaurant = require("../../models/Restaurant");
 const Dish = require("../../models/Dish");
 const Orders = require("../../models/Order");
-const db = require("../../config/db");
 
 router.get("/", auth, async (req, res) => {
   try {

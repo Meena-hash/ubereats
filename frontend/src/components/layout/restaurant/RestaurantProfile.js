@@ -6,13 +6,11 @@ import Spinner from "../Spinner";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import Dishes from "./Dishes";
 import "./RestaurantProfile.css";
-import { uploadImageRestaurant } from "../../../actions/restaurantprofile";
 
 const RestaurantProfile = ({
   getCurrentProfile,
   auth: { user, urole },
   restaurantprofile: { profile, loading },
-  uploadImageRestaurant,
 }) => {
   useEffect(() => {
     getCurrentProfile();
@@ -74,7 +72,6 @@ RestaurantProfile.propTypes = {
   getCurrentProfile: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
   restaurantprofile: PropTypes.object.isRequired,
-  uploadImageRestaurant: PropTypes.func.isRequired,
 };
 const mapStateToProps = (state) => ({
   auth: state.auth,
@@ -82,6 +79,5 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, {
-  uploadImageRestaurant,
   getCurrentProfile,
 })(RestaurantProfile);
