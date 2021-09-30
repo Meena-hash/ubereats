@@ -16,22 +16,30 @@ const UserProfile = ({
   getCurrentProfile,
 }) => {
   useEffect(() => {
-    getCurrentUser();
-    if (!loading && urole && urole === "user") getCurrentUser();
-    else if (urole === "restaurant") {
+    if (!loading && urole && urole === "user") {
+      getCurrentUser();
+    } else if (urole && urole === "restaurant") {
       getCurrentProfile();
       if (loading && profile === null) {
         <Link to="/restaurant/orders"></Link>;
       }
     }
-    if (!loading && user && urole && urole === "user") getUserByID(user.id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (user) {
+      getUserByID(user.id);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   return loading && profile === null ? (
     <>
       <Spinner />
-      <Redirect to={"/restaurant/orders"} delay={2000} />
+      {urole === "restaurant" && (
+        <Redirect to={"/restaurant/orders"} delay={30000} />
+      )}
     </>
   ) : (
     <>
@@ -40,17 +48,15 @@ const UserProfile = ({
           <div className="row">
             <div className="col-md-4">
               <div className="profile-img">
-                <img
-                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS52y5aInsxSm31CvHOFHWujqUx_wWTS9iM6s7BAm21oEN_RiGoog"
-                  alt=""
-                />{" "}
-                <hr />
-                {urole && urole === "user" && (
-                  <div>
-                    <i class="fas fa-edit" style={{ color: "black" }}></i>
-                    {/* <input type="file" name="file" /> */}
-                  </div>
-                )}
+                <img src={profile.picture} alt="" /> <hr />
+                {
+                  // urole && urole === "user" && (
+                  //   <div>
+                  //     <i class="fas fa-edit" style={{ color: "black" }}></i>
+                  //     {/* <input type="file" name="file" /> */}
+                  //   </div>
+                  // )
+                }
               </div>
             </div>
             <div className="col-md-6">

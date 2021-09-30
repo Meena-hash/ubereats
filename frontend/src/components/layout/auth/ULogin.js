@@ -59,7 +59,7 @@ const ULogin = ({ login, isAuthenticated }) => {
           />
         </form>
         <p className="my-1">
-          Don't have an account? <Link to="user/register">Sign Up</Link>
+          Don't have an account? <Link to="/user/register">Sign Up</Link>
         </p>
       </div>
     </Fragment>

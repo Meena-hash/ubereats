@@ -5,6 +5,7 @@ import {
   USER_LOADED,
   GET_USER_PROFILE,
   SET_USERID_FROM_RESTAURANT,
+  UPLOAD_USER_PICTURE,
 } from "./types";
 
 export const getUserByID =
@@ -48,7 +49,6 @@ export const getCurrentUser = () => async (dispatch) => {
     const config = {
       headers: { "Content-Type": "application/json" },
     };
-    console.log("here", res.data);
     const user_prof = await axios.get(
       `/api/user/profile/${res.data.profileid}`,
       config
@@ -60,19 +60,37 @@ export const getCurrentUser = () => async (dispatch) => {
   } catch (error) {}
 };
 
-export const editUserProfile = (formData, history) => async (dispatch) => {
+export const editUserProfile =
+  (formData, imageData, history) => async (dispatch) => {
+    try {
+      const config = {
+        headers: { "Content-Type": "application/json" },
+      };
+      const res = await axios.post("/api/user/profile/basic", formData, config);
+      dispatch({
+        type: USER_LOADED,
+        payload: res.data,
+      });
+      dispatch(uploadImageUser(imageData, res.data.profileid));
+      dispatch(getCurrentUser());
+      dispatch(setAlert("Profile Updated", "success"));
+      history.push("/user/profile");
+    } catch (error) {}
+  };
+
+export const uploadImageUser = (formData, user_id) => async (dispatch) => {
   try {
-    const config = {
-      headers: { "Content-Type": "application/json" },
-    };
-    const res = await axios.post("/api/user/profile/basic", formData, config);
+    const res = await axios.post(
+      `/api/image//user/upload/${user_id}`,
+      formData
+    );
     dispatch({
-      type: USER_LOADED,
+      type: UPLOAD_USER_PICTURE,
       payload: res.data,
     });
-
-    dispatch(getCurrentUser());
-    dispatch(setAlert("Profile Updated", "success"));
-    history.push("/user/profile");
-  } catch (error) {}
+  } catch (error) {
+    alert(
+      "Error occurred while uploading picture, try uploading a smaller image size or try again later."
+    );
+  }
 };

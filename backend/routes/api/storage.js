@@ -6,6 +6,7 @@ const config = require("config");
 const auth = require("../../middleware/restaurant_auth");
 const RestaurantProfile = require("../../models/RestaurantProfile");
 const Dish = require("../../models/Dish");
+const UserProfile = require("../../models/UserProfile");
 const router = express.Router();
 
 // Account access information
@@ -74,6 +75,39 @@ router.post(
         });
         await dish.save();
         return res.json(dish);
+      } else {
+        return res.status(400).json({ msg: "No profile found for the user" });
+      }
+    } catch (err) {
+      console.log(err);
+      res.status(500).send(err);
+    }
+  }
+);
+
+router.post(
+  "/user/upload/:user_id",
+  auth,
+  parser.single("image"),
+  async (req, res) => {
+    // upload the public id to db
+    try {
+      let profile = await UserProfile.findOne({
+        where: {
+          profileid: req.params.user_id,
+        },
+      });
+      let profileimage = {};
+      profileimage.picture = req.file.path;
+      if (profile) {
+        profile = await UserProfile.update(profileimage, {
+          where: { profileid: req.params.user_id },
+        });
+        profile = await UserProfile.findOne({
+          where: { profileid: req.params.user_id },
+        });
+        await profile.save();
+        return res.json(profile);
       } else {
         return res.status(400).json({ msg: "No profile found for the user" });
       }

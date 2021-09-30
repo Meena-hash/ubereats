@@ -48,6 +48,24 @@ const EditUserProfile = ({
       setFormData(profileData);
     }
   }, [loading, getCurrentUser, profile]);
+  // image
+  const [values, setValues] = useState({
+    imagePreviewUrl: formData.images,
+    picFile: null,
+  });
+
+  let fileInput = React.createRef();
+
+  const handleImageChange = (e) => {
+    e.preventDefault();
+    let reader = new FileReader();
+    let inFile = e.target.files[0];
+    reader.onloadend = () => {
+      setValues({ ...values, picFile: inFile, imagePreviewUrl: reader.result });
+    };
+    reader.readAsDataURL(inFile);
+  };
+
   const selectCountry = async (val) => {
     setFormData({ ...formData, country: val });
   };
@@ -58,16 +76,33 @@ const EditUserProfile = ({
     setFormData({ ...formData, [e.target.name]: e.target.value });
   const onSubmit = (e) => {
     e.preventDefault();
-    editUserProfile(formData, history);
+    const imageData = new FormData();
+    imageData.append("image", values.picFile);
+    editUserProfile(formData, imageData, history);
   };
-  return (
+  return urole === "user" ? (
     <Fragment>
       <form className="form profile" onSubmit={(e) => onSubmit(e)}>
         <center>
           {" "}
-          <h1 className="large text-primary">Edit Your Profile</h1>
+          {/* <h1 className="large text-primary">Edit Your Profile</h1> */}
         </center>
-
+        <div className="form-group">
+          <div>
+            {/* /onClick={() => editProfilePic()} */}
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              ref={fileInput}
+            />
+            <img
+              src={values.imagePreviewUrl}
+              alt=""
+              style={{ objectFit: "cover", width: "10%" }}
+            />
+          </div>
+        </div>
         <div className="form-group">
           <input
             type="text"
@@ -162,6 +197,8 @@ const EditUserProfile = ({
         </center>
       </form>
     </Fragment>
+  ) : (
+    <Fragment>Not allowed to access</Fragment>
   );
 };
 

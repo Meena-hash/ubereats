@@ -36,7 +36,6 @@ const User_Profile = db.define(
     },
     picture: {
       type: Sequelize.STRING,
-      allowNull: false,
     },
     email: {
       type: Sequelize.STRING,

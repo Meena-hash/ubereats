@@ -10,8 +10,6 @@ import {
   editDish,
 } from "../../../actions/restaurantprofile";
 import { deleteDish } from "../../../actions/restaurantprofile";
-import pasta1 from "../img/pasta1.jpeg";
-
 const Dishes = ({
   getCurrentProfile,
   restaurantprofile: { loading, dishes, dish },
