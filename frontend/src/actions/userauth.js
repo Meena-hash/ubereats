@@ -5,6 +5,9 @@ import {
   USER_LOGIN_SUCCESS,
   AUTH_ERROR,
   USER_LOADED,
+  CLEAR_PROFILE,
+  CLEAR_USER_PROFILE,
+  LOGOUT_SUCCESS,
 } from "./types";
 import { setAlert } from "./alert";
 import setAuthToken from "../utils/setAuthToken";
@@ -64,13 +67,19 @@ export const login = (email, password) => async (dispatch) => {
       payload: res.data,
     });
     dispatch(loadUser());
-  } catch (error) {
-    // const errors = error.response.data.errors;
-    // if (errors) {
-    //   errors.forEach((error) => dispatch(setAlert(error.msg, "danger")));
-    // }
-    // dispatch({
-    //   type: USER_LOGIN_FAIL,
-    // });
-  }
+  } catch (error) {}
+};
+export const logoutUser = (history) => async (dispatch) => {
+  try {
+    dispatch({
+      type: CLEAR_PROFILE,
+    });
+    dispatch({
+      type: CLEAR_USER_PROFILE,
+    });
+    dispatch({
+      type: LOGOUT_SUCCESS,
+    });
+    history.push("/user/login");
+  } catch (error) {}
 };

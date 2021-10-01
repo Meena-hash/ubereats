@@ -10,11 +10,15 @@ import PropTypes from "prop-types";
 import "./Navbar.css";
 import { Row, Col } from "react-bootstrap";
 import { logout } from "../../actions/restaurantauth";
+import { logoutUser } from "../../actions/userauth";
+import { withRouter } from "react-router-dom/cjs/react-router-dom.min";
 import UserNavbar from "./UserNavbar";
 
 const Navbar = ({
   auth: { isAuthenticated, loading, user, urole },
   logout,
+  logoutUser,
+  history,
 }) => {
   const [sidebar, setSidebar] = useState(false);
   const showSidebar = () => setSidebar(!sidebar);
@@ -77,13 +81,16 @@ const Navbar = ({
           })}
           <li className="nav-text">
             {/* later replace with dashboard */}
-            <a onClick={logout} href="/restaurant/login">
-              <i style={{ color: "black" }} className="fas fa-sign-out-alt"></i>
-              {""}
-              <span style={{ color: "black" }} className="hide-sm">
-                Logout
-              </span>
-            </a>
+
+            <i
+              style={{ color: "black" }}
+              className="fas fa-sign-out-alt"
+              onClick={() => logout(history)}
+            ></i>
+            {""}
+            <span style={{ color: "black" }} className="hide-sm">
+              Logout
+            </span>
           </li>
         </ul>
       </nav>
@@ -117,7 +124,7 @@ const Navbar = ({
             </Row>
             <Row>
               <Col cs="2">
-                <Link to="/restaurant/profile">
+                <Link to="/user/profile">
                   <button
                     style={{
                       background: "white",
@@ -144,13 +151,16 @@ const Navbar = ({
           })}
           <li className="nav-text">
             {/* later replace with dashboard */}
-            <a onClick={logout} href="/restaurant/login">
-              <i style={{ color: "black" }} className="fas fa-sign-out-alt"></i>
-              {""}
-              <span style={{ color: "black" }} className="hide-sm">
-                Logout
-              </span>
-            </a>
+
+            <i
+              style={{ color: "black" }}
+              className="fas fa-sign-out-alt"
+              onClick={() => logoutUser(history)}
+            ></i>
+            {""}
+            <span style={{ color: "black" }} className="hide-sm">
+              Logout
+            </span>
           </li>
         </ul>
       </nav>
@@ -172,9 +182,12 @@ const Navbar = ({
 };
 Navbar.propTypes = {
   logout: PropTypes.func.isRequired,
+  logoutUser: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
 };
 const mapStateToProps = (state) => ({
   auth: state.auth,
 });
-export default connect(mapStateToProps, { logout })(Navbar);
+export default connect(mapStateToProps, { logout, logoutUser })(
+  withRouter(Navbar)
+);

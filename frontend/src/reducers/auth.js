@@ -60,7 +60,7 @@ export default function authReducer(state = initialState, action) {
         ...payload,
         isAuthenticated: true,
         loading: false,
-        // urole: "user",
+        urole: "user",
       };
     case RESTAURANT_REGISTER_FAIL:
     case USER_REGISTER_FAIL:

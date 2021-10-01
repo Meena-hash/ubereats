@@ -22,6 +22,7 @@ import ViewOrder from "./components/layout/restaurant/ViewOrder";
 import Orders from "./components/layout/restaurant/Orders";
 import UserProfile from "./components/layout/user/UserProfile";
 import EditUserProfile from "./components/layout/user/EditUserProfile";
+import Dashboard from "./components/layout/user/Dashboard";
 if (localStorage.token) {
   setAuthToken(localStorage.token);
 }
@@ -43,20 +44,21 @@ const App = () => {
                 path="/restaurant/register"
                 component={RRegister}
               ></Route>
+              <Route exact path="/user/dashboard" component={Dashboard}></Route>
               <Route exact path="/user/register" component={URegister}></Route>
               <Route exact path="/user/login" component={ULogin}></Route>
-              <Route
+              <PrivateRoute
                 exact
                 path="/user/profile"
                 role="both"
                 component={UserProfile}
-              ></Route>
-              <Route
+              ></PrivateRoute>
+              <PrivateRoute
                 exact
                 path="/user/edit/profile"
                 role="user"
                 component={EditUserProfile}
-              ></Route>
+              ></PrivateRoute>
               <Route exact path="/restaurant/login" component={RLogin}></Route>
               <PrivateRoute
                 exact
@@ -88,12 +90,12 @@ const App = () => {
                 component={Dishes}
                 role="both"
               ></PrivateRoute>
-              <Route
+              <PrivateRoute
                 exact
                 path="/restaurant/add/dishes"
                 component={AddDishes}
                 role="restaurant"
-              ></Route>
+              ></PrivateRoute>
               <PrivateRoute
                 exact
                 path="/restaurant/edit/dishes"

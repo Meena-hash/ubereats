@@ -5,11 +5,11 @@
   font-size: 14px;
   padding: 0;
 }
-/* .ellipses {
+.ellipses {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-} */
+}
 .rlogin {
   background: url("./components/layout/img/loginrest.jpeg") no-repeat center
     center/cover;
@@ -321,6 +321,19 @@ tr:nth-child(even) {
 post-form .post-form-header {
   background: grey;
   padding: 0.5rem;
+}
+.columnrestaurants {
+  float: left;
+  width: 25%;
+  height: 25%;
+  padding: 5px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  border-top: 0.1px;
+  border-left: 0.1px;
+  border-right: 0.7px;
+  border-bottom: 0.1px;
 }
 
 .column {

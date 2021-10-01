@@ -19,11 +19,10 @@ const UserNavbar = () => {
           </label>
         </div>
         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-        <button className="ButtonLink">
+        <button className="ButtonLink" style={{ color: "black" }}>
           &nbsp;&nbsp;
-          <i class="fas fa-map-marker-alt" style={{ color: "black" }}>
-            &nbsp; 201 W California Avenue &nbsp;&nbsp;&nbsp;
-          </i>
+          <i className="fas fa-map-marker-alt" style={{ color: "black" }}></i>
+          &nbsp; 201 W California Avenue &nbsp;&nbsp;&nbsp;
         </button>
         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
         <div class="form-group has-search">

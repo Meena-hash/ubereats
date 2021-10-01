@@ -81,14 +81,17 @@ export const login = (email, password) => async (dispatch) => {
   }
 };
 // add clear profile later
-export const logout = () => async (dispatch) => {
-  dispatch({
-    type: LOGOUT_SUCCESS,
-  });
-  dispatch({
-    type: CLEAR_PROFILE,
-  });
-  dispatch({
-    type: CLEAR_USER_PROFILE,
-  });
+export const logout = (history) => async (dispatch) => {
+  try {
+    dispatch({
+      type: CLEAR_PROFILE,
+    });
+    dispatch({
+      type: CLEAR_USER_PROFILE,
+    });
+    dispatch({
+      type: LOGOUT_SUCCESS,
+    });
+    history.push("/restaurant/login");
+  } catch (error) {}
 };

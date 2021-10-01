@@ -87,7 +87,6 @@ export default function restprofReducer(state = initialState, action) {
         loading: false,
         dishes: state.dishes.filter((dish) => dish.id !== payload),
       };
-
     default:
       return state;
   }

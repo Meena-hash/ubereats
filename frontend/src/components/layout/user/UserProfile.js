@@ -16,7 +16,7 @@ const UserProfile = ({
   getCurrentProfile,
 }) => {
   useEffect(() => {
-    if (!loading && urole && urole === "user") {
+    if (urole && urole === "user") {
       getCurrentUser();
     } else if (urole && urole === "restaurant") {
       getCurrentProfile();
