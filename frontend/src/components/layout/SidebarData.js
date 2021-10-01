@@ -5,7 +5,6 @@ export const SidebarData = [
   {
     title: "Home",
     path: "/restaurant/profile",
-    // icon: <AiIcons.AiFillHome> </AiIcons.AiFillHome>,
     icon: <AiIcons.AiFillProfile> </AiIcons.AiFillProfile>,
     cName: "nav-text",
   },

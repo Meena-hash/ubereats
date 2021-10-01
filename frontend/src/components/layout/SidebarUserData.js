@@ -5,7 +5,6 @@ export const SidebarUserData = [
     title: "Home",
     path: "/user/dashboard",
     icon: <AiIcons.AiFillHome> </AiIcons.AiFillHome>,
-    // icon: <FaIcons.FaMoneyBill> </FaIcons.FaMoneyBill>,
     cName: "nav-text",
   },
 
@@ -13,7 +12,6 @@ export const SidebarUserData = [
     title: "profile",
     path: "/user/profile",
     icon: <AiIcons.AiFillProfile> </AiIcons.AiFillProfile>,
-
     cName: "nav-text",
   },
 ];

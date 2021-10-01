@@ -1,7 +1,18 @@
-import React, { Fragment } from "react";
-
+import React, { Fragment, useState, useEffect } from "react";
+import PropTypes from "prop-types";
 import "./UserNavbar.css";
-const UserNavbar = () => {
+import { filterOnLocation } from "../../actions/dashboard";
+import { connect } from "react-redux";
+const UserNavbar = ({ filterOnLocation }) => {
+  const [location, setLocation] = useState("");
+  const onChange = async (e) => {
+    setLocation(e.target.value);
+    // filterOnLocation(location);
+  };
+  useEffect(() => {
+    setLocation(location);
+    filterOnLocation(location);
+  }, [location]);
   return (
     <Fragment>
       <div className="unavbar">
@@ -32,11 +43,12 @@ const UserNavbar = () => {
           >
             &nbsp; &nbsp; &nbsp;
           </span>
-
           <input
             type="text"
             class="form-control"
             placeholder="Search"
+            name="location"
+            onChange={(e) => onChange(e)}
             style={{ width: "400px" }}
           />
         </div>
@@ -63,5 +75,10 @@ const UserNavbar = () => {
     </Fragment>
   );
 };
+UserNavbar.propTypes = {
+  filterOnLocation: PropTypes.func.isRequired,
+};
 
-export default UserNavbar;
+export default connect(null, {
+  filterOnLocation,
+})(UserNavbar);

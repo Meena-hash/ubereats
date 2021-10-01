@@ -5,16 +5,29 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 const Dashboard = ({
   getAllRestaurants,
-  dashboard: { restaurants, loading },
+  dashboard: { restaurants, loading, searchstring },
 }) => {
-  const [orderData, setOrderData] = useState(restaurants);
+  const [restaurantsData, setRestaurantsData] = useState(restaurants);
   useEffect(() => {
-    console.log("hi");
     getAllRestaurants();
-    setOrderData(restaurants);
-  }, [restaurants, getAllRestaurants]);
+  }, []);
+  useEffect(() => {
+    setRestaurantsData(restaurants);
+  }, [restaurants]);
+  useEffect(() => {
+    if (searchstring !== null) {
+      setRestaurantsData(
+        restaurants.filter((item) => item.location.includes(searchstring))
+      );
+      console.log(
+        "setting rest data",
+        searchstring,
+        restaurants.filter((item) => console.log(item.location))
+      );
+    }
+  }, [searchstring]);
 
-  return loading && restaurants === null ? (
+  return loading && restaurants === null && restaurantsData === null ? (
     <Spinner />
   ) : !loading && restaurants ? (
     <>
@@ -22,8 +35,8 @@ const Dashboard = ({
       <hr />
 
       <div className="container Fluid">
-        <div className="row" name="restaurants">
-          {orderData.map((item) => {
+        <div className="row" name="restaurantsD">
+          {restaurantsData.map((item) => {
             return (
               <div className="columnrestaurants">
                 <div className="card" style={{ width: "100%" }}>
