@@ -4,6 +4,7 @@ import {
   DASHBOARD_GET_ALL_RESTAURANTS,
   DASHBOARD_FILTER_STRING,
   DASHBOARD_FILTER_RESTAURANT_ON_SEARCH,
+  DASHBOARD_GET_ALL_DISHES,
 } from "./types";
 export const getAllRestaurants = () => async (dispatch) => {
   try {
@@ -15,6 +16,23 @@ export const getAllRestaurants = () => async (dispatch) => {
     const res = await axios.get("/api/dashboard/restaurants", config);
     dispatch({
       type: DASHBOARD_GET_ALL_RESTAURANTS,
+      payload: res.data,
+    });
+  } catch (error) {
+    dispatch(setAlert("Error", "danger"));
+  }
+};
+
+export const getAllDishes = () => async (dispatch) => {
+  try {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    const res = await axios.get("/api/dashboard/dishes", config);
+    dispatch({
+      type: DASHBOARD_GET_ALL_DISHES,
       payload: res.data,
     });
   } catch (error) {

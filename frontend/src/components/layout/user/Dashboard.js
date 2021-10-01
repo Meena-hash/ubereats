@@ -1,15 +1,18 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { Fragment, useEffect, useState } from "react";
-import { getAllRestaurants } from "../../../actions/dashboard";
+import { getAllRestaurants, getAllDishes } from "../../../actions/dashboard";
 import Spinner from "../Spinner";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 const Dashboard = ({
   getAllRestaurants,
-  dashboard: { restaurants, loading, searchstring },
+  getAllDishes,
+  dashboard: { restaurants, loading, searchstring, dishes },
 }) => {
   const [restaurantsData, setRestaurantsData] = useState(restaurants);
   useEffect(() => {
     getAllRestaurants();
+    getAllDishes();
   }, []);
   useEffect(() => {
     setRestaurantsData(restaurants);
@@ -17,12 +20,27 @@ const Dashboard = ({
   useEffect(() => {
     if (searchstring !== null) {
       setRestaurantsData(
-        restaurants.filter((item) => item.location.includes(searchstring))
-      );
-      console.log(
-        "setting rest data",
-        searchstring,
-        restaurants.filter((item) => console.log(item.location))
+        restaurants.filter((item) => {
+          // location
+          const locationSearch = item.location.includes(searchstring);
+          // dishname
+          let dishSearch = dishes.filter((dish) =>
+            dish.name.includes(searchstring)
+          );
+          const restaurant_ids_dishes = dishSearch.map(
+            (id) => id.restaurant_idx
+          );
+          //  type
+          let typeSearch = dishes.filter((dish) =>
+            dish.type.includes(searchstring)
+          );
+          const restaurant_ids_type = typeSearch.map((id) => id.restaurant_idx);
+          return (
+            locationSearch ||
+            restaurant_ids_dishes.includes(item.restaurantid) ||
+            restaurant_ids_type.includes(item.restaurantid)
+          );
+        })
       );
     }
   }, [searchstring]);
@@ -61,10 +79,12 @@ const Dashboard = ({
 };
 Dashboard.propTypes = {
   getAllRestaurants: PropTypes.func.isRequired,
+  getAllDishes: PropTypes.func.isRequired,
 };
 const mapStateToProps = (state) => ({
   dashboard: state.dashboard,
 });
 export default connect(mapStateToProps, {
   getAllRestaurants,
+  getAllDishes,
 })(Dashboard);

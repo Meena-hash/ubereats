@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { Fragment, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import "./UserNavbar.css";
@@ -7,7 +8,6 @@ const UserNavbar = ({ filterOnLocation }) => {
   const [location, setLocation] = useState("");
   const onChange = async (e) => {
     setLocation(e.target.value);
-    // filterOnLocation(location);
   };
   useEffect(() => {
     setLocation(location);
