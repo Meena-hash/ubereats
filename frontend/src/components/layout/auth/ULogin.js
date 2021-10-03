@@ -16,7 +16,7 @@ const ULogin = ({ login, isAuthenticated }) => {
     login(email, password);
   };
   if (isAuthenticated) {
-    return <Redirect to="/user/profile"> </Redirect>;
+    return <Redirect to="/user/dashboard"> </Redirect>;
   }
   return (
     <Fragment>

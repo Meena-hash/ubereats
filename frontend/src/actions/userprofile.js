@@ -73,7 +73,8 @@ export const editUserProfile =
       });
       dispatch(uploadImageUser(imageData, res.data.profileid));
       dispatch(getCurrentUser());
-      dispatch(setAlert("Profile Updated", "success"));
+      // uncomment later and fix z index
+      // dispatch(setAlert("Profile Updated", "success"));
       history.push("/user/profile");
     } catch (error) {}
   };
@@ -89,8 +90,8 @@ export const uploadImageUser = (formData, user_id) => async (dispatch) => {
       payload: res.data,
     });
   } catch (error) {
-    alert(
-      "Error occurred while uploading picture, try uploading a smaller image size or try again later."
-    );
+    // alert(
+    //   "Error occurred while uploading picture, try uploading a smaller image size or try again later."
+    // );
   }
 };

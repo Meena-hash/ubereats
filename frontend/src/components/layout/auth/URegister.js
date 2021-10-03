@@ -23,7 +23,7 @@ const URegister = ({ setAlert, register, isAuthenticated }) => {
     }
   };
   if (isAuthenticated) {
-    return <Redirect to="/dashboard"> </Redirect>;
+    return <Redirect to="/user/profile"> </Redirect>;
   }
   return (
     <Fragment>
@@ -36,7 +36,7 @@ const URegister = ({ setAlert, register, isAuthenticated }) => {
           ></img>
         </center>
         <br />
-        <h4>Welcome Back</h4>
+        <h4>Welcome</h4>
         <p>Enter Your Details To Sign Up</p>
 
         <form className="form" onSubmit={(e) => onSubmit(e)}>

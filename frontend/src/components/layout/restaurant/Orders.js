@@ -23,8 +23,10 @@ const Orders = ({
   const [orderData, setOrderData] = useState(orders);
   const [filter, setFilter] = useState("All Orders");
   useEffect(() => {
-    getAllOrdersByRestaurant();
-    getCurrentProfile();
+    if (!orders) {
+      getAllOrdersByRestaurant();
+      getCurrentProfile();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   useEffect(() => {

@@ -38,7 +38,7 @@ const RRegister = ({ setAlert, register, isAuthenticated }) => {
           ></img>
         </center>
         <br />
-        <h4>Welcome Back</h4>
+        <h4>Welcome</h4>
         <p>Enter Your Details To Sign Up</p>
 
         <form className="form" onSubmit={(e) => onSubmit(e)}>

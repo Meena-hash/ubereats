@@ -13,7 +13,7 @@ const RestaurantProfile = ({
   restaurantprofile: { profile, loading },
 }) => {
   useEffect(() => {
-    getCurrentProfile();
+    if (!profile) getCurrentProfile();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return loading && profile === null ? (

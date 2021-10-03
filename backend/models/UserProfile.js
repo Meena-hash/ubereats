@@ -12,47 +12,37 @@ const User_Profile = db.define(
     },
     name: {
       type: Sequelize.STRING,
-      allowNull: false,
     },
     street: {
       type: Sequelize.STRING,
-      allowNull: false,
     },
     city: {
       type: Sequelize.STRING,
-      allowNull: false,
     },
     state: {
       type: Sequelize.STRING,
-      allowNull: false,
     },
     country: {
       type: Sequelize.STRING,
-      allowNull: false,
     },
     nickname: {
       type: Sequelize.STRING,
-      allowNull: false,
     },
     picture: {
       type: Sequelize.STRING,
     },
     email: {
       type: Sequelize.STRING,
-      allowNull: false,
       unique: true,
     },
     ph_no: {
       type: Sequelize.STRING,
-      allowNull: false,
     },
     about: {
       type: Sequelize.STRING,
-      allowNull: false,
     },
     dob: {
       type: Sequelize.DATE,
-      allowNull: false,
     },
   },
   {

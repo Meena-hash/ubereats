@@ -5,7 +5,7 @@ const User = require("../../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const config = require("config");
-
+const UserProfile = require("../../models/UserProfile");
 router.post(
   "/",
   [
@@ -37,11 +37,15 @@ router.post(
       const salt = await bcrypt.genSalt(10);
       user.password = await bcrypt.hash(password, salt);
       await user.save();
+      let profileid = user.id;
+      const userProfile = new UserProfile({ name, email, profileid });
+      await userProfile.save();
       const payload = {
         user: {
           id: user.id,
         },
       };
+
       jwt.sign(
         payload,
         config.get("jwtSecret"),

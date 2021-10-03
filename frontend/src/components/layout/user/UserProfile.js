@@ -11,12 +11,12 @@ import { Redirect } from "react-router-dom/cjs/react-router-dom.min";
 const UserProfile = ({
   getCurrentUser,
   getUserByID,
-  auth: { user, urole },
+  auth: { user, urole, isAuthenticated },
   userprofile: { loading, profile },
   getCurrentProfile,
 }) => {
   useEffect(() => {
-    if (urole && urole === "user") {
+    if (!user && urole && urole === "user") {
       getCurrentUser();
     } else if (urole && urole === "restaurant") {
       getCurrentProfile();
@@ -28,12 +28,14 @@ const UserProfile = ({
   }, []);
 
   useEffect(() => {
-    if (user) {
+    if (user && !profile) {
       getUserByID(user.id);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
-
+  if (!isAuthenticated) {
+    return <Redirect to="/user/login"> </Redirect>;
+  }
   return loading && profile === null ? (
     <>
       <Spinner />
@@ -48,7 +50,8 @@ const UserProfile = ({
           <div className="row">
             <div className="col-md-4">
               <div className="profile-img">
-                <img src={profile.picture} alt="" /> <hr />
+                <img src={profile.picture} alt="" style={{ width: "50%" }} />{" "}
+                <hr />
                 {
                   // urole && urole === "user" && (
                   //   <div>

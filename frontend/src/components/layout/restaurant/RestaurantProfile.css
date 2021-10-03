@@ -29,5 +29,6 @@
   color: white;
 }
 .fa-edit {
-  color: white;
+  /* color: white; */
+  color: red;
 }
