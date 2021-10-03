@@ -32,8 +32,16 @@ router.post("/basic", auth, async (req, res) => {
   let restaurant = await Restaurant.findOne({
     where: { id: req.restaurant.id },
   });
-  const { name, location, description, email, ph_no, from_time, to_time } =
-    req.body;
+  const {
+    name,
+    location,
+    description,
+    email,
+    ph_no,
+    from_time,
+    to_time,
+    mode,
+  } = req.body;
 
   let profileFields = {};
   profileFields.restaurantid = restaurant.id;
@@ -44,6 +52,7 @@ router.post("/basic", auth, async (req, res) => {
   profileFields.ph_no = ph_no;
   profileFields.from_time = from_time;
   profileFields.to_time = to_time;
+  profileFields.mode = mode;
   let contactFields = {};
   contactFields.email = email;
   contactFields.ph_no = ph_no;

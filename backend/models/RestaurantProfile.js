@@ -33,6 +33,9 @@ const Restaurant_Profile = db.define(
     to_time: {
       type: Sequelize.TIME,
     },
+    mode: {
+      type: Sequelize.ENUM("delivery", "pickup", "both"),
+    },
   },
   {
     timestamps: false,

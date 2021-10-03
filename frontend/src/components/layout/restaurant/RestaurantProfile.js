@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { getCurrentProfile } from "../../../actions/restaurantprofile";
@@ -40,6 +40,17 @@ const RestaurantProfile = ({
               {" "}
               Open everyday from {profile.from_time} to {profile.to_time}
             </i>
+            <br />
+            {profile.mode === "both" && (
+              <i class="fas fa-truck">
+                <i class="fas fa-male"></i> Delivery and Pickup
+              </i>
+            )}
+            {profile.mode === "delivery" && (
+              <i class="fas fa-truck"> Delivery</i>
+            )}
+
+            {profile.mode === "pickup" && <i class="fas fa-male"> Pickup</i>}
             <br />
             <i className="fas fa-map-marker-alt"> {profile.location}</i>
             <br />

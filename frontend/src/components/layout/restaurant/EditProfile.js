@@ -18,6 +18,7 @@ const initialState = {
   ph_no: "",
   from_time: "",
   to_time: "",
+  mode: "both",
 };
 const EditProfile = ({
   auth: { urole },
@@ -28,8 +29,16 @@ const EditProfile = ({
   uploadImageRestaurant,
 }) => {
   const [formData, setFormData] = useState(initialState);
-  const { name, email, location, description, ph_no, from_time, to_time } =
-    formData;
+  const {
+    name,
+    email,
+    location,
+    description,
+    ph_no,
+    from_time,
+    to_time,
+    mode,
+  } = formData;
   const [displayContactInformation, toggleContactInformation] = useState(false);
 
   useEffect(() => {
@@ -70,9 +79,9 @@ const EditProfile = ({
     // fileInput.current.click();
   };
 
-  const editProfilePic = () => {
-    fileInput.current.click();
-  };
+  // const editProfilePic = () => {
+  //   fileInput.current.click();
+  // };
 
   const handleSubmit = async () => {
     const formData = new FormData();
@@ -142,6 +151,16 @@ const EditProfile = ({
             value={description}
             onChange={(e) => onChange(e)}
           ></textarea>
+        </div>
+        <div className="form-group">
+          <select name="mode" onChange={(e) => onChange(e)}>
+            <option value="0">
+              {mode.charAt(0).toUpperCase() + mode.slice(1)}
+            </option>
+            <option value="delivery">Delivery</option>
+            <option value="pickup">Pickup</option>
+            <option value="both">Both</option>
+          </select>
         </div>
         <div className="form-group">
           <i className="fas fa-clock"> From &nbsp;</i>
