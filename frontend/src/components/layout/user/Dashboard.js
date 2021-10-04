@@ -5,16 +5,22 @@ import { getCurrentUser } from "../../../actions/userprofile";
 import Spinner from "../Spinner";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import { fetchSelectedRestaurantData } from "../../../actions/restaurant";
+import { filterRestaurantFoodType } from "../../../actions/dashboard";
 const Dashboard = ({
   getAllRestaurants,
   getCurrentUser,
   getAllDishes,
+  fetchSelectedRestaurantData,
+  filterRestaurantFoodType,
   dashboard: { restaurants, loading, searchstring, dishes, mode },
+  history,
   auth: { user, urole },
 }) => {
   const [restaurantsData, setRestaurantsData] = useState(restaurants);
 
   const typeOnClick = (foodType) => {
+    filterRestaurantFoodType(foodType);
     setRestaurantsData(
       restaurants.filter((item) => {
         // veg shud include vegan
@@ -25,6 +31,12 @@ const Dashboard = ({
     );
   };
 
+  const viewRestaurantOnClick = (restaurant) => {
+    const filterRestaurantDish = dishes.filter(
+      (dish) => dish.restaurant_idx === restaurant.restaurantid
+    );
+    fetchSelectedRestaurantData(restaurant, filterRestaurantDish, history);
+  };
   useEffect(() => {
     if (!user && urole && urole === "user") {
       getCurrentUser();
@@ -132,9 +144,21 @@ const Dashboard = ({
                   <div className="card-body">
                     <h5 className="card-title ellipses">{item.name}</h5>
                     <p className="card-text ellipses">{item.description}</p>
-                    <a href="/dashboard" className="btn btn-primary">
+                    {/* <a href="/view/restaurant" className="btn btn-primary">
                       View Restaurant
-                    </a>
+                    </a> */}
+                    <button
+                      className="btn"
+                      style={{ borderRadius: "30px", width: "100%" }}
+                      onClick={() => {
+                        viewRestaurantOnClick(item);
+                      }}
+                    >
+                      <i class="fas fa-glasses" style={{ color: "black" }}>
+                        {" "}
+                        View Restaurant
+                      </i>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -151,6 +175,8 @@ Dashboard.propTypes = {
   getAllRestaurants: PropTypes.func.isRequired,
   getAllDishes: PropTypes.func.isRequired,
   getCurrentUser: PropTypes.func.isRequired,
+  fetchSelectedRestaurantData: PropTypes.func.isRequired,
+  filterRestaurantFoodType: PropTypes.func.isRequired,
 };
 const mapStateToProps = (state) => ({
   dashboard: state.dashboard,
@@ -159,5 +185,7 @@ const mapStateToProps = (state) => ({
 export default connect(mapStateToProps, {
   getAllRestaurants,
   getAllDishes,
+  fetchSelectedRestaurantData,
   getCurrentUser,
+  filterRestaurantFoodType,
 })(Dashboard);

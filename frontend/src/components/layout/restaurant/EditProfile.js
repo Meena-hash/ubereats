@@ -217,7 +217,6 @@ const EditProfile = ({
             </div>
           </Fragment>
         )}
-
         <center>
           {" "}
           <input type="submit" className="btn btn-primary my-1" />

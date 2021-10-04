@@ -23,6 +23,7 @@ import Orders from "./components/layout/restaurant/Orders";
 import UserProfile from "./components/layout/user/UserProfile";
 import EditUserProfile from "./components/layout/user/EditUserProfile";
 import Dashboard from "./components/layout/user/Dashboard";
+import Restaurant from "./components/layout/user/Restaurant";
 if (localStorage.token) {
   setAuthToken(localStorage.token);
 }
@@ -47,6 +48,11 @@ const App = () => {
               <Route exact path="/user/dashboard" component={Dashboard}></Route>
               <Route exact path="/user/register" component={URegister}></Route>
               <Route exact path="/user/login" component={ULogin}></Route>
+              <Route
+                exact
+                path="/view/restaurant"
+                component={Restaurant}
+              ></Route>
               <PrivateRoute
                 exact
                 path="/user/profile"
@@ -102,6 +108,7 @@ const App = () => {
                 component={EditProfile}
                 role="restaurant"
               ></PrivateRoute>
+              {/* /view/restaurant */}
             </Switch>
           </section>
           <Footer />
