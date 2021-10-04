@@ -2,17 +2,29 @@
 import React, { Fragment, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import "./UserNavbar.css";
-import { filterOnLocation } from "../../actions/dashboard";
+import {
+  filterOnSearchString,
+  filterOnDeliveryMode,
+} from "../../actions/dashboard";
 import { connect } from "react-redux";
-const UserNavbar = ({ filterOnLocation }) => {
-  const [location, setLocation] = useState("");
+const UserNavbar = ({ filterOnSearchString, filterOnDeliveryMode }) => {
+  const [search, setSearch] = useState("");
+  const [mode, setMode] = useState("Both");
   const onChange = async (e) => {
-    setLocation(e.target.value);
+    setSearch(e.target.value);
+  };
+  const onChangeCheck = async (e) => {
+    if (e.target.checked) setMode("pickup");
+    else if (!e.target.checked) setMode("delivery");
   };
   useEffect(() => {
-    setLocation(location);
-    filterOnLocation(location);
-  }, [location]);
+    setSearch(search);
+    filterOnSearchString(search);
+  }, [search]);
+  useEffect(() => {
+    setMode(mode);
+    filterOnDeliveryMode(mode);
+  }, [mode]);
   return (
     <Fragment>
       <div className="unavbar">
@@ -24,9 +36,15 @@ const UserNavbar = ({ filterOnLocation }) => {
         </div>
         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
         <div class="switch-button">
-          <input class="switch-button-checkbox" type="checkbox"></input>
-          <label class="switch-button-label" for="">
-            <span class="switch-button-label-span">Delivery</span>
+          <input
+            className="switch-button-checkbox"
+            type="checkbox"
+            // checked={mode}
+            // name="mode"
+            onChange={(e) => onChangeCheck(e)}
+          ></input>
+          <label className="switch-button-label" for="mode">
+            <span className="switch-button-label-span">Delivery</span>
           </label>
         </div>
         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
@@ -47,7 +65,7 @@ const UserNavbar = ({ filterOnLocation }) => {
             type="text"
             class="form-control"
             placeholder="Search"
-            name="location"
+            name="search"
             onChange={(e) => onChange(e)}
             style={{ width: "400px" }}
           />
@@ -76,9 +94,11 @@ const UserNavbar = ({ filterOnLocation }) => {
   );
 };
 UserNavbar.propTypes = {
-  filterOnLocation: PropTypes.func.isRequired,
+  filterOnSearchString: PropTypes.func.isRequired,
+  filterOnDeliveryMode: PropTypes.func.isRequired,
 };
 
 export default connect(null, {
-  filterOnLocation,
+  filterOnSearchString,
+  filterOnDeliveryMode,
 })(UserNavbar);

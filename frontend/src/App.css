@@ -346,6 +346,12 @@ post-form .post-form-header {
   border-right: 0.7px;
   border-bottom: 0.1px;
 }
+.columndietary {
+  float: left;
+  width: fit-content;
+  height: 25%;
+  padding: 1px;
+}
 
 .column {
   float: left;

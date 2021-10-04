@@ -5,6 +5,8 @@ import {
   DASHBOARD_FILTER_STRING,
   DASHBOARD_FILTER_RESTAURANT_ON_SEARCH,
   DASHBOARD_GET_ALL_DISHES,
+  DASHBOARD_FILTER_BY_MODE,
+  DASHBOARD_FILTER_BY_FOOD_TYPE,
 } from "./types";
 export const getAllRestaurants = () => async (dispatch) => {
   try {
@@ -40,10 +42,17 @@ export const getAllDishes = () => async (dispatch) => {
   }
 };
 
-export const filterOnLocation = (location) => async (dispatch) => {
+export const filterOnSearchString = (searchString) => async (dispatch) => {
   dispatch({
     type: DASHBOARD_FILTER_STRING,
-    payload: location,
+    payload: searchString,
+  });
+};
+
+export const filterOnDeliveryMode = (mode) => async (dispatch) => {
+  dispatch({
+    type: DASHBOARD_FILTER_BY_MODE,
+    payload: mode,
   });
 };
 
@@ -51,5 +60,11 @@ export const filterRestaurantOnSearch = (searchString) => async (dispatch) => {
   dispatch({
     type: DASHBOARD_FILTER_RESTAURANT_ON_SEARCH,
     payload: searchString,
+  });
+};
+export const filterRestaurantFoodType = (foodType) => async (dispatch) => {
+  dispatch({
+    type: DASHBOARD_FILTER_BY_FOOD_TYPE,
+    payload: foodType,
   });
 };

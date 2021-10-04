@@ -1,4 +1,6 @@
 import {
+  DASHBOARD_FILTER_BY_FOOD_TYPE,
+  DASHBOARD_FILTER_BY_MODE,
   DASHBOARD_FILTER_RESTAURANT_ON_SEARCH,
   DASHBOARD_FILTER_STRING,
   DASHBOARD_GET_ALL_DISHES,
@@ -8,7 +10,9 @@ const initialState = {
   restaurants: [],
   loading: true,
   searchstring: null,
+  mode: null,
   dishes: [],
+  foodType: null,
 };
 
 export default function dashboard(state = initialState, action) {
@@ -18,6 +22,18 @@ export default function dashboard(state = initialState, action) {
       return {
         ...state,
         searchstring: payload,
+        loading: false,
+      };
+    case DASHBOARD_FILTER_BY_MODE:
+      return {
+        ...state,
+        mode: payload,
+        loading: false,
+      };
+    case DASHBOARD_FILTER_BY_FOOD_TYPE:
+      return {
+        ...state,
+        foodType: payload,
         loading: false,
       };
     case DASHBOARD_GET_ALL_RESTAURANTS:
