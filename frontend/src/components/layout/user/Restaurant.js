@@ -1,14 +1,29 @@
-import React, { Fragment } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { Fragment, useEffect, useState } from "react";
 
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import Spinner from "../Spinner";
-import Dishes from "../restaurant/Dishes";
 import { Redirect } from "react-router-dom/cjs/react-router-dom.min";
 const Restaurant = ({
-  restaurantlanding: { restaurantprofile, loading, dishes, foodType },
-  dashboard: { restaurants, searchstring, mode },
+  restaurantlanding: { restaurantprofile, loading, dishes },
+  dashboard: { searchstring, foodType },
 }) => {
+  const [dishesData, setDishesData] = useState(dishes);
+  useEffect(() => {
+    var searchStringResult = "";
+    if (searchstring !== null)
+      searchStringResult = dishes[0].filter((item) =>
+        item.name.includes(searchstring)
+      );
+
+    if (foodType !== null && dishesData && dishesData !== null) {
+      setDishesData(
+        searchStringResult.filter((item) => item.type.includes(foodType))
+      );
+    } else setDishesData(searchStringResult);
+  }, [searchstring, foodType]);
+
   if (loading) {
     return <Redirect to="/user/dashboard"> </Redirect>;
   }
@@ -59,17 +74,19 @@ const Restaurant = ({
             <br />
             <i className="fas fa-envelope-open"> {restaurantprofile.email}</i>
             <div className="row container-fluid" name="dishes">
-              {dishes &&
-                dishes[0].map((item) => {
+              {dishesData &&
+                dishesData.map((item) => {
                   return (
-                    <div className="column col-md-4 container-fluid">
+                    <div className="column restaurant col-md-5 container-fluid">
                       <div className="row rowlanding container-fluid">
                         <div className="columnlanding container-fluid ">
                           <img className="imagecol" src={item.images} alt="" />
                         </div>
                         <div className="columnlanding container-fluid">
                           <p>
-                            <i>{item.name}</i>
+                            <b>
+                              <i>{item.name}</i>
+                            </b>
                           </p>
 
                           <p className="post-date desc">

@@ -399,7 +399,10 @@ post-form .post-form-header {
   overflow: hidden;
   white-space: nowrap;
 }
-.col-md-4 {
+.row {
+  --bs-gutter-x: 0rem;
+}
+.col-md-5 {
   flex: 0 0 50%;
   max-width: 50%;
   position: relative;

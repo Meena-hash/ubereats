@@ -87,10 +87,10 @@ const Dishes = ({
                 <>
                   <div className="column">
                     <div className="row rows">
-                      <div className="column">
+                      <div className="col-md-6">
                         <img className="imagecol" src={item.images} alt="" />
                       </div>
-                      <div className="column">
+                      <div className="col-md-6">
                         <h4>{item.name}</h4>
                         <i
                           className="fas fa-trash-alt"

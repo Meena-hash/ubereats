@@ -13,13 +13,15 @@ const Dashboard = ({
   getAllDishes,
   fetchSelectedRestaurantData,
   filterRestaurantFoodType,
-  dashboard: { restaurants, loading, searchstring, dishes, mode },
+  dashboard: { restaurants, loading, searchstring, dishes, mode, foodType },
+  userprofile: { profile },
   history,
   auth: { user, urole },
 }) => {
   const [restaurantsData, setRestaurantsData] = useState(restaurants);
-
-  const typeOnClick = (foodType) => {
+  const [dietaryType, setDietaryType] = useState("clear filters");
+  const typeOnClick = (e, foodType) => {
+    e.preventDefault();
     filterRestaurantFoodType(foodType);
     setRestaurantsData(
       restaurants.filter((item) => {
@@ -29,6 +31,8 @@ const Dashboard = ({
         return restaurant_ids_type.includes(item.restaurantid);
       })
     );
+    if (foodType !== null && foodType !== "") setDietaryType(foodType);
+    else setDietaryType("clear filters");
   };
 
   const viewRestaurantOnClick = (restaurant) => {
@@ -41,12 +45,44 @@ const Dashboard = ({
     if (!user && urole && urole === "user") {
       getCurrentUser();
     }
-    getAllRestaurants();
-    getAllDishes();
+    if (restaurants !== []) getAllRestaurants();
+    if (dishes !== []) getAllDishes();
   }, []);
   useEffect(() => {
     setRestaurantsData(restaurants);
+    if (profile && profile.city !== null) {
+      let filterByUserLoc = restaurants.filter((item) =>
+        item.location.includes(profile.city)
+      );
+      const filterArray = (restaurants, filterByUserLoc) => {
+        const filtered = restaurants.filter((el) => {
+          return filterByUserLoc.indexOf(el) === -1;
+        });
+        return filtered;
+      };
+
+      setRestaurantsData(
+        filterByUserLoc.concat(filterArray(restaurants, filterByUserLoc))
+      );
+    }
   }, [restaurants]);
+  useEffect(() => {
+    if (profile && profile.city !== null) {
+      let filterByUserLoc = restaurants.filter((item) =>
+        item.location.includes(profile.city)
+      );
+      const filterArray = (restaurants, filterByUserLoc) => {
+        const filtered = restaurants.filter((el) => {
+          return filterByUserLoc.indexOf(el) === -1;
+        });
+        return filtered;
+      };
+
+      setRestaurantsData(
+        filterByUserLoc.concat(filterArray(restaurants, filterByUserLoc))
+      );
+    }
+  }, [profile]);
   useEffect(() => {
     if (mode !== null)
       setRestaurantsData(restaurants.filter((item) => item.mode === mode));
@@ -95,8 +131,8 @@ const Dashboard = ({
             <button
               className="btn"
               style={{ borderRadius: "30px" }}
-              onClick={() => {
-                typeOnClick("non-veg");
+              onClick={(e) => {
+                typeOnClick(e, "non-veg");
               }}
             >
               <i class="fas fa-drumstick-bite" style={{ color: "black" }}>
@@ -109,8 +145,8 @@ const Dashboard = ({
             <button
               className="btn"
               style={{ borderRadius: "30px" }}
-              onClick={() => {
-                typeOnClick("vegan");
+              onClick={(e) => {
+                typeOnClick(e, "vegan");
               }}
             >
               <i class="fas fa-carrot" style={{ color: "black" }}>
@@ -123,13 +159,27 @@ const Dashboard = ({
             <button
               className="btn"
               style={{ borderRadius: "30px" }}
-              onClick={() => {
-                typeOnClick("veg");
+              onClick={(e) => {
+                typeOnClick(e, "veg");
               }}
             >
               <i class="fas fa-leaf" style={{ color: "black" }}>
                 {" "}
                 Vegetarian
+              </i>
+            </button>
+          </div>
+          <div className="columndietary">
+            <button
+              className="btn"
+              style={{ borderRadius: "30px" }}
+              onClick={(e) => {
+                typeOnClick(e, "");
+              }}
+            >
+              <i class="fas fa-times" style={{ color: "black" }}>
+                {" "}
+                {dietaryType}
               </i>
             </button>
           </div>
@@ -181,6 +231,7 @@ Dashboard.propTypes = {
 const mapStateToProps = (state) => ({
   dashboard: state.dashboard,
   auth: state.auth,
+  userprofile: state.userprofile,
 });
 export default connect(mapStateToProps, {
   getAllRestaurants,

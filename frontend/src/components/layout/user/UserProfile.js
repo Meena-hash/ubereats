@@ -48,21 +48,13 @@ const UserProfile = ({
       <div className="container emp-profile">
         <form>
           <div className="row">
-            <div className="col-md-4">
+            <div className="col-md-2">
               <div className="profile-img">
                 <img src={profile.picture} alt="" style={{ width: "50%" }} />{" "}
                 <hr />
-                {
-                  // urole && urole === "user" && (
-                  //   <div>
-                  //     <i class="fas fa-edit" style={{ color: "black" }}></i>
-                  //     {/* <input type="file" name="file" /> */}
-                  //   </div>
-                  // )
-                }
               </div>
             </div>
-            <div className="col-md-6">
+            <div className="col-md-8">
               <div className="profile-head">
                 <h5>{profile.name}</h5>
                 <h6>{profile.ph_no}</h6>
@@ -97,14 +89,14 @@ const UserProfile = ({
             )}
           </div>
           <div className="row">
-            <div className="col-md-4">
+            <div className="col-md-2">
               <div className="profile-work">
                 {/* <p>WORK LINK</p> */}
                 <i class="fas fa-heart"> Favourites</i>
                 <br />
               </div>
             </div>
-            <div className="col-md-8">
+            <div className="col-md-10">
               <div className="tab-content profile-tab" id="myTabContent">
                 <div
                   className="tab-pane fade show active"
