@@ -3,16 +3,31 @@ import React, { Fragment, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import Spinner from "../Spinner";
-import { Redirect } from "react-router-dom/cjs/react-router-dom.min";
+import { fetchCurrentRestaurantDataOnReload } from "../../../actions/restaurant";
+import { getCurrentUser } from "../../../actions/userprofile";
 const Restaurant = ({
   restaurantlanding: { restaurantprofile, loading, dishes },
   dashboard: { searchstring, foodType },
+  fetchCurrentRestaurantDataOnReload,
+  getCurrentUser,
+  auth: { user },
 }) => {
   const [dishesData, setDishesData] = useState(dishes);
   useEffect(() => {
+    if (loading) {
+      fetchCurrentRestaurantDataOnReload();
+    }
+    if (!user) {
+      getCurrentUser();
+    }
+  }, []);
+  useEffect(() => {
+    setDishesData(dishes);
+  }, [dishes]);
+  useEffect(() => {
     var searchStringResult = "";
     if (searchstring !== null)
-      searchStringResult = dishes[0].filter((item) =>
+      searchStringResult = dishes.filter((item) =>
         item.name.includes(searchstring)
       );
 
@@ -23,9 +38,9 @@ const Restaurant = ({
     } else setDishesData(searchStringResult);
   }, [searchstring, foodType]);
 
-  if (loading) {
-    return <Redirect to="/user/dashboard"> </Redirect>;
-  }
+  // if (loading) {
+  //   return <Redirect to="/user/dashboard"> </Redirect>;
+  // }
   return loading && restaurantprofile === null ? (
     <Spinner />
   ) : (
@@ -125,10 +140,17 @@ const Restaurant = ({
 Restaurant.propTypes = {
   dashboard: PropTypes.object.isRequired,
   restaurantlanding: PropTypes.object.isRequired,
+  fetchCurrentRestaurantDataOnReload: PropTypes.func.isRequired,
+  getCurrentUser: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   dashboard: state.dashboard,
   restaurantlanding: state.restaurantlanding,
+  auth: state.auth,
 });
-export default connect(mapStateToProps, null)(Restaurant);
+export default connect(mapStateToProps, {
+  getCurrentUser,
+  fetchCurrentRestaurantDataOnReload,
+})(Restaurant);

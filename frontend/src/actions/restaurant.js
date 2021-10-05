@@ -1,4 +1,7 @@
-import { FETCH_SELECTED_RESTAURANT_PROFILE_DISH_DATA } from "./types";
+import {
+  FETCH_CURRENT_RESTAURANT_DATA_ON_RELOAD,
+  FETCH_SELECTED_RESTAURANT_PROFILE_DISH_DATA,
+} from "./types";
 
 export const fetchSelectedRestaurantData =
   (profile, dishes, history) => async (dispatch) => {
@@ -11,3 +14,9 @@ export const fetchSelectedRestaurantData =
     });
     history.push("/view/restaurant");
   };
+
+export const fetchCurrentRestaurantDataOnReload = () => async (dispatch) => {
+  dispatch({
+    type: FETCH_CURRENT_RESTAURANT_DATA_ON_RELOAD,
+  });
+};

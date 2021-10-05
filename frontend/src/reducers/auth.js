@@ -70,6 +70,8 @@ export default function authReducer(state = initialState, action) {
     case USER_LOGIN_FAIL:
       localStorage.removeItem("token");
       localStorage.removeItem("urole");
+      sessionStorage.removeItem("currentRestaurantDishes");
+      sessionStorage.removeItem("currentRestaurant");
       return {
         ...state,
         token: null,

@@ -53,7 +53,6 @@ const Dashboard = ({
         item.restaurant_id_fav === restaurantid
       );
     });
-    console.log(checkIfAlreadyFav.length);
     if (checkIfAlreadyFav.length === 0 && isAuthenticated) {
       addFavourite(restaurantid);
     }

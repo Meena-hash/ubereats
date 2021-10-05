@@ -2,15 +2,13 @@ import React, { Fragment, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { getCurrentUser } from "../../../actions/userprofile";
-import Spinner from "../Spinner";
-import { Redirect } from "react-router-dom/cjs/react-router-dom.min";
 import { fetchSelectedRestaurantData } from "../../../actions/restaurant";
 const Favourites = ({
   getCurrentUser,
-  auth: { user, urole, isAuthenticated },
-  favourites: { favlist, loading },
+  auth: { user, urole },
+  favourites: { favlist },
   fetchSelectedRestaurantData,
-  dashboard: { restaurants, dishes },
+  dashboard: { dishes },
   history,
 }) => {
   const [favRestaurants, setFavRestaurants] = useState(favlist);
