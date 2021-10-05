@@ -2,6 +2,7 @@
 import React, { Fragment, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import { Button, Modal } from "react-bootstrap";
 import Spinner from "../Spinner";
 import { fetchCurrentRestaurantDataOnReload } from "../../../actions/restaurant";
 import { getCurrentUser } from "../../../actions/userprofile";
@@ -13,6 +14,15 @@ const Restaurant = ({
   auth: { user },
 }) => {
   const [dishesData, setDishesData] = useState(dishes);
+  const [show, setShow] = useState(false);
+  const [itemToAdd, setItemToAdd] = useState("");
+  const handleClose = () => {
+    setShow(false);
+  };
+  const handleShow = (item) => {
+    setItemToAdd(item);
+    setShow(true);
+  };
   useEffect(() => {
     if (loading) {
       fetchCurrentRestaurantDataOnReload();
@@ -24,6 +34,11 @@ const Restaurant = ({
   useEffect(() => {
     setDishesData(dishes);
   }, [dishes]);
+  const addToCart = () => {
+    setShow(false);
+
+    console.log(show);
+  };
   useEffect(() => {
     var searchStringResult = "";
     if (searchstring !== null)
@@ -92,38 +107,91 @@ const Restaurant = ({
                 dishesData.map((item) => {
                   return (
                     <div className="column restaurant col-md-5 container-fluid">
-                      <div className="row rowlanding container-fluid">
-                        <div className="columnlanding container-fluid ">
-                          <img className="imagecol" src={item.images} alt="" />
-                        </div>
-                        <div className="columnlanding container-fluid">
-                          <p>
-                            <b>
-                              <i>{item.name}</i>
-                            </b>
-                          </p>
+                      <div className="columnlanding container-fluid ">
+                        <img className="imagecol" src={item.images} alt="" />
+                      </div>
+                      <div className="columnlanding container-fluid">
+                        <i
+                          className="fas fa-edit"
+                          style={{ color: "black" }}
+                          onClick={() => {
+                            handleShow(item);
+                          }}
+                        />
 
-                          <p className="post-date desc">
-                            <b>Description: </b>
-                            {item.description}
-                          </p>
-                          <p className="post-date">
-                            <b>Ingredients: </b>
-                            {item.ingredients}
-                          </p>
-                          <p className="post-date">
-                            <b>Category: </b>
-                            {item.category}
-                          </p>
-                          <p className="post-date">
-                            <b>Type: </b>
-                            {item.type}
-                          </p>
-                          <p className="post-date">
-                            <b>Price: </b>
-                            {item.price}
-                          </p>
-                        </div>
+                        {!loading &&
+                          show &&
+                          itemToAdd &&
+                          itemToAdd.id === item.id && (
+                            <Fragment>
+                              <Modal show={show} onHide={handleClose}>
+                                <Modal.Header>
+                                  <Modal.Title>
+                                    {item.name}
+                                    <div>
+                                      <img
+                                        src={item.images}
+                                        alt=""
+                                        style={{
+                                          objectFit: "cover",
+                                          width: "100%",
+                                        }}
+                                      />
+                                    </div>
+                                  </Modal.Title>
+                                </Modal.Header>
+                                <Modal.Body>
+                                  <p className="text-muted">
+                                    {item.description}
+                                  </p>
+                                </Modal.Body>
+                                <Modal.Footer>
+                                  <Button
+                                    variant="secondary"
+                                    onClick={handleClose}
+                                  >
+                                    Close
+                                  </Button>
+                                  <Button
+                                    variant="primary"
+                                    style={{
+                                      color: "white",
+                                      backgroundColor: "black",
+                                      width: "80%",
+                                    }}
+                                    onClick={addToCart}
+                                  >
+                                    Add to cart ${item.price}
+                                  </Button>
+                                </Modal.Footer>
+                              </Modal>
+                            </Fragment>
+                          )}
+                        <p>
+                          <b>
+                            <i>{item.name}</i>
+                          </b>
+                        </p>
+                        <p className="post-date desc">
+                          <b>Description: </b>
+                          {item.description}
+                        </p>
+                        <p className="post-date">
+                          <b>Ingredients: </b>
+                          {item.ingredients}
+                        </p>
+                        <p className="post-date">
+                          <b>Category: </b>
+                          {item.category}
+                        </p>
+                        <p className="post-date">
+                          <b>Type: </b>
+                          {item.type}
+                        </p>
+                        <p className="post-date">
+                          <b>Price: </b>
+                          {item.price}
+                        </p>
                       </div>
                     </div>
                   );

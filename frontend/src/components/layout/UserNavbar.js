@@ -75,16 +75,20 @@ const UserNavbar = ({ filterOnSearchString, filterOnDeliveryMode }) => {
           className="ButtonLink"
           style={{
             backgroundColor: "black",
-            borderRadius: "5px",
+            borderRadius: "7px",
             float: "right",
             display: "flex",
             justifyContent: "flex-end",
+            width: "fit-content",
+            height: "35px",
           }}
         >
           &nbsp;&nbsp;
           <i
             className="fas fa-shopping-cart pull-right"
-            style={{ color: "white" }}
+            style={{
+              color: "white",
+            }}
           >
             &nbsp;&nbsp; cart&nbsp;&nbsp;
           </i>
