@@ -25,6 +25,7 @@ import EditUserProfile from "./components/layout/user/EditUserProfile";
 import Dashboard from "./components/layout/user/Dashboard";
 import Restaurant from "./components/layout/user/Restaurant";
 import Favourites from "./components/layout/user/Favourites";
+import { Checkout } from "./components/layout/user/Checkout";
 if (localStorage.token) {
   setAuthToken(localStorage.token);
 }
@@ -46,9 +47,20 @@ const App = () => {
                 path="/restaurant/register"
                 component={RRegister}
               ></Route>
-              <Route exact path="/user/dashboard" component={Dashboard}></Route>
+              <PrivateRoute
+                exact
+                path="/user/dashboard"
+                role="user"
+                component={Dashboard}
+              ></PrivateRoute>
               <Route exact path="/user/register" component={URegister}></Route>
               <Route exact path="/user/login" component={ULogin}></Route>
+              <PrivateRoute
+                exact
+                path="/user/checkout"
+                component={Checkout}
+                role="both"
+              ></PrivateRoute>
               <Route
                 exact
                 path="/view/restaurant"
@@ -60,17 +72,19 @@ const App = () => {
                 role="both"
                 component={UserProfile}
               ></PrivateRoute>
-              <Route
+              <PrivateRoute
                 exact
                 path="/user/favourites"
                 component={Favourites}
-              ></Route>
+                role="user"
+              ></PrivateRoute>
               <PrivateRoute
                 exact
                 path="/user/edit/profile"
                 role="user"
                 component={EditUserProfile}
               ></PrivateRoute>
+
               <Route exact path="/restaurant/login" component={RLogin}></Route>
               <PrivateRoute
                 exact
@@ -114,12 +128,11 @@ const App = () => {
                 component={EditProfile}
                 role="restaurant"
               ></PrivateRoute>
-              {/* /view/restaurant */}
             </Switch>
           </section>
-          <Footer />
         </Fragment>
       </Router>
+      <Footer />
     </Provider>
   );
 };

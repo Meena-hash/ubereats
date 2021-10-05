@@ -14,7 +14,7 @@ const Dashboard = ({
   getAllDishes,
   fetchSelectedRestaurantData,
   filterRestaurantFoodType,
-  dashboard: { restaurants, loading, searchstring, dishes, mode, foodType },
+  dashboard: { restaurants, loading, searchstring, dishes, mode },
   userprofile: { profile },
   favourites: { favlist },
   history,

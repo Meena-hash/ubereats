@@ -1,0 +1,48 @@
+.column {
+  float: left;
+  width: 50%;
+  padding: 10px;
+  height: 100%; /* Should be removed. Only for demonstration */
+}
+.checkout {
+  font-size: 30px;
+}
+.text-muted {
+  font-size: 14px;
+}
+.checkoutp {
+  white-space: normal;
+  font-size: 20px;
+}
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+.btn-primary {
+  background: green;
+  color: white;
+  border-radius: 0px;
+}
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 50%;
+}
+
+td,
+th {
+  border: 1px solid whitesmoke;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: whitesmoke;
+}
+
+.header {
+  margin-left: 3rem;
+  background-color: whitesmoke;
+}

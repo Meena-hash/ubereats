@@ -28,9 +28,6 @@ const Favourites = ({
     const filterRestaurantDish = dishes.filter(
       (dish) => dish.restaurant_idx === rest.restaurantid
     );
-    console.log(dishes[0]);
-    console.log(rest);
-    console.log(filterRestaurantDish);
     fetchSelectedRestaurantData(rest, filterRestaurantDish, history);
   };
   useEffect(() => {
