@@ -24,6 +24,7 @@ import UserProfile from "./components/layout/user/UserProfile";
 import EditUserProfile from "./components/layout/user/EditUserProfile";
 import Dashboard from "./components/layout/user/Dashboard";
 import Restaurant from "./components/layout/user/Restaurant";
+import Favourites from "./components/layout/user/Favourites";
 if (localStorage.token) {
   setAuthToken(localStorage.token);
 }
@@ -59,6 +60,11 @@ const App = () => {
                 role="both"
                 component={UserProfile}
               ></PrivateRoute>
+              <Route
+                exact
+                path="/user/favourites"
+                component={Favourites}
+              ></Route>
               <PrivateRoute
                 exact
                 path="/user/edit/profile"

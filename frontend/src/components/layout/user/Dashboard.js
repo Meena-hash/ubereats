@@ -7,6 +7,7 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { fetchSelectedRestaurantData } from "../../../actions/restaurant";
 import { filterRestaurantFoodType } from "../../../actions/dashboard";
+import { addFavourite } from "../../../actions/favourites";
 const Dashboard = ({
   getAllRestaurants,
   getCurrentUser,
@@ -15,11 +16,14 @@ const Dashboard = ({
   filterRestaurantFoodType,
   dashboard: { restaurants, loading, searchstring, dishes, mode, foodType },
   userprofile: { profile },
+  favourites: { favlist },
   history,
-  auth: { user, urole },
+  addFavourite,
+  auth: { user, urole, isAuthenticated },
 }) => {
   const [restaurantsData, setRestaurantsData] = useState(restaurants);
   const [dietaryType, setDietaryType] = useState("clear filters");
+
   const typeOnClick = (e, foodType) => {
     e.preventDefault();
     filterRestaurantFoodType(foodType);
@@ -41,6 +45,21 @@ const Dashboard = ({
     );
     fetchSelectedRestaurantData(restaurant, filterRestaurantDish, history);
   };
+
+  const addFavouriteForUser = (e, restaurantid) => {
+    const checkIfAlreadyFav = favlist.filter((item) => {
+      return (
+        item.customer_id_fav === user.id &&
+        item.restaurant_id_fav === restaurantid
+      );
+    });
+    console.log(checkIfAlreadyFav.length);
+    if (checkIfAlreadyFav.length === 0 && isAuthenticated) {
+      addFavourite(restaurantid);
+    }
+    e.target.style.color = "red";
+  };
+
   useEffect(() => {
     if (!user && urole && urole === "user") {
       getCurrentUser();
@@ -48,6 +67,7 @@ const Dashboard = ({
     if (restaurants !== []) getAllRestaurants();
     if (dishes !== []) getAllDishes();
   }, []);
+
   useEffect(() => {
     setRestaurantsData(restaurants);
     if (profile && profile.city !== null) {
@@ -66,6 +86,7 @@ const Dashboard = ({
       );
     }
   }, [restaurants]);
+
   useEffect(() => {
     if (profile && profile.city !== null) {
       let filterByUserLoc = restaurants.filter((item) =>
@@ -83,10 +104,12 @@ const Dashboard = ({
       );
     }
   }, [profile]);
+
   useEffect(() => {
     if (mode !== null)
       setRestaurantsData(restaurants.filter((item) => item.mode === mode));
   }, [mode]);
+
   useEffect(() => {
     if (searchstring !== null) {
       setRestaurantsData(
@@ -185,18 +208,25 @@ const Dashboard = ({
           </div>
         </div>
         <hr />
-        <div className="row" name="restaurantsD">
+        <div className="row" name="restaurants">
           {restaurantsData.map((item) => {
             return (
               <div className="columnrestaurants">
                 <div className="card" style={{ width: "100%" }}>
                   <img className="card-img-top" src={item.images} alt="..." />
+                  <div className="top-right">
+                    <i
+                      class="fas fa-heart fa-lg"
+                      style={{ color: "white" }}
+                      onClick={(e) => {
+                        addFavouriteForUser(e, item.restaurantid);
+                      }}
+                    ></i>
+                  </div>
                   <div className="card-body">
                     <h5 className="card-title ellipses">{item.name}</h5>
                     <p className="card-text ellipses">{item.description}</p>
-                    {/* <a href="/view/restaurant" className="btn btn-primary">
-                      View Restaurant
-                    </a> */}
+
                     <button
                       className="btn"
                       style={{ borderRadius: "30px", width: "100%" }}
@@ -227,11 +257,14 @@ Dashboard.propTypes = {
   getCurrentUser: PropTypes.func.isRequired,
   fetchSelectedRestaurantData: PropTypes.func.isRequired,
   filterRestaurantFoodType: PropTypes.func.isRequired,
+  addFavourite: PropTypes.func.isRequired,
+  favourites: PropTypes.object.isRequired,
 };
 const mapStateToProps = (state) => ({
   dashboard: state.dashboard,
   auth: state.auth,
   userprofile: state.userprofile,
+  favourites: state.favourites,
 });
 export default connect(mapStateToProps, {
   getAllRestaurants,
@@ -239,4 +272,5 @@ export default connect(mapStateToProps, {
   fetchSelectedRestaurantData,
   getCurrentUser,
   filterRestaurantFoodType,
+  addFavourite,
 })(Dashboard);

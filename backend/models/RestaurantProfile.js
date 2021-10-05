@@ -7,10 +7,12 @@ const Restaurant_Profile = db.define(
       type: Sequelize.INTEGER,
       references: "restaurants",
       referencesKey: "id",
+      primaryKey: true,
     },
     name: {
       type: Sequelize.STRING,
-      primaryKey: true,
+      // primaryKey: true,
+      unique: true,
     },
     location: {
       type: Sequelize.STRING,

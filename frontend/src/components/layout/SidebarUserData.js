@@ -14,4 +14,10 @@ export const SidebarUserData = [
     icon: <AiIcons.AiFillProfile> </AiIcons.AiFillProfile>,
     cName: "nav-text",
   },
+  {
+    title: "favourites",
+    path: "/user/favourites",
+    icon: <AiIcons.AiFillHeart> </AiIcons.AiFillHeart>,
+    cName: "nav-text",
+  },
 ];

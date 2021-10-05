@@ -1,8 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { Fragment, useEffect, useState } from "react";
-
-import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import { connect } from "react-redux";
 import Spinner from "../Spinner";
 import { Redirect } from "react-router-dom/cjs/react-router-dom.min";
 const Restaurant = ({
@@ -122,6 +121,10 @@ const Restaurant = ({
       </Fragment>
     </>
   );
+};
+Restaurant.propTypes = {
+  dashboard: PropTypes.object.isRequired,
+  restaurantlanding: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({

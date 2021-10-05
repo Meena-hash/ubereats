@@ -145,6 +145,7 @@ button {
 .alert-success {
   background: var(--success-color);
   color: #fff;
+  z-index: 5;
 }
 
 .btn-white,
@@ -446,4 +447,11 @@ table {
 /* The switch - the box around the slider */
 .fas {
   cursor: pointer;
+}
+.top-right {
+  position: absolute;
+  top: 8px;
+  right: 16px;
+  font-size: 25px;
+  color: white;
 }

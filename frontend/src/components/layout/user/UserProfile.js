@@ -92,7 +92,11 @@ const UserProfile = ({
             <div className="col-md-2">
               <div className="profile-work">
                 {/* <p>WORK LINK</p> */}
-                <i class="fas fa-heart"> Favourites</i>
+                <i class="fas fa-heart">
+                  {" "}
+                  Favourites
+                  <Link to="/user/favourites"></Link>
+                </i>
                 <br />
               </div>
             </div>

@@ -22,6 +22,7 @@ app.use("/api/restaurant/profile", require("./routes/api/restaurantprofile"));
 app.use("/api/image", require("./routes/api/storage"));
 
 app.use("/api/dashboard", require("./routes/api/restaurantdashboard"));
+app.use("/api/favourites", require("./routes/api/favourites"));
 
 const PORT = process.env.PORT || 5000;
 
