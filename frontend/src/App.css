@@ -202,7 +202,7 @@ footer {
   margin: auto;
   overflow: hidden;
   padding: 0 2rem;
-  margin-top: 4rem;
+  margin-top: 2rem;
   margin-bottom: 3rem;
 }
 .profilec {
@@ -412,6 +412,7 @@ post-form .post-form-header {
   padding-left: 15px;
   display: flex;
   white-space: wrap;
+
   border-collapse: collapse;
 }
 

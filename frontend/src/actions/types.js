@@ -61,3 +61,7 @@ export const UPLOAD_USER_PICTURE = "UPLOAD_USER_PICTURE";
 // favourites - user
 export const GET_CURRENTUSER_FAVOURITES = "GET_CURRENTUSER_FAVOURITES";
 export const ADD_FAVOURITE = "ADD_FAVOURITE";
+
+// cart
+export const ADD_ITEM_CART = "ADD_ITEM_CART";
+export const GET_CART = "GET_CART";

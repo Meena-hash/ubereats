@@ -9,7 +9,6 @@ ReactDOM.render(
     <Container fluid>
       <App />
     </Container>
-    ,
   </React.StrictMode>,
 
   document.getElementById("root")

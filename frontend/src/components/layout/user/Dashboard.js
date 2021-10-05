@@ -141,10 +141,6 @@ const Dashboard = ({
     <Spinner />
   ) : !loading && restaurants ? (
     <>
-      <br />
-
-      <hr />
-
       <div className="container Fluid">
         <h5>Dietary</h5>
         {/* fa-drumstick-bite */}

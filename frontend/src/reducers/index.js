@@ -7,6 +7,7 @@ import userprofile from "./userprofile";
 import dashboard from "./dashboard";
 import restaurantlanding from "./restaurantlanding";
 import favourites from "./favourites";
+import cart from "./cart";
 const rootReducer = combineReducers({
   alert,
   auth,
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
   dashboard,
   restaurantlanding,
   favourites,
+  cart,
 });
 export default (state, action) =>
   rootReducer(action.type === "LOGOUT_SUCCESS" ? undefined : state, action);

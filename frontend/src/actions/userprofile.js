@@ -1,5 +1,6 @@
 import axios from "axios";
 import { setAlert } from "./alert";
+import { getItemsInCart } from "./cart";
 import { getUserFavourites } from "./favourites";
 import {
   GET_USER_BY_ID,
@@ -59,6 +60,7 @@ export const getCurrentUser = () => async (dispatch) => {
       payload: user_prof.data,
     });
     dispatch(getUserFavourites());
+    dispatch(getItemsInCart());
   } catch (error) {}
 };
 

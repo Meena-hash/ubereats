@@ -6,14 +6,17 @@ import { Button, Modal } from "react-bootstrap";
 import Spinner from "../Spinner";
 import { fetchCurrentRestaurantDataOnReload } from "../../../actions/restaurant";
 import { getCurrentUser } from "../../../actions/userprofile";
+import { addItemToCart } from "../../../actions/cart";
 const Restaurant = ({
   restaurantlanding: { restaurantprofile, loading, dishes },
   dashboard: { searchstring, foodType },
   fetchCurrentRestaurantDataOnReload,
   getCurrentUser,
+  addItemToCart,
   auth: { user },
 }) => {
   const [dishesData, setDishesData] = useState(dishes);
+
   const [show, setShow] = useState(false);
   const [itemToAdd, setItemToAdd] = useState("");
   const handleClose = () => {
@@ -23,6 +26,12 @@ const Restaurant = ({
     setItemToAdd(item);
     setShow(true);
   };
+
+  const addToCart = (item) => {
+    addItemToCart(item, restaurantprofile.name);
+    setShow(false);
+  };
+
   useEffect(() => {
     if (loading) {
       fetchCurrentRestaurantDataOnReload();
@@ -34,11 +43,7 @@ const Restaurant = ({
   useEffect(() => {
     setDishesData(dishes);
   }, [dishes]);
-  const addToCart = () => {
-    setShow(false);
 
-    console.log(show);
-  };
   useEffect(() => {
     var searchStringResult = "";
     if (searchstring !== null)
@@ -107,12 +112,12 @@ const Restaurant = ({
                 dishesData.map((item) => {
                   return (
                     <div className="column restaurant col-md-5 container-fluid">
-                      <div className="columnlanding container-fluid ">
+                      <div className="columnlanding container-fluid border">
                         <img className="imagecol" src={item.images} alt="" />
                       </div>
-                      <div className="columnlanding container-fluid">
+                      <div className="columnlanding container-fluid border">
                         <i
-                          className="fas fa-edit"
+                          className="fas fa-cart-plus fa-2x"
                           style={{ color: "black" }}
                           onClick={() => {
                             handleShow(item);
@@ -159,7 +164,9 @@ const Restaurant = ({
                                       backgroundColor: "black",
                                       width: "80%",
                                     }}
-                                    onClick={addToCart}
+                                    onClick={() => {
+                                      addToCart(item);
+                                    }}
                                   >
                                     Add to cart ${item.price}
                                   </Button>
@@ -211,6 +218,7 @@ Restaurant.propTypes = {
   fetchCurrentRestaurantDataOnReload: PropTypes.func.isRequired,
   getCurrentUser: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
+  addItemToCart: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -221,4 +229,5 @@ const mapStateToProps = (state) => ({
 export default connect(mapStateToProps, {
   getCurrentUser,
   fetchCurrentRestaurantDataOnReload,
+  addItemToCart,
 })(Restaurant);
