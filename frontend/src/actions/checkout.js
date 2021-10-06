@@ -52,14 +52,18 @@ export const addDeliveryAddress =
     }
   };
 
-export const placeOrder = (orderData) => async (dispatch) => {
+export const placeOrder = (orderData, dishes) => async (dispatch) => {
   try {
     const config = {
       headers: {
         "Content-Type": "application/json",
       },
     };
-    const res = await axios.post("/api/user/profile/orders", orderData, config);
+    const body = {
+      orderData,
+      dishes,
+    };
+    const res = await axios.post("/api/user/profile/orders", body, config);
     dispatch({
       type: PLACE_ORDER,
       payload: res.data,

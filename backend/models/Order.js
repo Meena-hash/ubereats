@@ -1,6 +1,5 @@
 const Sequelize = require("sequelize");
 const db = require("../config/db");
-const User_Profile = require("./UserProfile");
 const Orders = db.define(
   "orders",
   {
@@ -24,7 +23,6 @@ const Orders = db.define(
     },
     date: {
       type: Sequelize.DATE,
-      defaultValue: new Date(),
     },
     total: {
       type: Sequelize.INTEGER,

@@ -154,6 +154,7 @@ const UserNavbar = ({
                       backgroundColor: "black",
                       width: "80%",
                     }}
+                    onClick={{ handleClose }}
                   >
                     <Link
                       to="/user/checkout"

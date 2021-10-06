@@ -1,11 +1,11 @@
-import axios from "axios";
 import { setAlert } from "./alert";
 import { ADD_ITEM_CART, CLEAR_CART, GET_CART } from "./types";
 
-export const addItemToCart = (item, name) => async (dispatch) => {
+export const addItemToCart = (item, name, id) => async (dispatch) => {
   const data = {
     items: item,
     restaurantname: name,
+    restaurantid: id,
     cost: item.price,
   };
   dispatch({

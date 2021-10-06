@@ -14,11 +14,12 @@ const Checkout = ({
   auth: { user },
   userprofile: { profile },
   dashboard: { restaurants },
-  cart: { restaurantname, loading, items, itemcount, cost },
+  cart: { restaurantname, restaurantid, loading, items, cost },
   deliveryAddresses: { addresses },
 }) => {
   useEffect(() => {
     if (!user) getCurrentUser();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const [tip, setTip] = useState(0);
   const [total, setTotal] = useState(0);
@@ -75,16 +76,18 @@ const Checkout = ({
 
   const submitOrder = () => {
     let orderFields = {};
-    const restaurant_id_ordering_from = restaurants.filter(
-      (item) => item.name === restaurantname
-    );
-    orderFields.restaurant_id_order =
-      restaurant_id_ordering_from[0].restaurantid;
+    orderFields.restaurant_id_order = restaurantid;
     orderFields.tip = tip;
     orderFields.total = total;
     orderFields.delivery_address =
-      street + "," + city + "," + region + "," + country;
-    placeOrder(orderFields);
+      currDeliveryAddr.street +
+      "," +
+      currDeliveryAddr.city +
+      "," +
+      currDeliveryAddr.state +
+      "," +
+      currDeliveryAddr.country;
+    placeOrder(orderFields, items);
   };
   useEffect(() => {
     if (profile)
@@ -280,6 +283,7 @@ const Checkout = ({
               className="btn btn-primary"
               style={{ width: "100%", height: "50px" }}
               value="Place Order"
+              disabled={items === null}
               onClick={() => submitOrder()}
             />
             <br />

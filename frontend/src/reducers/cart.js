@@ -2,6 +2,7 @@ import { ADD_ITEM_CART, CLEAR_CART, GET_CART } from "../actions/types";
 
 const initialState = {
   restaurantname: null,
+  restaurantid: 0,
   loading: true,
   items: [],
   itemcount: 0,
@@ -26,11 +27,13 @@ export default function cart(state = initialState, action) {
         "cartItemsCost",
         Number(payload.cost) + Number(state.cost)
       );
+      sessionStorage.setItem("cartRestaurantId", payload.restaurantid);
       return {
         ...state,
         restaurantname: JSON.parse(
           sessionStorage.getItem("cartRestaurantName")
         ),
+        restaurantid: sessionStorage.getItem("cartRestaurantId"),
         items: JSON.parse(sessionStorage.getItem("cartItemsOfUser")),
         itemcount: JSON.parse(sessionStorage.getItem("cartItemsOfUser")).length,
         loading: false,
@@ -42,6 +45,8 @@ export default function cart(state = initialState, action) {
         restaurantname: JSON.parse(
           sessionStorage.getItem("cartRestaurantName")
         ),
+        restaurantid: sessionStorage.getItem("cartRestaurantId"),
+
         items: JSON.parse(sessionStorage.getItem("cartItemsOfUser")),
         itemcount: JSON.parse(sessionStorage.getItem("cartItemsOfUser"))
           ? JSON.parse(sessionStorage.getItem("cartItemsOfUser")).length
@@ -56,6 +61,7 @@ export default function cart(state = initialState, action) {
       return {
         ...state,
         restaurantname: null,
+        restaurantid: 0,
         loading: true,
         items: [],
         itemcount: 0,

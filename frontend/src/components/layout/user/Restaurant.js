@@ -37,7 +37,7 @@ const Restaurant = ({
     setOrderWarning(true);
   };
   const addToCart = (item) => {
-    addItemToCart(item, restaurantprofile.name);
+    addItemToCart(item, restaurantprofile.name, restaurantprofile.restaurantid);
     setShow(false);
   };
 

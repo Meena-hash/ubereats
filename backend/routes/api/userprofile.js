@@ -5,6 +5,7 @@ const DeliveryAddress = require("../../models/DeliveryAddress");
 const UserProfile = require("../../models/UserProfile");
 const User = require("../../models/User");
 const Orders = require("../../models/Order");
+const OrderDish = require("../../models/OrderDish");
 
 router.get("/", auth, async (req, res) => {
   try {
@@ -147,18 +148,34 @@ router.post("/address/me", auth, async (req, res) => {
 });
 router.post("/orders", auth, async (req, res) => {
   try {
-    const { tip, restaurant_id_order, total, delivery_address } = req.body;
+    const { tip, restaurant_id_order, total, delivery_address } =
+      req.body.orderData;
     let orderFields = {};
+    orderFields.tip = 10;
+    orderFields.date = new Date();
     orderFields.userprofileid = req.user.id;
     orderFields.restaurant_id_order = restaurant_id_order;
-    orderFields.tip = tip;
-    orderFields.total = total;
     orderFields.order_type = "new";
     orderFields.type = "deliver";
     orderFields.delivery_status = "received";
+    orderFields.total = total;
     orderFields.delivery_address = delivery_address;
     const order = new Orders(orderFields);
-    await order.save();
+    await Orders.create(orderFields).then((result) => {
+      for (let i = 0; i < req.body.dishes.length; i++) {
+        var dish = req.body.dishes[i];
+        var dishesFields = {};
+        (dishesFields.order_id = result.id),
+          (dishesFields.dish_id = dish.id),
+          (dishesFields.count = dish.count);
+        var orderDish = new OrderDish(dishesFields);
+        orderDish.save();
+      }
+      // return result.id;
+    });
+    // await Orders.create(order).then((result) => {
+
+    // });
     return res.json(orderFields);
   } catch (error) {
     console.log(error);
