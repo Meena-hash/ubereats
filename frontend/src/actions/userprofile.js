@@ -1,6 +1,7 @@
 import axios from "axios";
 import { setAlert } from "./alert";
 import { getItemsInCart } from "./cart";
+import { getAllDeliveryAddress } from "./checkout";
 import { getUserFavourites } from "./favourites";
 import {
   GET_USER_BY_ID,
@@ -61,6 +62,7 @@ export const getCurrentUser = () => async (dispatch) => {
     });
     dispatch(getUserFavourites());
     dispatch(getItemsInCart());
+    dispatch(getAllDeliveryAddress());
   } catch (error) {}
 };
 
@@ -85,10 +87,7 @@ export const editUserProfile =
 
 export const uploadImageUser = (formData, user_id) => async (dispatch) => {
   try {
-    const res = await axios.post(
-      `/api/image//user/upload/${user_id}`,
-      formData
-    );
+    const res = await axios.post(`/api/image/user/upload/${user_id}`, formData);
     dispatch({
       type: UPLOAD_USER_PICTURE,
       payload: res.data,

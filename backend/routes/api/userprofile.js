@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const auth = require("../../middleware/auth");
-const { check, validationResult } = require("express-validator");
+const DeliveryAddress = require("../../models/DeliveryAddress");
 const UserProfile = require("../../models/UserProfile");
 const User = require("../../models/User");
 
@@ -115,5 +115,33 @@ router.post("/contact", auth, async (req, res) => {
     res.status(500).send("Server error");
   }
 });
+router.get("/address/me", auth, async (req, res) => {
+  try {
+    const addresses = await DeliveryAddress.findAll({
+      where: { customer_idx: req.user.id },
+    });
+    return res.json(addresses);
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send("Server error");
+  }
+});
 
+router.post("/address/me", auth, async (req, res) => {
+  try {
+    const { street, city, country, state } = req.body;
+    let addressFields = {};
+    addressFields.street = street;
+    addressFields.city = city;
+    addressFields.country = country;
+    addressFields.state = state;
+    addressFields.customer_idx = req.user.id;
+    const adress = new DeliveryAddress(addressFields);
+    await adress.save();
+    return res.json(address);
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send("Server error");
+  }
+});
 module.exports = router;

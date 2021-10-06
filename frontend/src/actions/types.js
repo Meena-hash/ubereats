@@ -65,3 +65,7 @@ export const ADD_FAVOURITE = "ADD_FAVOURITE";
 // cart
 export const ADD_ITEM_CART = "ADD_ITEM_CART";
 export const GET_CART = "GET_CART";
+
+// delivery address
+export const ADD_DELIVERY_ADDRESS = "ADD_DELIVERY_ADDRESS";
+export const GET_DELIVERY_ADDRESSES = "GET_DELIVERY_ADDRESSES";

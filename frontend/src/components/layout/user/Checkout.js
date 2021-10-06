@@ -3,17 +3,44 @@ import { getCurrentUser } from "../../../actions/userprofile";
 import PropTypes from "prop-types";
 import "./Checkout.css";
 import { connect } from "react-redux";
+import { Button, Modal } from "react-bootstrap";
 const Checkout = ({
   getCurrentUser,
   auth: { user },
   userprofile: { profile },
   cart: { restaurantname, loading, items, itemcount, cost },
+  deliveryAddresses: { addresses },
 }) => {
   useEffect(() => {
     if (!user) getCurrentUser();
   }, []);
   const [tip, setTip] = useState(0);
   const [total, setTotal] = useState(0);
+  const [deliveryAddr, setDeliveryAddr] = useState(addresses);
+  const [currDeliveryAddr, setCurrDeliveryAddr] = useState("");
+  const [show, setShow] = useState(false);
+  const handleClose = () => {
+    setShow(false);
+  };
+  const handleShow = () => {
+    setShow(true);
+  };
+  const onAddressChange = (index) => {
+    setCurrDeliveryAddr(addresses[index]);
+    handleClose();
+  };
+  useEffect(() => {
+    if (profile)
+      setCurrDeliveryAddr({
+        street: profile.street,
+        city: profile.city,
+        country: profile.country,
+        state: profile.state,
+      });
+  }, [profile]);
+  useEffect(() => {
+    setDeliveryAddr(addresses);
+  }, [addresses]);
   useEffect(() => {
     if (cost)
       setTotal(Number(cost) + Number(tip) + Number(0.1 * cost) + Number(15));
@@ -33,16 +60,74 @@ const Checkout = ({
             <hr />
             <p className="checkoutp">
               <address>
-                <i class="fas fa-map-pin"></i> {profile && profile.street}{" "}
-                <i class="fas fa-user-edit" style={{ color: "black" }}></i>
+                <i class="fas fa-map-pin"></i>{" "}
+                {currDeliveryAddr && currDeliveryAddr.street}{" "}
+                <i
+                  class="fas fa-user-edit"
+                  style={{
+                    color: "black",
+                    textDecoration: "none",
+                  }}
+                  onClick={() => {
+                    handleShow();
+                  }}
+                ></i>
                 <br />
-                {profile && profile.city}
+                {currDeliveryAddr && currDeliveryAddr.city}
                 <br />
-                {profile && profile.state}
+                {currDeliveryAddr && currDeliveryAddr.state}
                 <br />
-                {profile && profile.country}
+                {currDeliveryAddr && currDeliveryAddr.country}
               </address>
             </p>
+            {!loading && deliveryAddr && addresses && (
+              <Fragment>
+                <Modal show={show} onHide={handleClose}>
+                  <Modal.Header>
+                    <Modal.Title>Your addresses</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+                    {!loading &&
+                      deliveryAddr &&
+                      deliveryAddr.map((item, index) => {
+                        return (
+                          <Button
+                            style={{
+                              color: "black",
+                              backgroundColor: "white",
+                              width: "100%",
+                            }}
+                            onClick={() => onAddressChange(index)}
+                          >
+                            <p>
+                              {" "}
+                              <>
+                                <address>
+                                  <i>
+                                    {item && item.street}
+                                    <br />
+                                    {item && item.city}
+                                    <br />
+                                    {item && item.state}
+                                    <br />
+                                    {item && item.country}
+                                  </i>{" "}
+                                </address>
+                                <hr />
+                              </>
+                            </p>
+                          </Button>
+                        );
+                      })}
+                  </Modal.Body>
+                  <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                      Close
+                    </Button>
+                  </Modal.Footer>
+                </Modal>
+              </Fragment>
+            )}
             <hr />
             <p className="checkoutp">
               <b>
@@ -227,12 +312,14 @@ Checkout.propTypes = {
   auth: PropTypes.object.isRequired,
   cart: PropTypes.object.isRequired,
   userprofile: PropTypes.object.isRequired,
+  deliveryAddress: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   auth: state.auth,
   cart: state.cart,
   userprofile: state.userprofile,
+  deliveryAddresses: state.deliveryAddress,
 });
 
 export default connect(mapStateToProps, {
