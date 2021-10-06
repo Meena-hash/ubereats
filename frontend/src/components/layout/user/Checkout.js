@@ -1,6 +1,23 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect, useState } from "react";
+import { getCurrentUser } from "../../../actions/userprofile";
+import PropTypes from "prop-types";
 import "./Checkout.css";
-export const Checkout = () => {
+import { connect } from "react-redux";
+const Checkout = ({
+  getCurrentUser,
+  auth: { user },
+  userprofile: { profile },
+  cart: { restaurantname, loading, items, itemcount, cost },
+}) => {
+  useEffect(() => {
+    if (!user) getCurrentUser();
+  }, []);
+  const [tip, setTip] = useState(0);
+  const [total, setTotal] = useState(0);
+  useEffect(() => {
+    if (cost)
+      setTotal(Number(cost) + Number(tip) + Number(0.1 * cost) + Number(15));
+  }, [cost, tip]);
   return (
     <Fragment>
       <div className="container-fluid">
@@ -12,6 +29,19 @@ export const Checkout = () => {
                 <i class="fas fa-money-bill-wave"></i>&nbsp;&nbsp;Uber Cash:
                 $0.00
               </b>
+            </p>
+            <hr />
+            <p className="checkoutp">
+              <address>
+                <i class="fas fa-map-pin"></i> {profile && profile.street}{" "}
+                <i class="fas fa-user-edit" style={{ color: "black" }}></i>
+                <br />
+                {profile && profile.city}
+                <br />
+                {profile && profile.state}
+                <br />
+                {profile && profile.country}
+              </address>
             </p>
             <hr />
             <p className="checkoutp">
@@ -41,34 +71,26 @@ export const Checkout = () => {
                   </button>
                 </td>
               </tr>
-              <tr>
-                <td>
-                  <select id="cars">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="1" selected>
-                      1
-                    </option>
-                  </select>
-                  &nbsp;&nbsp; Chicken Biriyani
-                </td>
-                <td>$88.00</td>
-              </tr>
-              <tr>
-                <td>
-                  <select id="cars">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="1" selected>
-                      1
-                    </option>
-                  </select>
-                  &nbsp;&nbsp; Veg Biriyani
-                </td>
-                <td>$88.00</td>
-              </tr>
+              {items &&
+                items.map((item) => {
+                  return (
+                    <tr>
+                      <td>
+                        <select id="cars">
+                          <option value="1">1</option>
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                          <option value="1" selected>
+                            1
+                          </option>
+                        </select>
+                        &nbsp;&nbsp; {item.name}
+                      </td>
+                      <td>${item.price}</td>
+                    </tr>
+                  );
+                })}
+
               <br />
               <br />
               <tr>
@@ -102,7 +124,7 @@ export const Checkout = () => {
               value="Place Order"
             />
             <br />
-            <p className="text-muted">
+            <p className="text-muted wrappara">
               If you’re not around when the delivery person arrives, they’ll
               leave your order at the door. By placing your order, you agree to
               take full responsibility for it once it’s delivered.
@@ -111,23 +133,24 @@ export const Checkout = () => {
             <table style={{ width: "100%", border: "0" }}>
               <tr>
                 <td>Subtotal</td>
-                <td>$88.00</td>
+                <td>${cost}</td>
               </tr>
               <tr>
                 <td>Taxes and Fees</td>
-                <td>$88.00</td>
+                <td>${0.1 * cost}</td>
               </tr>
               <tr>
                 <td>Delivery Fee</td>
-                <td>$88.00</td>
+                <td>$15</td>
               </tr>
-              <tr>
+              {/* <tr>
                 <td>CA Driver Benefits</td>
                 <td>Free shipping</td>
-              </tr>
+              </tr> */}
 
               <tr>
                 <td>Add a tip</td>
+                <td> {tip}</td>
                 <td>
                   <div class="row">
                     <div className="col-md-3">
@@ -138,6 +161,7 @@ export const Checkout = () => {
                           backgroundColor: "black",
                           borderRadius: "10px",
                         }}
+                        onClick={() => setTip(25)}
                       >
                         &nbsp;&nbsp; $25&nbsp;&nbsp;
                       </button>
@@ -150,8 +174,9 @@ export const Checkout = () => {
                           backgroundColor: "black",
                           borderRadius: "10px",
                         }}
+                        onClick={() => setTip(10)}
                       >
-                        &nbsp;&nbsp; $25&nbsp;&nbsp;
+                        &nbsp;&nbsp; $10&nbsp;&nbsp;
                       </button>
                     </div>
                     <div className="col-md-3">
@@ -162,8 +187,9 @@ export const Checkout = () => {
                           backgroundColor: "black",
                           borderRadius: "10px",
                         }}
+                        onClick={() => setTip(5)}
                       >
-                        &nbsp;&nbsp; $25&nbsp;&nbsp;
+                        &nbsp;&nbsp; $5&nbsp;&nbsp;
                       </button>
                     </div>
                     <div className="col-md-3">
@@ -174,8 +200,9 @@ export const Checkout = () => {
                           backgroundColor: "black",
                           borderRadius: "10px",
                         }}
+                        onClick={() => setTip(3)}
                       >
-                        &nbsp;&nbsp; $25&nbsp;&nbsp;
+                        &nbsp;&nbsp; $3 &nbsp;&nbsp;
                       </button>
                     </div>
                   </div>
@@ -187,10 +214,27 @@ export const Checkout = () => {
               a tip to say thanks.
             </p>
             <hr />
-            <h4>Total: $88</h4>
+            <h4>Total: ${total}</h4>
           </div>
         </div>
       </div>
     </Fragment>
   );
 };
+
+Checkout.propTypes = {
+  getCurrentUser: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
+  cart: PropTypes.object.isRequired,
+  userprofile: PropTypes.object.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+  cart: state.cart,
+  userprofile: state.userprofile,
+});
+
+export default connect(mapStateToProps, {
+  getCurrentUser,
+})(Checkout);

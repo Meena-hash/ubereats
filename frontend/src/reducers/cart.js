@@ -5,7 +5,7 @@ const initialState = {
   loading: true,
   items: [],
   itemcount: 0,
-  itemcost: 0,
+  cost: 0,
 };
 
 export default function cart(state = initialState, action) {

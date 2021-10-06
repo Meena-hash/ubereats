@@ -62,8 +62,6 @@ const UserNavbar = ({
           <input
             className="switch-button-checkbox"
             type="checkbox"
-            // checked={mode}
-            // name="mode"
             onChange={(e) => onChangeCheck(e)}
           ></input>
           <label className="switch-button-label" for="mode">
@@ -104,6 +102,7 @@ const UserNavbar = ({
             justifyContent: "flex-end",
             width: "fit-content",
             height: "35px",
+            textDecoration: "none",
           }}
         >
           &nbsp;&nbsp;
@@ -111,6 +110,7 @@ const UserNavbar = ({
             className="fas fa-shopping-cart pull-right"
             style={{
               color: "white",
+              textDecoration: "none",
             }}
             onClick={() => {
               handleShow();

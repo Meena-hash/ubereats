@@ -25,7 +25,7 @@ import EditUserProfile from "./components/layout/user/EditUserProfile";
 import Dashboard from "./components/layout/user/Dashboard";
 import Restaurant from "./components/layout/user/Restaurant";
 import Favourites from "./components/layout/user/Favourites";
-import { Checkout } from "./components/layout/user/Checkout";
+import Checkout from "./components/layout/user/Checkout";
 if (localStorage.token) {
   setAuthToken(localStorage.token);
 }

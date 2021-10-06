@@ -9,6 +9,7 @@
 }
 .text-muted {
   font-size: 14px;
+  white-space: normal;
 }
 .checkoutp {
   white-space: normal;
