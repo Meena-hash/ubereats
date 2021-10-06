@@ -3,11 +3,17 @@ import { getCurrentUser } from "../../../actions/userprofile";
 import PropTypes from "prop-types";
 import "./Checkout.css";
 import { connect } from "react-redux";
+import { CountryDropdown, RegionDropdown } from "react-country-region-selector";
 import { Button, Modal } from "react-bootstrap";
+import { addDeliveryAddress } from "../../../actions/checkout";
+import { placeOrder } from "../../../actions/checkout";
 const Checkout = ({
   getCurrentUser,
+  addDeliveryAddress,
+  placeOrder,
   auth: { user },
   userprofile: { profile },
+  dashboard: { restaurants },
   cart: { restaurantname, loading, items, itemcount, cost },
   deliveryAddresses: { addresses },
 }) => {
@@ -19,15 +25,66 @@ const Checkout = ({
   const [deliveryAddr, setDeliveryAddr] = useState(addresses);
   const [currDeliveryAddr, setCurrDeliveryAddr] = useState("");
   const [show, setShow] = useState(false);
+  const [showAddAddressModal, setShowAddAddressModal] = useState(false);
+
+  const [region, setRegion] = useState("");
+  const [country, setCountry] = useState("");
+  const [city, setCity] = useState("");
+  const [street, setStreet] = useState("");
+  const selectCountry = (val) => {
+    setCountry(val);
+  };
+
+  const selectRegion = (val) => {
+    setRegion(val);
+  };
+
+  const onCityChange = (val) => {
+    setCity(val.target.value);
+  };
+
+  const onStreetChange = (val) => {
+    setStreet(val.target.value);
+  };
+
   const handleClose = () => {
     setShow(false);
   };
   const handleShow = () => {
     setShow(true);
   };
+  const addAddrHandleClose = () => {
+    setShowAddAddressModal(false);
+  };
+  const addAddrHandleShow = () => {
+    setShowAddAddressModal(true);
+  };
   const onAddressChange = (index) => {
     setCurrDeliveryAddr(addresses[index]);
     handleClose();
+  };
+
+  const addAddress = (street, city, state, country) => {
+    addDeliveryAddress(street, city, state, country);
+    addAddrHandleClose();
+    selectCountry("");
+    selectRegion("");
+    setCity("");
+    setStreet("");
+  };
+
+  const submitOrder = () => {
+    let orderFields = {};
+    const restaurant_id_ordering_from = restaurants.filter(
+      (item) => item.name === restaurantname
+    );
+    orderFields.restaurant_id_order =
+      restaurant_id_ordering_from[0].restaurantid;
+    orderFields.tip = tip;
+    orderFields.total = total;
+    orderFields.delivery_address =
+      street + "," + city + "," + region + "," + country;
+    placeOrder(orderFields);
   };
   useEffect(() => {
     if (profile)
@@ -40,7 +97,7 @@ const Checkout = ({
   }, [profile]);
   useEffect(() => {
     setDeliveryAddr(addresses);
-  }, [addresses]);
+  }, [addresses, show]);
   useEffect(() => {
     if (cost)
       setTotal(Number(cost) + Number(tip) + Number(0.1 * cost) + Number(15));
@@ -58,6 +115,16 @@ const Checkout = ({
               </b>
             </p>
             <hr />
+            <i
+              class="fas fa-user-plus"
+              style={{
+                color: "black",
+                textDecoration: "none",
+              }}
+              onClick={() => {
+                addAddrHandleShow();
+              }}
+            ></i>
             <p className="checkoutp">
               <address>
                 <i class="fas fa-map-pin"></i>{" "}
@@ -72,6 +139,7 @@ const Checkout = ({
                     handleShow();
                   }}
                 ></i>
+                &nbsp;&nbsp;
                 <br />
                 {currDeliveryAddr && currDeliveryAddr.city}
                 <br />
@@ -80,54 +148,59 @@ const Checkout = ({
                 {currDeliveryAddr && currDeliveryAddr.country}
               </address>
             </p>
-            {!loading && deliveryAddr && addresses && (
-              <Fragment>
-                <Modal show={show} onHide={handleClose}>
-                  <Modal.Header>
-                    <Modal.Title>Your addresses</Modal.Title>
-                  </Modal.Header>
-                  <Modal.Body>
-                    {!loading &&
-                      deliveryAddr &&
-                      deliveryAddr.map((item, index) => {
-                        return (
-                          <Button
-                            style={{
-                              color: "black",
-                              backgroundColor: "white",
-                              width: "100%",
-                            }}
-                            onClick={() => onAddressChange(index)}
-                          >
-                            <p>
-                              {" "}
-                              <>
-                                <address>
-                                  <i>
-                                    {item && item.street}
-                                    <br />
-                                    {item && item.city}
-                                    <br />
-                                    {item && item.state}
-                                    <br />
-                                    {item && item.country}
-                                  </i>{" "}
-                                </address>
-                                <hr />
-                              </>
-                            </p>
-                          </Button>
-                        );
-                      })}
-                  </Modal.Body>
-                  <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>
-                      Close
-                    </Button>
-                  </Modal.Footer>
-                </Modal>
-              </Fragment>
-            )}
+
+            {!loading &&
+              deliveryAddr &&
+              show &&
+              addresses &&
+              deliveryAddr.length > 0 && (
+                <Fragment>
+                  <Modal show={show} onHide={handleClose}>
+                    <Modal.Header>
+                      <Modal.Title>Your saved addresses</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                      {!loading &&
+                        deliveryAddr &&
+                        deliveryAddr.map((item, index) => {
+                          return (
+                            <Button
+                              style={{
+                                color: "black",
+                                backgroundColor: "white",
+                                width: "100%",
+                              }}
+                              onClick={() => onAddressChange(index)}
+                            >
+                              <p>
+                                {" "}
+                                <>
+                                  <address>
+                                    <i>
+                                      {item && item.street}
+                                      <br />
+                                      {item && item.city}
+                                      <br />
+                                      {item && item.state}
+                                      <br />
+                                      {item && item.country}
+                                    </i>{" "}
+                                  </address>
+                                  <hr />
+                                </>
+                              </p>
+                            </Button>
+                          );
+                        })}
+                    </Modal.Body>
+                    <Modal.Footer>
+                      <Button variant="secondary" onClick={handleClose}>
+                        Close
+                      </Button>
+                    </Modal.Footer>
+                  </Modal>
+                </Fragment>
+              )}
             <hr />
             <p className="checkoutp">
               <b>
@@ -207,6 +280,7 @@ const Checkout = ({
               className="btn btn-primary"
               style={{ width: "100%", height: "50px" }}
               value="Place Order"
+              onClick={() => submitOrder()}
             />
             <br />
             <p className="text-muted wrappara">
@@ -303,6 +377,71 @@ const Checkout = ({
           </div>
         </div>
       </div>
+      {!loading && showAddAddressModal && (
+        <Fragment>
+          <Modal show={showAddAddressModal} onHide={addAddrHandleClose}>
+            <Modal.Header>
+              <Modal.Title>Delivery details</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <input
+                type="text"
+                placeholder="Street"
+                style={{ width: "100%", height: "35px" }}
+                name="street"
+                defaultValue={street}
+                onChange={(val) => onStreetChange(val)}
+              ></input>
+              <br />
+              <br />
+              <input
+                type="text"
+                placeholder="City"
+                style={{ width: "100%", height: "35px" }}
+                name="city"
+                defaultValue={city}
+                onChange={(val) => onCityChange(val)}
+              ></input>
+              <br />
+              <br />
+              <CountryDropdown
+                style={{ width: "100%", height: "35px" }}
+                class="dropdown"
+                value={country}
+                onChange={(val) => selectCountry(val)}
+              />
+              <br />
+              <br />
+              <RegionDropdown
+                style={{ width: "100%", height: "35px" }}
+                class="dropdown"
+                country={country}
+                value={region}
+                onChange={(val) => selectRegion(val)}
+              />
+              <br />
+            </Modal.Body>
+            <Modal.Footer>
+              <Button
+                variant="primary"
+                style={{
+                  color: "white",
+                  backgroundColor: "black",
+                  width: "80%",
+                }}
+                onClick={() => {
+                  addAddress(street, city, region, country);
+                }}
+              >
+                Save
+              </Button>
+              <Button variant="secondary" onClick={addAddrHandleClose}>
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal>
+        </Fragment>
+      )}
     </Fragment>
   );
 };
@@ -313,6 +452,9 @@ Checkout.propTypes = {
   cart: PropTypes.object.isRequired,
   userprofile: PropTypes.object.isRequired,
   deliveryAddress: PropTypes.object.isRequired,
+  addDeliveryAddress: PropTypes.func.isRequired,
+  dashboard: PropTypes.object.isRequired,
+  placeOrder: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -320,8 +462,11 @@ const mapStateToProps = (state) => ({
   cart: state.cart,
   userprofile: state.userprofile,
   deliveryAddresses: state.deliveryAddress,
+  dashboard: state.dashboard,
 });
 
 export default connect(mapStateToProps, {
   getCurrentUser,
+  addDeliveryAddress,
+  placeOrder,
 })(Checkout);

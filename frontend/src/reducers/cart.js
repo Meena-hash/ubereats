@@ -1,4 +1,4 @@
-import { ADD_ITEM_CART, GET_CART } from "../actions/types";
+import { ADD_ITEM_CART, CLEAR_CART, GET_CART } from "../actions/types";
 
 const initialState = {
   restaurantname: null,
@@ -48,6 +48,18 @@ export default function cart(state = initialState, action) {
           : 0,
         loading: false,
         cost: sessionStorage.getItem("cartItemsCost"),
+      };
+    case CLEAR_CART:
+      sessionStorage.removeItem("cartRestaurantName");
+      sessionStorage.removeItem("cartItemsOfUser");
+      sessionStorage.removeItem("cartItemsCost");
+      return {
+        ...state,
+        restaurantname: null,
+        loading: true,
+        items: [],
+        itemcount: 0,
+        cost: 0,
       };
     default:
       return state;

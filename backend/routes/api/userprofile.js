@@ -4,6 +4,7 @@ const auth = require("../../middleware/auth");
 const DeliveryAddress = require("../../models/DeliveryAddress");
 const UserProfile = require("../../models/UserProfile");
 const User = require("../../models/User");
+const Orders = require("../../models/Order");
 
 router.get("/", auth, async (req, res) => {
   try {
@@ -136,11 +137,31 @@ router.post("/address/me", auth, async (req, res) => {
     addressFields.country = country;
     addressFields.state = state;
     addressFields.customer_idx = req.user.id;
-    const adress = new DeliveryAddress(addressFields);
-    await adress.save();
-    return res.json(address);
+    const address = new DeliveryAddress(addressFields);
+    await address.save();
+    return res.json(addressFields);
   } catch (err) {
     console.log(err.message);
+    res.status(500).send("Server error");
+  }
+});
+router.post("/orders", auth, async (req, res) => {
+  try {
+    const { tip, restaurant_id_order, total, delivery_address } = req.body;
+    let orderFields = {};
+    orderFields.userprofileid = req.user.id;
+    orderFields.restaurant_id_order = restaurant_id_order;
+    orderFields.tip = tip;
+    orderFields.total = total;
+    orderFields.order_type = "new";
+    orderFields.type = "deliver";
+    orderFields.delivery_status = "received";
+    orderFields.delivery_address = delivery_address;
+    const order = new Orders(orderFields);
+    await order.save();
+    return res.json(orderFields);
+  } catch (error) {
+    console.log(error);
     res.status(500).send("Server error");
   }
 });

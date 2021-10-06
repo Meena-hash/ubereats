@@ -6,6 +6,7 @@ const Orders = db.define(
   {
     id: {
       type: Sequelize.INTEGER,
+      autoIncrement: true,
       primaryKey: true,
     },
     tip: {
@@ -23,6 +24,7 @@ const Orders = db.define(
     },
     date: {
       type: Sequelize.DATE,
+      defaultValue: new Date(),
     },
     total: {
       type: Sequelize.INTEGER,

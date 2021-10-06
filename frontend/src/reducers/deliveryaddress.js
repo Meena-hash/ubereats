@@ -17,7 +17,7 @@ export default function deliveryAddress(state = initialState, action) {
     case ADD_DELIVERY_ADDRESS:
       return {
         ...state,
-        addresses: { payload, ...state.addresses },
+        addresses: [...state.addresses, payload],
         loading: false,
       };
     default:

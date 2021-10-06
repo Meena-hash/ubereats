@@ -6,19 +6,23 @@ import { Button, Modal } from "react-bootstrap";
 import Spinner from "../Spinner";
 import { fetchCurrentRestaurantDataOnReload } from "../../../actions/restaurant";
 import { getCurrentUser } from "../../../actions/userprofile";
-import { addItemToCart } from "../../../actions/cart";
+import { addItemToCart, clearCart } from "../../../actions/cart";
 const Restaurant = ({
   restaurantlanding: { restaurantprofile, loading, dishes },
   dashboard: { searchstring, foodType },
   fetchCurrentRestaurantDataOnReload,
+  cart: { restaurantname },
   getCurrentUser,
   addItemToCart,
+  clearCart,
   auth: { user },
 }) => {
   const [dishesData, setDishesData] = useState(dishes);
 
   const [show, setShow] = useState(false);
+  const [orderWarning, setOrderWarning] = useState(false);
   const [itemToAdd, setItemToAdd] = useState("");
+
   const handleClose = () => {
     setShow(false);
   };
@@ -26,10 +30,20 @@ const Restaurant = ({
     setItemToAdd(item);
     setShow(true);
   };
-
+  const handleOrderWarningClose = () => {
+    setOrderWarning(false);
+  };
+  const handleOrderWarningShow = (item) => {
+    setOrderWarning(true);
+  };
   const addToCart = (item) => {
     addItemToCart(item, restaurantprofile.name);
     setShow(false);
+  };
+
+  const resetCart = () => {
+    clearCart();
+    handleOrderWarningClose();
   };
 
   useEffect(() => {
@@ -165,7 +179,10 @@ const Restaurant = ({
                                       width: "80%",
                                     }}
                                     onClick={() => {
-                                      addToCart(item);
+                                      restaurantname &&
+                                      restaurantname !== restaurantprofile.name
+                                        ? handleOrderWarningShow()
+                                        : addToCart(item);
                                     }}
                                   >
                                     Add to cart ${item.price}
@@ -174,6 +191,44 @@ const Restaurant = ({
                               </Modal>
                             </Fragment>
                           )}
+                        <Fragment>
+                          <Modal
+                            show={orderWarning}
+                            onHide={handleOrderWarningClose}
+                          >
+                            <Modal.Header>
+                              <Modal.Title>Create new order?</Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>
+                              <p className="text-muted">
+                                Your order contains items from {restaurantname}.
+                                Create a new order to add items from{" "}
+                                {restaurantprofile.name}
+                              </p>
+                            </Modal.Body>
+                            <Modal.Footer>
+                              <Button
+                                variant="primary"
+                                style={{
+                                  color: "white",
+                                  backgroundColor: "black",
+                                  width: "80%",
+                                }}
+                                onClick={() => {
+                                  resetCart();
+                                }}
+                              >
+                                New Order
+                              </Button>
+                              <Button
+                                variant="secondary"
+                                onClick={handleOrderWarningClose}
+                              >
+                                Close
+                              </Button>
+                            </Modal.Footer>
+                          </Modal>
+                        </Fragment>
                         <p>
                           <b>
                             <i>{item.name}</i>
@@ -219,15 +274,19 @@ Restaurant.propTypes = {
   getCurrentUser: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
   addItemToCart: PropTypes.func.isRequired,
+  cart: PropTypes.object.isRequired,
+  clearCart: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   dashboard: state.dashboard,
   restaurantlanding: state.restaurantlanding,
   auth: state.auth,
+  cart: state.cart,
 });
 export default connect(mapStateToProps, {
   getCurrentUser,
   fetchCurrentRestaurantDataOnReload,
   addItemToCart,
+  clearCart,
 })(Restaurant);

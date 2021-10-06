@@ -1,6 +1,11 @@
 import axios from "axios";
 import { setAlert } from "./alert";
-import { ADD_DELIVERY_ADDRESS, GET_DELIVERY_ADDRESSES } from "./types";
+import {
+  ADD_DELIVERY_ADDRESS,
+  GET_DELIVERY_ADDRESSES,
+  PLACE_ORDER,
+  CLEAR_CART,
+} from "./types";
 
 export const getAllDeliveryAddress = () => async (dispatch) => {
   try {
@@ -42,6 +47,29 @@ export const addDeliveryAddress =
         payload: res.data,
       });
     } catch (error) {
+      console.log(error);
       dispatch(setAlert("Error", "danger"));
     }
   };
+
+export const placeOrder = (orderData) => async (dispatch) => {
+  try {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    const res = await axios.post("/api/user/profile/orders", orderData, config);
+    dispatch({
+      type: PLACE_ORDER,
+      payload: res.data,
+    });
+    dispatch({
+      type: CLEAR_CART,
+    });
+    dispatch(setAlert("Order Placed Successfully", "success"));
+  } catch (error) {
+    console.log(error);
+    dispatch(setAlert("Error", "danger"));
+  }
+};
