@@ -18,8 +18,8 @@ const Orders = db.define(
     },
     restaurant_id_order: {
       type: Sequelize.INTEGER,
-      references: "restaurants",
-      referencesKey: "id",
+      references: "restaurant_profiles",
+      referencesKey: "restaurantid",
     },
     date: {
       type: Sequelize.DATE,

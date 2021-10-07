@@ -3,16 +3,16 @@ const db = require("../config/db");
 const OrderDish = db.define(
   "order_dish",
   {
-    order_id: {
+    orderId: {
       type: Sequelize.INTEGER,
       references: "orders",
       referencesKey: "id",
-      primaryKey: true,
     },
     dish_id: {
       type: Sequelize.INTEGER,
       references: "dish",
       referencesKey: "id",
+      primaryKey: true,
     },
     count: {
       type: Sequelize.INTEGER,

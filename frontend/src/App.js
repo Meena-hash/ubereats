@@ -26,6 +26,7 @@ import Dashboard from "./components/layout/user/Dashboard";
 import Restaurant from "./components/layout/user/Restaurant";
 import Favourites from "./components/layout/user/Favourites";
 import Checkout from "./components/layout/user/Checkout";
+import PastOrders from "./components/layout/user/PastOrders";
 if (localStorage.token) {
   setAuthToken(localStorage.token);
 }
@@ -55,6 +56,11 @@ const App = () => {
               ></PrivateRoute>
               <Route exact path="/user/register" component={URegister}></Route>
               <Route exact path="/user/login" component={ULogin}></Route>
+              <Route
+                exact
+                path="/user/orderhistory"
+                component={PastOrders}
+              ></Route>
               <PrivateRoute
                 exact
                 path="/user/checkout"

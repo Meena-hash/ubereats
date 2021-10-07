@@ -63,8 +63,8 @@ const Dashboard = ({
     if (!user && urole && urole === "user") {
       getCurrentUser();
     }
-    if (restaurants !== []) getAllRestaurants();
-    if (dishes !== []) getAllDishes();
+    getAllRestaurants();
+    getAllDishes();
   }, []);
 
   useEffect(() => {

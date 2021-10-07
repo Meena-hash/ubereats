@@ -3,6 +3,7 @@ import { setAlert } from "./alert";
 import { getItemsInCart } from "./cart";
 import { getAllDeliveryAddress } from "./checkout";
 import { getUserFavourites } from "./favourites";
+import { getDeliveryHistory } from "./orderhistory";
 import {
   GET_USER_BY_ID,
   USER_LOADED,
@@ -63,6 +64,7 @@ export const getCurrentUser = () => async (dispatch) => {
     dispatch(getUserFavourites());
     dispatch(getItemsInCart());
     dispatch(getAllDeliveryAddress());
+    dispatch(getDeliveryHistory());
   } catch (error) {}
 };
 
@@ -79,8 +81,7 @@ export const editUserProfile =
       });
       dispatch(uploadImageUser(imageData, res.data.profileid));
       dispatch(getCurrentUser());
-      // uncomment later and fix z index
-      // dispatch(setAlert("Profile Updated", "success"));
+      dispatch(setAlert("Profile Updated", "success"));
       history.push("/user/profile");
     } catch (error) {}
   };

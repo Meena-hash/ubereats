@@ -72,6 +72,8 @@ export default function authReducer(state = initialState, action) {
       localStorage.removeItem("urole");
       sessionStorage.removeItem("currentRestaurantDishes");
       sessionStorage.removeItem("currentRestaurant");
+      sessionStorage.removeItem("pastOrders");
+      sessionStorage.removeItem("cartRestaurantId");
       return {
         ...state,
         token: null,

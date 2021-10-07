@@ -1,10 +1,12 @@
 import axios from "axios";
 import { setAlert } from "./alert";
+import { getDeliveryHistory } from "./orderhistory";
 import {
   ADD_DELIVERY_ADDRESS,
   GET_DELIVERY_ADDRESSES,
   PLACE_ORDER,
   CLEAR_CART,
+  DELIVERY_HISTORY_SUMMARY,
 } from "./types";
 
 export const getAllDeliveryAddress = () => async (dispatch) => {
@@ -68,6 +70,7 @@ export const placeOrder = (orderData, dishes) => async (dispatch) => {
       type: PLACE_ORDER,
       payload: res.data,
     });
+    dispatch(getDeliveryHistory());
     dispatch({
       type: CLEAR_CART,
     });

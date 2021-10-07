@@ -9,15 +9,21 @@ export const SidebarUserData = [
   },
 
   {
-    title: "profile",
+    title: "Profile",
     path: "/user/profile",
     icon: <AiIcons.AiFillProfile> </AiIcons.AiFillProfile>,
     cName: "nav-text",
   },
   {
-    title: "favourites",
+    title: "Favourites",
     path: "/user/favourites",
     icon: <AiIcons.AiFillHeart> </AiIcons.AiFillHeart>,
+    cName: "nav-text",
+  },
+  {
+    title: "Orders",
+    path: "/user/orderhistory",
+    icon: <AiIcons.AiOutlineHistory> </AiIcons.AiOutlineHistory>,
     cName: "nav-text",
   },
 ];
