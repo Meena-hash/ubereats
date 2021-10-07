@@ -34,10 +34,22 @@ const Orders = db.define(
       type: Sequelize.ENUM("deliver", "pickup"),
     },
     delivery_status: {
-      type: Sequelize.ENUM("received", "preparing", "otw", "delivered"),
+      type: Sequelize.ENUM(
+        "order received",
+        "preparing",
+        "on the way",
+        "delivered",
+        "cancelled"
+      ),
     },
     pickup_status: {
-      type: Sequelize.ENUM("received", "preparing", "ready", "pickedup"),
+      type: Sequelize.ENUM(
+        "order received",
+        "preparing",
+        "pick up ready",
+        "pickedup",
+        "cancelled"
+      ),
     },
     delivery_address: {
       type: Sequelize.STRING,

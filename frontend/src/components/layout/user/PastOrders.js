@@ -3,7 +3,6 @@ import React, { Fragment, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { getDishesOfOrder } from "../../../actions/orderhistory";
-import Spinner from "../Spinner";
 import { getCurrentUser } from "../../../actions/userprofile";
 import { getAllRestaurants, getAllDishes } from "../../../actions/dashboard";
 import { Button, Modal } from "react-bootstrap";
@@ -91,9 +90,7 @@ const PastOrders = ({
                           <i className="fas fa-id-card-alt"></i>&nbsp;
                           {item["order_dishes.orderId"]}
                         </li>
-                        <li>
-                          <i className="fas fa-shopping-bag"></i>&nbsp;10 items
-                        </li>
+
                         <li>
                           <i className="fas fa-money-bill-alt"></i>&nbsp;$
                           {item.total}
@@ -144,6 +141,10 @@ const PastOrders = ({
                         <Modal show={show} onHide={handleClose}>
                           <Modal.Header>
                             <Modal.Title>Receipt</Modal.Title>
+                            <li>
+                              <i className="fas fa-shopping-bag"></i>&nbsp;
+                              {orderDish.length}&nbsp;
+                            </li>
                           </Modal.Header>
                           <Modal.Body>
                             {orderDish.map((item) => {

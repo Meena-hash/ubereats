@@ -160,7 +160,7 @@ router.post("/orders", auth, async (req, res) => {
     orderFields.restaurant_id_order = restaurant_id_order;
     orderFields.order_type = "new";
     orderFields.type = "deliver";
-    orderFields.delivery_status = "received";
+    orderFields.delivery_status = "order received";
     orderFields.total = total;
     orderFields.delivery_address = delivery_address;
     let newOrderId = 0;
@@ -201,7 +201,12 @@ router.get("/get/past/orders", auth, async (req, res) => {
       raw: true,
       where: { userprofileid: req.user.id },
       attributes: {
-        exclude: ["restaurantProfileRestaurantid", "dishId", "id"],
+        exclude: [
+          "restaurantProfileRestaurantid",
+          "dishId",
+          "id",
+          "userProfileProfileid",
+        ],
       },
       include: [
         {
@@ -210,7 +215,12 @@ router.get("/get/past/orders", auth, async (req, res) => {
           as: "restaurant_profile",
 
           attributes: {
-            exclude: ["restaurantProfileRestaurantid", "dishId", "id"],
+            exclude: [
+              "restaurantProfileRestaurantid",
+              "dishId",
+              "id",
+              "userProfileProfileid",
+            ],
           },
         },
         {

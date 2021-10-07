@@ -202,7 +202,9 @@ router.get("/orders", auth, async (req, res) => {
     Orders.belongsTo(UserProfile, { foreignKey: "userprofileid" });
     let orders = await Orders.findAll({
       where: { restaurant_id_order: req.restaurant.id },
-      attributes: { exclude: ["userProfileProfileid"] },
+      attributes: {
+        exclude: ["userProfileProfileid", "restaurantProfileRestaurantid"],
+      },
       include: [
         {
           model: UserProfile,

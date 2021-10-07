@@ -6,7 +6,6 @@ import {
   GET_DELIVERY_ADDRESSES,
   PLACE_ORDER,
   CLEAR_CART,
-  DELIVERY_HISTORY_SUMMARY,
 } from "./types";
 
 export const getAllDeliveryAddress = () => async (dispatch) => {
