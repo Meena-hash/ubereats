@@ -4,6 +4,8 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { CountryDropdown, RegionDropdown } from "react-country-region-selector";
 import { getCurrentUser, editUserProfile } from "../../../actions/userprofile";
+import PhoneInput from "react-phone-number-input";
+import "react-phone-number-input/style.css";
 const initialState = {
   id: "",
   name: "",
@@ -72,6 +74,9 @@ const EditUserProfile = ({
   const selectRegion = async (val) => {
     setFormData({ ...formData, state: val });
   };
+  const selectPh = async (val) => {
+    setFormData({ ...formData, ph_no: val });
+  };
   const onChange = async (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
   const onSubmit = (e) => {
@@ -83,10 +88,7 @@ const EditUserProfile = ({
   return urole === "user" ? (
     <Fragment>
       <form className="form profile" onSubmit={(e) => onSubmit(e)}>
-        <center>
-          {" "}
-          {/* <h1 className="large text-primary">Edit Your Profile</h1> */}
-        </center>
+        <center> </center>
         <div className="form-group">
           <div>
             {/* /onClick={() => editProfilePic()} */}
@@ -155,6 +157,14 @@ const EditUserProfile = ({
           />
         </div>
         <div className="form-group">
+          <PhoneInput
+            countrySelectProps={{ unicodeFlags: true }}
+            placeholder="Enter phone number"
+            value={ph_no}
+            onChange={(val) => selectPh(val)}
+          />
+        </div>
+        <div className="form-group">
           <input
             type="text"
             placeholder="NickName"
@@ -165,22 +175,14 @@ const EditUserProfile = ({
         </div>
         <div className="form-group">
           <input
-            type="textarea"
+            type="text"
             placeholder="About"
             name="about"
             value={about}
             onChange={(e) => onChange(e)}
           />
         </div>
-        <div className="form-group">
-          <input
-            type="text"
-            placeholder="Phone Number"
-            name="ph_no"
-            value={ph_no}
-            onChange={(e) => onChange(e)}
-          />
-        </div>
+
         <div className="form-group">
           <input
             type="text"

@@ -79,7 +79,10 @@ const Checkout = ({
   const submitOrder = () => {
     let orderFields = {};
     orderFields.restaurant_id_order = restaurantid;
-    orderFields.type = sessionStorage.getItem("deliveryMode");
+    orderFields.type = sessionStorage.getItem("deliveryMode")
+      ? sessionStorage.getItem("deliveryMode")
+      : "delivery";
+    alert(orderFields.type);
     orderFields.tip = tip;
     orderFields.total = total;
     orderFields.delivery_address =

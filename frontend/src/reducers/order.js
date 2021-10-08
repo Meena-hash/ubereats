@@ -19,6 +19,7 @@ export default function order(state = initialState, action) {
       // edit to hold in session storage
       const editOrders = [...state.pastorders, payload];
       sessionStorage.removeItem("pastOrders");
+      sessionStorage.removeItem("deliveryMode");
       return {
         ...state,
         order: payload,

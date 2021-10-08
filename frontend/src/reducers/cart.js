@@ -56,6 +56,7 @@ export default function cart(state = initialState, action) {
       };
     case CLEAR_CART:
       sessionStorage.removeItem("cartRestaurantName");
+      sessionStorage.removeItem("cartRestaurantId");
       sessionStorage.removeItem("cartItemsOfUser");
       sessionStorage.removeItem("cartItemsCost");
       return {
