@@ -14,7 +14,7 @@ const Checkout = ({
   placeOrder,
   auth: { user },
   userprofile: { profile },
-
+  history,
   cart: { restaurantname, restaurantid, loading, items, cost },
   deliveryAddresses: { addresses },
 }) => {
@@ -90,7 +90,7 @@ const Checkout = ({
       currDeliveryAddr.state +
       "," +
       currDeliveryAddr.country;
-    placeOrder(orderFields, items);
+    placeOrder(orderFields, items, history);
   };
   useEffect(() => {
     if (profile)

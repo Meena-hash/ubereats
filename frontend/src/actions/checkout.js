@@ -53,7 +53,7 @@ export const addDeliveryAddress =
     }
   };
 
-export const placeOrder = (orderData, dishes) => async (dispatch) => {
+export const placeOrder = (orderData, dishes, history) => async (dispatch) => {
   try {
     const config = {
       headers: {
@@ -74,6 +74,7 @@ export const placeOrder = (orderData, dishes) => async (dispatch) => {
       type: CLEAR_CART,
     });
     dispatch(setAlert("Order Placed Successfully", "success"));
+    history.push("/user/dashboard");
   } catch (error) {
     console.log(error);
     dispatch(setAlert("Error", "danger"));

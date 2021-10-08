@@ -12,15 +12,14 @@ export const getDeliveryHistory = () => async (dispatch) => {
         "Content-Type": "application/json",
       },
     };
-    if (!JSON.parse(sessionStorage.getItem("pastOrders"))) {
-      const res = await axios.get("/api/user/profile/get/past/orders", config);
-      dispatch({
-        type: DELIVERY_HISTORY_SUMMARY,
-        payload: res.data,
-      });
-    } else {
-      dispatch({ type: LOAD_DELIVERY_HISTORY });
-    }
+
+    const res = await axios.get("/api/user/profile/get/past/orders", config);
+    dispatch({
+      type: DELIVERY_HISTORY_SUMMARY,
+      payload: res.data,
+    });
+
+    dispatch({ type: LOAD_DELIVERY_HISTORY });
   } catch (error) {
     console.log(error);
     dispatch(setAlert("Error", "danger"));

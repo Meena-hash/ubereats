@@ -226,19 +226,29 @@ router.put("/update/delivery/:order_id/:del_status", auth, async (req, res) => {
     UserProfile.hasMany(Orders);
     Orders.belongsTo(UserProfile, { foreignKey: "userprofileid" });
     let delivery = {};
-    delivery.delivery_status = req.params.del_status;
+    let order = await Orders.findOne({
+      where: { id: req.params.order_id },
+      attributes: {
+        exclude: ["userProfileProfileid", "restaurantProfileRestaurantid"],
+      },
+    });
+    if (order.type === "deliver")
+      delivery.delivery_status = req.params.del_status;
+    else delivery.pickup_status = req.params.del_status;
     if (req.params.del_status === "delivered") {
       delivery.order_type = "delivered";
     }
     if (req.params.del_status === "cancelled") {
       delivery.order_type = "cancelled";
     }
-    let order = await Orders.update(delivery, {
+    order = await Orders.update(delivery, {
       where: { id: req.params.order_id },
     });
     order = await Orders.findOne({
       where: { id: req.params.order_id },
-      attributes: { exclude: ["userProfileProfileid"] },
+      attributes: {
+        exclude: ["userProfileProfileid", "restaurantProfileRestaurantid"],
+      },
       include: [
         {
           model: UserProfile,
@@ -250,7 +260,7 @@ router.put("/update/delivery/:order_id/:del_status", auth, async (req, res) => {
 
     return res.json([order]);
   } catch (err) {
-    console.log(err.message);
+    console.log(err);
     res.status(500).send("Server error");
   }
 });
