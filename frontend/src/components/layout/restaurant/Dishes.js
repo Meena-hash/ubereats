@@ -70,7 +70,7 @@ const Dishes = ({
         <hr />
         {urole === "restaurant" && (
           <div className="col-md-2">
-            <button className="btn btn-primary">
+            <button className="btn btn-secondary">
               <i class="fas fa-plus" style={{ color: "black" }}>
                 {" "}
                 <Link to="/restaurant/add/dishes" style={{ color: "black" }}>
@@ -216,7 +216,7 @@ const Dishes = ({
                                   Close
                                 </Button>
                                 <Button
-                                  variant="primary"
+                                  className="btn btn-primary"
                                   onClick={(e) => onSubmit(e)}
                                 >
                                   Save Changes
@@ -250,6 +250,7 @@ const Dishes = ({
                         </p>
                       </div>
                     </div>
+                    <br />
                   </div>
                 </>
               );

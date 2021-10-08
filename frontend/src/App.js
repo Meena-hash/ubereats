@@ -27,6 +27,7 @@ import Restaurant from "./components/layout/user/Restaurant";
 import Favourites from "./components/layout/user/Favourites";
 import Checkout from "./components/layout/user/Checkout";
 import PastOrders from "./components/layout/user/PastOrders";
+import LandingPage from "./components/layout/LandingPage";
 if (localStorage.token) {
   setAuthToken(localStorage.token);
 }
@@ -40,6 +41,7 @@ const App = () => {
       <Router>
         <Fragment>
           <Navbar />
+          <Route exact path="/landing" component={LandingPage}></Route>
           <section className="container">
             <Alert />
             <Switch>
@@ -56,11 +58,13 @@ const App = () => {
               ></PrivateRoute>
               <Route exact path="/user/register" component={URegister}></Route>
               <Route exact path="/user/login" component={ULogin}></Route>
-              <Route
+              <PrivateRoute
                 exact
                 path="/user/orderhistory"
                 component={PastOrders}
-              ></Route>
+                role="user"
+              ></PrivateRoute>
+
               <PrivateRoute
                 exact
                 path="/user/checkout"

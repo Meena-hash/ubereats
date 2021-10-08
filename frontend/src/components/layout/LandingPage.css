@@ -1,0 +1,7 @@
+.landing-page {
+  position: relative;
+  background: url("landingplain.jpeg") no-repeat center center/cover;
+  height: 95vh;
+  color: white;
+  /* background-size: auto; */
+}

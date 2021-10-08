@@ -101,6 +101,10 @@ const PastOrders = ({
                           {item.date}
                         </li>
                         <li>
+                          <i className="fas fa-truck-pickup"></i>&nbsp;
+                          {item.type}
+                        </li>
+                        <li>
                           {" "}
                           <i className="fas fa-cookie-bite"></i> &nbsp;
                           {item.delivery_status !== null &&

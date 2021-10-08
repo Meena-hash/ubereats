@@ -7,13 +7,14 @@ import { CountryDropdown, RegionDropdown } from "react-country-region-selector";
 import { Button, Modal } from "react-bootstrap";
 import { addDeliveryAddress } from "../../../actions/checkout";
 import { placeOrder } from "../../../actions/checkout";
+
 const Checkout = ({
   getCurrentUser,
   addDeliveryAddress,
   placeOrder,
   auth: { user },
   userprofile: { profile },
-  dashboard: { restaurants },
+
   cart: { restaurantname, restaurantid, loading, items, cost },
   deliveryAddresses: { addresses },
 }) => {
@@ -32,6 +33,7 @@ const Checkout = ({
   const [country, setCountry] = useState("");
   const [city, setCity] = useState("");
   const [street, setStreet] = useState("");
+
   const selectCountry = (val) => {
     setCountry(val);
   };
@@ -77,6 +79,7 @@ const Checkout = ({
   const submitOrder = () => {
     let orderFields = {};
     orderFields.restaurant_id_order = restaurantid;
+    orderFields.type = sessionStorage.getItem("deliveryMode");
     orderFields.tip = tip;
     orderFields.total = total;
     orderFields.delivery_address =
@@ -105,6 +108,7 @@ const Checkout = ({
     if (cost)
       setTotal(Number(cost) + Number(tip) + Number(0.1 * cost) + Number(15));
   }, [cost, tip]);
+
   return (
     <Fragment>
       <div className="container-fluid">
@@ -302,10 +306,12 @@ const Checkout = ({
                 <td>Taxes and Fees</td>
                 <td>${0.1 * cost}</td>
               </tr>
+
               <tr>
                 <td>Delivery Fee</td>
                 <td>$15</td>
               </tr>
+
               {/* <tr>
                 <td>CA Driver Benefits</td>
                 <td>Free shipping</td>
@@ -457,7 +463,6 @@ Checkout.propTypes = {
   userprofile: PropTypes.object.isRequired,
   deliveryAddress: PropTypes.object.isRequired,
   addDeliveryAddress: PropTypes.func.isRequired,
-  dashboard: PropTypes.object.isRequired,
   placeOrder: PropTypes.func.isRequired,
 };
 
@@ -466,7 +471,6 @@ const mapStateToProps = (state) => ({
   cart: state.cart,
   userprofile: state.userprofile,
   deliveryAddresses: state.deliveryAddress,
-  dashboard: state.dashboard,
 });
 
 export default connect(mapStateToProps, {

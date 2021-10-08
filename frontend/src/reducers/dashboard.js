@@ -25,6 +25,7 @@ export default function dashboard(state = initialState, action) {
         loading: false,
       };
     case DASHBOARD_FILTER_BY_MODE:
+      if (payload !== "Both") sessionStorage.setItem("deliveryMode", payload);
       return {
         ...state,
         mode: payload,

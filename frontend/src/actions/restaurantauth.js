@@ -92,6 +92,6 @@ export const logout = (history) => async (dispatch) => {
     dispatch({
       type: LOGOUT_SUCCESS,
     });
-    history.push("/restaurant/login");
+    history.push("/landing");
   } catch (error) {}
 };

@@ -80,6 +80,6 @@ export const logoutUser = (history) => async (dispatch) => {
     dispatch({
       type: LOGOUT_SUCCESS,
     });
-    history.push("/user/login");
+    history.push("/landing");
   } catch (error) {}
 };

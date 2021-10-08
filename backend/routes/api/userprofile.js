@@ -151,7 +151,7 @@ router.post("/address/me", auth, async (req, res) => {
 });
 router.post("/orders", auth, async (req, res) => {
   try {
-    const { tip, restaurant_id_order, total, delivery_address } =
+    const { tip, restaurant_id_order, total, delivery_address, type } =
       req.body.orderData;
     let orderFields = {};
     orderFields.tip = tip;
@@ -159,8 +159,10 @@ router.post("/orders", auth, async (req, res) => {
     orderFields.userprofileid = req.user.id;
     orderFields.restaurant_id_order = restaurant_id_order;
     orderFields.order_type = "new";
-    orderFields.type = "deliver";
-    orderFields.delivery_status = "order received";
+    if (type === "delivery") orderFields.type = "deliver";
+    else orderFields.type = type;
+    if (type === "pickup") orderFields.pickup_status = "order received";
+    else orderFields.delivery_status = "order received";
     orderFields.total = total;
     orderFields.delivery_address = delivery_address;
     let newOrderId = 0;
@@ -177,7 +179,17 @@ router.post("/orders", auth, async (req, res) => {
       }
     });
 
-    let order = await Orders.findOne({ where: { id: newOrderId } });
+    let order = await Orders.findOne({
+      where: { id: newOrderId },
+      attributes: {
+        exclude: [
+          "restaurantProfileRestaurantid",
+          "dishId",
+          "id",
+          "userProfileProfileid",
+        ],
+      },
+    });
     return res.json(order);
   } catch (error) {
     console.log(error);
