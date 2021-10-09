@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect } from "react";
-import orderimg from "../img/orderimg.jpeg";
+import deliveryboy from "../img/deliveryboy.jpg";
 import { Redirect } from "react-router-dom/cjs/react-router-dom.min";
 
 import {
@@ -31,7 +31,7 @@ const ViewOrder = ({
         <>
           <nav>
             <img
-              src={orderimg}
+              src={deliveryboy}
               alt=""
               style={{ width: "100%", height: "300px" }}
             />

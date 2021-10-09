@@ -88,10 +88,22 @@ const Dishes = ({
                   <div className="column">
                     <div className="row rows">
                       <div className="col-md-6">
-                        <img className="imagecol" src={item.images} alt="" />
+                        <img
+                          className="imagecol"
+                          src={item.images}
+                          alt=""
+                          style={{ width: "100%", height: "95%" }}
+                        />
                       </div>
                       <div className="col-md-6">
-                        <h4>{item.name}</h4>
+                        <b>
+                          <i>
+                            {" "}
+                            <u>
+                              <h5 className="normalspace">{item.name} </h5>
+                            </u>
+                          </i>
+                        </b>
                         <i
                           className="fas fa-trash-alt"
                           onClick={() => deleteDish(item.id)}
@@ -245,7 +257,7 @@ const Dishes = ({
                           {item.type}
                         </p>
                         <p className="post-date">
-                          <b>Price: </b>
+                          <b>Price ($): </b>
                           {item.price}
                         </p>
                       </div>

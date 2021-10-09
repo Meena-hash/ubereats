@@ -6,7 +6,6 @@ const UserProfile = require("../../models/UserProfile");
 const User = require("../../models/User");
 const Orders = require("../../models/Order");
 const OrderDish = require("../../models/OrderDish");
-const Dish = require("../../models/Dish");
 const db = require("../../config/db");
 const RestaurantProfile = require("../../models/RestaurantProfile");
 
@@ -90,36 +89,7 @@ router.post("/basic", auth, async (req, res) => {
     res.status(500).send("Server error");
   }
 });
-// Update Contact Information (email id, phone number)
-router.post("/contact", auth, async (req, res) => {
-  let user = await User.findOne({ where: { id: req.user.id } });
-  const { email, ph_no } = req.body;
 
-  let profileFields = {};
-  profileFields.profileid = user.id;
-  profileFields.email = email;
-  profileFields.ph_no = ph_no;
-
-  try {
-    let profile = await UserProfile.findOne({
-      where: { profileid: user.id },
-    });
-    if (profile) {
-      profile = await UserProfile.update(profileFields, {
-        where: { profileid: user.id },
-      });
-      profile = await UserProfile.findOne({ where: { profileid: user.id } });
-      console.log(profile);
-      return res.json(profile);
-    }
-    profile = new UserProfile(profileFields);
-    await profile.save();
-    return res.json(profile);
-  } catch (err) {
-    console.log(err.message);
-    res.status(500).send("Server error");
-  }
-});
 router.get("/address/me", auth, async (req, res) => {
   try {
     const addresses = await DeliveryAddress.findAll({
@@ -149,6 +119,7 @@ router.post("/address/me", auth, async (req, res) => {
     res.status(500).send("Server error");
   }
 });
+
 router.post("/orders", auth, async (req, res) => {
   try {
     const { tip, restaurant_id_order, total, delivery_address, type } =

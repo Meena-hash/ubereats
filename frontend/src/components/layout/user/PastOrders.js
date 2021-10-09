@@ -18,12 +18,15 @@ const PastOrders = ({
   const [uniqueOrders, setUniqueOrders] = useState(pastorders);
   const [show, setShow] = useState(false);
   const [orderDish, setOrderDish] = useState("");
+  const [deliveryAddress, setDeliveryAddress] = useState("");
   const handleClose = () => {
     setOrderDish("");
+    setDeliveryAddress("");
     setShow(false);
   };
 
-  const fetchOrderDishes = (orderid) => {
+  const fetchOrderDishes = (orderid, address) => {
+    if (address) setDeliveryAddress(address);
     getDishesOfOrder(orderid);
     setShow(true);
   };
@@ -122,7 +125,10 @@ const PastOrders = ({
                               color: "black",
                             }}
                             onClick={() => {
-                              fetchOrderDishes(item["order_dishes.orderId"]);
+                              fetchOrderDishes(
+                                item["order_dishes.orderId"],
+                                item["delivery_address"]
+                              );
                             }}
                           >
                             {" "}
@@ -168,6 +174,11 @@ const PastOrders = ({
                                 </>
                               );
                             })}
+                            <i className="fas fa-map-marked-alt"></i>
+                            &nbsp;&nbsp;&nbsp;
+                            <p className="text-muted">
+                              Deliverd to {deliveryAddress}
+                            </p>
                           </Modal.Body>
 
                           <Modal.Footer>

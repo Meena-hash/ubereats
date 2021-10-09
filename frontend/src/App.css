@@ -132,7 +132,7 @@ button {
 
 @media (max-width: 700px) {
   .container {
-    margin-top: 8rem;
+    margin-top: 10rem;
   }
   .form input[type="submit"] {
     max-width: 30%;
@@ -204,6 +204,20 @@ footer {
   padding: 0 2rem;
   margin-top: 2rem;
   margin-bottom: 3rem;
+
+  @media only screen and (min-width: 992px) {
+    width: 20%;
+    background-color: black;
+  }
+  @media only screen and (min-width: 768px) {
+    width: 75%;
+    background-color: black;
+  }
+
+  /* Medium Devices, Desktops */
+  @media only screen and (min-width: 992px) {
+    width: 50%;
+  }
 }
 .profilec {
   position: relative;
@@ -455,4 +469,7 @@ table {
   right: 16px;
   font-size: 25px;
   color: white;
+}
+.normalspace {
+  white-space: normal;
 }

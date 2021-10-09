@@ -217,17 +217,18 @@ export const viewOrder = (orderId, history) => async (dispatch) => {
     });
     history.push("/restaurant/view/order");
   } catch (error) {
-    const errors = error.response.data.errors;
-    if (errors) {
-      errors.forEach((error) => dispatch(setAlert(error.msg, "danger")));
-    }
-    dispatch({
-      type: PROFILE_ERROR,
-      payload: {
-        msg: error.response.statusText,
-        status: error.response.status,
-      },
-    });
+    console.log(error);
+    // const errors = error.response.data.errors;
+    // if (errors) {
+    //   errors.forEach((error) => dispatch(setAlert(error.msg, "danger")));
+    // }
+    // dispatch({
+    //   type: PROFILE_ERROR,
+    //   payload: {
+    //     msg: error.response.statusText,
+    //     status: error.response.status,
+    //   },
+    // });
   }
 };
 

@@ -86,7 +86,7 @@ const URegister = ({ setAlert, register, isAuthenticated }) => {
           />
         </form>
         <p className="my-1">
-          Already have an account? <Link to="user/login">Sign In</Link>
+          Already have an account? <Link to="/user/login">Sign In</Link>
         </p>
       </div>
     </Fragment>
