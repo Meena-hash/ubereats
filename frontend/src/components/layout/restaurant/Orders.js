@@ -24,6 +24,7 @@ const Orders = ({
   const [filter, setFilter] = useState("All Orders");
   useEffect(() => {
     getCurrentProfile();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orders === []]);
   useEffect(() => {
     setOrderData(orders);
