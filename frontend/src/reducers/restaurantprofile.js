@@ -76,7 +76,12 @@ export default function restprofReducer(state = initialState, action) {
     case GET_PROFILE:
       return { ...state, profile: payload, loading: false };
     case UPDATE_DELIVERY_STATUS:
-      return { ...state, loading: false, order: payload };
+      return {
+        ...state,
+        loading: false,
+        orders: [payload, ...state.orders.filter((or) => or.id !== payload.id)],
+        order: payload,
+      };
     case PROFILE_ERROR:
       return { ...state, error: payload, loading: false, dishes: null };
     case CLEAR_PROFILE:

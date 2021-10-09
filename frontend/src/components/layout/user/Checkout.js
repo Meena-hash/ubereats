@@ -82,7 +82,6 @@ const Checkout = ({
     orderFields.type = sessionStorage.getItem("deliveryMode")
       ? sessionStorage.getItem("deliveryMode")
       : "delivery";
-    alert(orderFields.type);
     orderFields.tip = tip;
     orderFields.total = total;
     orderFields.delivery_address =

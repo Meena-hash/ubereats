@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import deliveryboy from "../img/deliveryboy.jpg";
 import { Redirect } from "react-router-dom/cjs/react-router-dom.min";
 
@@ -15,6 +15,7 @@ const ViewOrder = ({
   auth: { urole },
   restaurantprofile: { order, loading, dishesOfOrder },
 }) => {
+  const [selectedOrder, setSelectedOrder] = useState(order);
   useEffect(() => {
     getCurrentProfile();
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -473,3 +473,49 @@ table {
 .normalspace {
   white-space: normal;
 }
+
+/* past order page */
+.userorder {
+  width: 100%;
+  background-color: rgb(143, 140, 140);
+  overflow: auto;
+  height: 50px;
+}
+.nav-link {
+  background-color: rgb(143, 140, 140);
+}
+
+.userorder a {
+  float: left;
+  padding: 12px;
+  color: white;
+  text-decoration: none;
+  font-size: 17px;
+  width: 12.5%; /* Four links of equal widths */
+  text-align: center;
+}
+.navuserorder {
+  float: left;
+  padding: 12px;
+  color: white;
+  text-decoration: none;
+  font-size: 17px;
+  width: 12.5%; /* Four links of equal widths */
+  text-align: center;
+}
+.userorder a:hover {
+  background-color: darkgray;
+}
+
+.userorder a.active {
+  background-color: darkgrey;
+}
+
+@media screen and (max-width: 500px) {
+  .userorder a {
+    float: none;
+    display: block;
+    width: 100%;
+    text-align: left;
+  }
+}

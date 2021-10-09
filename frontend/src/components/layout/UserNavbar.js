@@ -3,6 +3,7 @@ import React, { Fragment, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { Button, Modal } from "react-bootstrap";
+import { getCurrentUser } from "../../actions/userprofile";
 import "./UserNavbar.css";
 import {
   filterOnSearchString,
@@ -11,9 +12,11 @@ import {
 import { getItemsInCart } from "../../actions/cart";
 import { connect } from "react-redux";
 const UserNavbar = ({
+  getCurrentUser,
   filterOnSearchString,
   filterOnDeliveryMode,
   cart: { restaurantname, loading, items, itemcount, cost },
+  userprofile: { profile },
 }) => {
   const [search, setSearch] = useState("");
   const [mode, setMode] = useState("Both");
@@ -32,6 +35,9 @@ const UserNavbar = ({
   const handleShow = () => {
     setShow(true);
   };
+  useEffect(() => {
+    if (!profile) getCurrentUser();
+  }, []);
 
   useEffect(() => {
     setSearch(search);
@@ -67,10 +73,17 @@ const UserNavbar = ({
           </label>
         </div>
         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-        <button className="ButtonLink" style={{ color: "black" }}>
+        <button
+          className="ButtonLink"
+          style={{
+            color: "black",
+            width: "fit-content",
+          }}
+        >
           &nbsp;&nbsp;
           <i className="fas fa-map-marker-alt" style={{ color: "black" }}></i>
-          &nbsp; 201 W California Avenue &nbsp;&nbsp;&nbsp;
+          &nbsp; {profile && profile.city + "," + profile.state}{" "}
+          &nbsp;&nbsp;&nbsp;
         </button>
         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
         <div class="form-group has-search">
@@ -178,11 +191,15 @@ const UserNavbar = ({
 UserNavbar.propTypes = {
   filterOnSearchString: PropTypes.func.isRequired,
   filterOnDeliveryMode: PropTypes.func.isRequired,
+  userprofile: PropTypes.object.isRequired,
+  getCurrentUser: PropTypes.func.isRequired,
 };
 const mapStateToProps = (state) => ({
   cart: state.cart,
+  userprofile: state.userprofile,
 });
 export default connect(mapStateToProps, {
   filterOnSearchString,
   filterOnDeliveryMode,
+  getCurrentUser,
 })(UserNavbar);

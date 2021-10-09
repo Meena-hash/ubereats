@@ -59,7 +59,169 @@ const PastOrders = ({
         <h4>
           <i className="fas fa-utensils fa-lg"></i> <b>Past Orders</b>
         </h4>
+        <br />
+        <div
+          className="userorder"
+          style={{ backgroundColor: "black", fontSize: "14px" }}
+        >
+          <i
+            className="fas fa-check-circle navuserorder"
+            onClick={(e) => {
+              e.preventDefault();
+              uniqueOrders &&
+                setUniqueOrders([
+                  ...new Map(
+                    pastorders.map((item) => [
+                      item["order_dishes.orderId"],
+                      item,
+                    ])
+                  ).values(),
+                ]);
+            }}
+          >
+            {" "}
+            All
+          </i>
+          <i
+            className="fas fa-cart-plus navuserorder"
+            onClick={(e) => {
+              e.preventDefault();
+              const rec = [
+                ...new Map(
+                  pastorders.map((item) => [item["order_dishes.orderId"], item])
+                ).values(),
+              ];
+              rec &&
+                setUniqueOrders(
+                  rec.filter(
+                    (item) =>
+                      item.delivery_status === "order received" ||
+                      item.pickup_status === "order received"
+                  )
+                );
+            }}
+          >
+            Received
+          </i>
 
+          <i
+            className="fas fa-truck navuserorder"
+            onClick={(e) => {
+              e.preventDefault();
+              const prep = [
+                ...new Map(
+                  pastorders.map((item) => [item["order_dishes.orderId"], item])
+                ).values(),
+              ];
+              prep &&
+                setUniqueOrders(
+                  prep.filter(
+                    (item) =>
+                      item.delivery_status === "preparing" ||
+                      item.pickup_status === "preparing"
+                  )
+                );
+            }}
+          >
+            Preparing
+          </i>
+
+          <i
+            className="fas fa-ban navuserorder"
+            onClick={(e) => {
+              e.preventDefault();
+              const ontw = [
+                ...new Map(
+                  pastorders.map((item) => [item["order_dishes.orderId"], item])
+                ).values(),
+              ];
+              ontw &&
+                setUniqueOrders(
+                  ontw.filter((item) => item.delivery_status === "on the way")
+                );
+            }}
+          >
+            On the way
+          </i>
+          <i
+            className="fas fa-check-circle navuserorder"
+            onClick={(e) => {
+              e.preventDefault();
+              const del = [
+                ...new Map(
+                  pastorders.map((item) => [item["order_dishes.orderId"], item])
+                ).values(),
+              ];
+              del &&
+                setUniqueOrders(
+                  del.filter((item) => item.delivery_status === "delivered")
+                );
+            }}
+          >
+            {" "}
+            Delivered
+          </i>
+          <i
+            className="fas fa-check-circle navuserorder"
+            onClick={(e) => {
+              e.preventDefault();
+              const pic = [
+                ...new Map(
+                  pastorders.map((item) => [item["order_dishes.orderId"], item])
+                ).values(),
+              ];
+              pic &&
+                setUniqueOrders(
+                  pic.filter((item) => item.pickup_status === "pick up ready")
+                );
+            }}
+          >
+            {" "}
+            Pickup Ready
+          </i>
+          <i
+            className="fas fa-check-circle navuserorder"
+            onClick={(e) => {
+              e.preventDefault();
+              const picdone = [
+                ...new Map(
+                  pastorders.map((item) => [item["order_dishes.orderId"], item])
+                ).values(),
+              ];
+              picdone &&
+                setUniqueOrders(
+                  picdone.filter((item) => item.pickup_status === "pickedup")
+                );
+            }}
+          >
+            {" "}
+            Picked up
+          </i>
+          <i
+            className="fas fa-check-circle navuserorder"
+            onClick={(e) => {
+              e.preventDefault();
+              const cancelledpicdel = [
+                ...new Map(
+                  pastorders.map((item) => [item["order_dishes.orderId"], item])
+                ).values(),
+              ];
+              cancelledpicdel &&
+                setUniqueOrders(
+                  cancelledpicdel.filter(
+                    (item) =>
+                      item.delivery_status === "cancelled" ||
+                      item.pickup_status === "cancelled"
+                  )
+                );
+            }}
+          >
+            {" "}
+            Cancelled
+          </i>
+        </div>
+        <br />
+        <br />
         <div className="list-group">
           {uniqueOrders &&
             pastorders &&
@@ -177,7 +339,7 @@ const PastOrders = ({
                             <i className="fas fa-map-marked-alt"></i>
                             &nbsp;&nbsp;&nbsp;
                             <p className="text-muted">
-                              Deliverd to {deliveryAddress}
+                              Ordered to<address> {deliveryAddress}</address>
                             </p>
                           </Modal.Body>
 
