@@ -260,9 +260,9 @@ export const uploadImageRestaurant =
       });
       history.push("/restaurant/profile");
     } catch (error) {
-      alert(
-        "Error occurred while uploading picture, try uploading a smaller image size or try again later."
-      );
+      // alert(
+      //   "Error occurred while uploading picture, try uploading a smaller image size or try again later."
+      // );
     }
   };
 
@@ -274,8 +274,8 @@ export const uploadImageDish = (formData, dish_id) => async (dispatch) => {
       payload: res.data,
     });
   } catch (error) {
-    alert(
-      "Error occurred while uploading picture, try uploading a smaller image size or try again later."
-    );
+    // alert(
+    //   "Error occurred while uploading picture, try uploading a smaller image size or try again later."
+    // );
   }
 };
