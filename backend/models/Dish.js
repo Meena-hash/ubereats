@@ -15,7 +15,7 @@ const Dish = db.define(
       type: Sequelize.STRING,
     },
     price: {
-      type: Sequelize.STRING,
+      type: Sequelize.FLOAT,
     },
     description: {
       type: Sequelize.STRING,

@@ -18,7 +18,7 @@ const OrderDish = db.define(
       type: Sequelize.INTEGER,
     },
     price: {
-      type: Sequelize.INTEGER,
+      type: Sequelize.FLOAT,
     },
   },
   {
