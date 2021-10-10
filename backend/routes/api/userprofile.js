@@ -144,7 +144,8 @@ router.post("/orders", auth, async (req, res) => {
         var dishesFields = {};
         (dishesFields.orderId = result.id),
           (dishesFields.dish_id = dish.id),
-          (dishesFields.count = dish.count);
+          (dishesFields.count = dish.count),
+          (dishesFields.price = dish.price);
         var orderDish = new OrderDish(dishesFields);
         orderDish.save();
       }

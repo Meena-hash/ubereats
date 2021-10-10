@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from "react";
+import React, { useEffect } from "react";
 import "./UserProfile.css";
 import { getUserByID } from "../../../actions/userprofile";
 import { getCurrentUser } from "../../../actions/userprofile";

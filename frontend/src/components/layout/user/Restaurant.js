@@ -7,6 +7,7 @@ import Spinner from "../Spinner";
 import { fetchCurrentRestaurantDataOnReload } from "../../../actions/restaurant";
 import { getCurrentUser } from "../../../actions/userprofile";
 import { addItemToCart, clearCart } from "../../../actions/cart";
+import { addFavourite } from "../../../actions/favourites";
 const Restaurant = ({
   restaurantlanding: { restaurantprofile, loading, dishes },
   dashboard: { searchstring, foodType },
@@ -15,7 +16,9 @@ const Restaurant = ({
   getCurrentUser,
   addItemToCart,
   clearCart,
-  auth: { user },
+  addFavourite,
+  favourites: { favlist },
+  auth: { user, isAuthenticated },
 }) => {
   const [dishesData, setDishesData] = useState(dishes);
 
@@ -44,6 +47,19 @@ const Restaurant = ({
   const resetCart = () => {
     clearCart();
     handleOrderWarningClose();
+  };
+
+  const addFavouriteForUser = (e, restaurantid) => {
+    const checkIfAlreadyFav = favlist.filter((item) => {
+      return (
+        item.customer_id_fav === user.id &&
+        item.restaurant_id_fav === restaurantid
+      );
+    });
+    if (checkIfAlreadyFav.length === 0 && isAuthenticated) {
+      addFavourite(restaurantid);
+    }
+    e.target.style.color = "red";
   };
 
   useEffect(() => {
@@ -87,6 +103,15 @@ const Restaurant = ({
                 className="profilec"
                 style={{ backgroundImage: `url(${restaurantprofile.images})` }}
               >
+                <div className="top-right">
+                  <i
+                    class="fas fa-heart fa-lg"
+                    style={{ color: "white" }}
+                    onClick={(e) => {
+                      addFavouriteForUser(e, restaurantprofile.restaurantid);
+                    }}
+                  ></i>
+                </div>
                 <div className="bottom-left">
                   {restaurantprofile && restaurantprofile.name}
                 </div>
@@ -122,7 +147,9 @@ const Restaurant = ({
             <br />
             <i className="fas fa-envelope-open"> {restaurantprofile.email}</i>
             <div className="row container-fluid" name="dishes">
-              {dishesData &&
+              {!loading &&
+                dishes &&
+                dishesData &&
                 dishesData.map((item) => {
                   return (
                     <div className="column restaurant col-md-5 container-fluid">
@@ -283,10 +310,12 @@ const mapStateToProps = (state) => ({
   restaurantlanding: state.restaurantlanding,
   auth: state.auth,
   cart: state.cart,
+  favourites: state.favourites,
 });
 export default connect(mapStateToProps, {
   getCurrentUser,
   fetchCurrentRestaurantDataOnReload,
   addItemToCart,
   clearCart,
+  addFavourite,
 })(Restaurant);

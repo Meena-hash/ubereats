@@ -105,15 +105,33 @@ const Dashboard = ({
   }, [profile]);
 
   useEffect(() => {
-    if (mode !== null)
-      setRestaurantsData(restaurants.filter((item) => item.mode === mode));
+    if (mode !== null) {
+      if (mode === "delivery") {
+        setRestaurantsData(
+          restaurants.filter((item) => item.mode !== "pickup")
+        );
+      } else {
+        setRestaurantsData(
+          restaurants.filter((item) => item.mode !== "delivery")
+        );
+      }
+    }
   }, [mode]);
 
   useEffect(() => {
-    if (searchstring !== null) {
-      setRestaurantsData(
-        restaurants.filter((item) => {
-          // location
+    setRestaurantsData(
+      restaurants.filter((item) => {
+        let shouldReturnSearch = false;
+        let shouldReturnByMode = false;
+
+        if (searchstring === null) {
+          shouldReturnSearch = true;
+        }
+        if (mode === null || mode === "Both") {
+          shouldReturnByMode = true;
+        }
+
+        if (searchstring !== null) {
           const locationSearch = item.location.includes(searchstring);
           // dishname
           let dishSearch = dishes.filter((dish) =>
@@ -127,15 +145,26 @@ const Dashboard = ({
             dish.type.includes(searchstring)
           );
           const restaurant_ids_type = typeSearch.map((id) => id.restaurant_idx);
-          return (
+          shouldReturnSearch =
             locationSearch ||
             restaurant_ids_dishes.includes(item.restaurantid) ||
-            restaurant_ids_type.includes(item.restaurantid)
-          );
-        })
-      );
-    }
-  }, [searchstring]);
+            restaurant_ids_type.includes(item.restaurantid);
+        }
+        if (shouldReturnSearch) {
+          // check mode
+          if (mode !== null && mode !== "Both") {
+            if (mode === "delivery") {
+              shouldReturnByMode = item.mode !== "pickup";
+            } else {
+              shouldReturnByMode = item.mode !== "delivery";
+            }
+          }
+        }
+
+        return shouldReturnSearch && shouldReturnByMode;
+      })
+    );
+  }, [searchstring, mode]);
 
   return loading && restaurants === null && restaurantsData === null ? (
     <Spinner />

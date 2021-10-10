@@ -19,14 +19,21 @@ const PastOrders = ({
   const [show, setShow] = useState(false);
   const [orderDish, setOrderDish] = useState("");
   const [deliveryAddress, setDeliveryAddress] = useState("");
+  const [tip, setTip] = useState(0);
+  const [totalAmount, setTotalAmount] = useState(0);
+
   const handleClose = () => {
     setOrderDish("");
     setDeliveryAddress("");
+    setTip(0);
+    setTotalAmount(0);
     setShow(false);
   };
 
-  const fetchOrderDishes = (orderid, address) => {
+  const fetchOrderDishes = (orderid, address, total, tip) => {
     if (address) setDeliveryAddress(address);
+    if (total) setTotalAmount(total);
+    if (tip) setTip(tip);
     getDishesOfOrder(orderid);
     setShow(true);
   };
@@ -289,7 +296,9 @@ const PastOrders = ({
                             onClick={() => {
                               fetchOrderDishes(
                                 item["order_dishes.orderId"],
-                                item["delivery_address"]
+                                item["delivery_address"],
+                                item["total"],
+                                item["tip"]
                               );
                             }}
                           >
@@ -313,9 +322,20 @@ const PastOrders = ({
                         <Modal show={show} onHide={handleClose}>
                           <Modal.Header>
                             <Modal.Title>Receipt</Modal.Title>
-                            <li>
+                            <li style={{ listStyle: "none" }}>
                               <i className="fas fa-shopping-bag"></i>&nbsp;
                               {orderDish.length}&nbsp;
+                            </li>
+                            <li style={{ listStyle: "none" }}>
+                              <i className="fas fa-hand-holding"> tip</i>&nbsp;
+                              {tip}&nbsp;
+                            </li>
+                            <li style={{ listStyle: "none" }}>
+                              <i className="fas fa-file-invoice-dollar">
+                                total
+                              </i>
+                              &nbsp;
+                              {totalAmount}&nbsp;
                             </li>
                           </Modal.Header>
                           <Modal.Body>
