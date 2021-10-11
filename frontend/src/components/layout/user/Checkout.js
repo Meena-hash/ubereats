@@ -302,7 +302,7 @@ const Checkout = ({
             <table style={{ width: "100%", border: "0" }}>
               <tr>
                 <td>Subtotal</td>
-                <td>${cost}</td>
+                <td>${cost.toFixed(2)}</td>
               </tr>
               <tr>
                 <td>Taxes and Fees</td>

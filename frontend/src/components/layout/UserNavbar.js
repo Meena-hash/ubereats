@@ -176,7 +176,7 @@ const UserNavbar = ({
                         width: "100%",
                       }}
                     >
-                      Proceed to Checkout ${cost}
+                      Proceed to Checkout ${cost.toFixed(2)}
                     </Link>
                   </Button>
                 </Modal.Footer>

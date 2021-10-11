@@ -3,16 +3,19 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { getCurrentUser } from "../../../actions/userprofile";
 import { fetchSelectedRestaurantData } from "../../../actions/restaurant";
+import { getAllDishes, getAllRestaurants } from "../../../actions/dashboard";
 const Favourites = ({
   getCurrentUser,
   auth: { user, urole },
   favourites: { favlist },
   fetchSelectedRestaurantData,
+  getAllRestaurants,
+  getAllDishes,
   dashboard: { dishes },
   history,
 }) => {
   const [favRestaurants, setFavRestaurants] = useState(favlist);
-  const viewRestaurantOnClick = async (restaurant) => {
+  const viewRestaurantOnClick = (restaurant) => {
     const rest = {
       restaurantid: restaurant["restaurant_profile.restaurantid"],
       name: restaurant["restaurant_profile.name"],
@@ -25,7 +28,7 @@ const Favourites = ({
       to_time: restaurant["restaurant_profile.to_time"],
       mode: restaurant["restaurant_profile.mode"],
     };
-    const filterRestaurantDish = await dishes.filter(
+    const filterRestaurantDish = dishes.filter(
       (dish) => dish.restaurant_idx === rest.restaurantid
     );
     fetchSelectedRestaurantData(rest, filterRestaurantDish, history);
@@ -34,6 +37,9 @@ const Favourites = ({
     if (!user && urole && urole === "user") {
       getCurrentUser();
     }
+
+    getAllDishes();
+    getAllRestaurants();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   useEffect(() => {
@@ -96,6 +102,8 @@ Favourites.propTypes = {
   favourites: PropTypes.object.isRequired,
   dashboard: PropTypes.object.isRequired,
   fetchSelectedRestaurantData: PropTypes.func.isRequired,
+  getAllDishes: PropTypes.func.isRequired,
+  getAllRestaurants: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -106,4 +114,6 @@ const mapStateToProps = (state) => ({
 export default connect(mapStateToProps, {
   getCurrentUser,
   fetchSelectedRestaurantData,
+  getAllRestaurants,
+  getAllDishes,
 })(Favourites);
