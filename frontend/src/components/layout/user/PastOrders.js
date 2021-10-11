@@ -328,14 +328,20 @@ const PastOrders = ({
                             </li>
                             <li style={{ listStyle: "none" }}>
                               <i className="fas fa-hand-holding"> tip</i>&nbsp;
-                              {tip}&nbsp;
+                              {Number(tip).toFixed(2)}&nbsp;
+                            </li>
+                            <li style={{ listStyle: "none" }}>
+                              <i className="fas fa-hand-holding">
+                                {" "}
+                                Delivery fee 15.00&nbsp;
+                              </i>
                             </li>
                             <li style={{ listStyle: "none" }}>
                               <i className="fas fa-file-invoice-dollar">
                                 total
                               </i>
                               &nbsp;
-                              {totalAmount}&nbsp;
+                              {Number(totalAmount).toFixed(2)}&nbsp;
                             </li>
                           </Modal.Header>
                           <Modal.Body>
