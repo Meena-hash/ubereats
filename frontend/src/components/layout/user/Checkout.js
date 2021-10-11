@@ -306,7 +306,7 @@ const Checkout = ({
               </tr>
               <tr>
                 <td>Taxes and Fees</td>
-                <td>${0.1 * cost}</td>
+                <td>${(0.1 * cost).toFixed(2)}</td>
               </tr>
 
               <tr>
@@ -385,7 +385,7 @@ const Checkout = ({
               a tip to say thanks.
             </p>
             <hr />
-            <h4>Total: ${total}</h4>
+            <h4>Total: ${total.toFixed(2)}</h4>
           </div>
         </div>
       </div>

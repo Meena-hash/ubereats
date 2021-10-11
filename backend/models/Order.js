@@ -25,7 +25,7 @@ const Orders = db.define(
       type: Sequelize.DATE,
     },
     total: {
-      type: Sequelize.INTEGER,
+      type: Sequelize.FLOAT,
     },
     order_type: {
       type: Sequelize.ENUM("new", "delivered", "cancelled"),
