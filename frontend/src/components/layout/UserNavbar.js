@@ -4,6 +4,8 @@ import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { Button, Modal } from "react-bootstrap";
 import { getCurrentUser } from "../../actions/userprofile";
+import { editCart } from "../../actions/cart";
+import { deleteItemCart } from "../../actions/cart";
 import "./UserNavbar.css";
 import {
   filterOnSearchString,
@@ -15,11 +17,14 @@ const UserNavbar = ({
   getCurrentUser,
   filterOnSearchString,
   filterOnDeliveryMode,
+  editCart,
+  deleteItemCart,
   cart: { restaurantname, loading, items, itemcount, cost },
   userprofile: { profile },
 }) => {
   const [search, setSearch] = useState("");
   const [mode, setMode] = useState("Both");
+
   const onChange = async (e) => {
     setSearch(e.target.value);
   };
@@ -35,6 +40,15 @@ const UserNavbar = ({
   const handleShow = () => {
     setShow(true);
   };
+  // Edit cart
+  const onChangeItemCount = async (val, item) => {
+    item[val.target.name] = val.target.value;
+    editCart(item.id, item.count);
+  };
+  const deleteItem = (item) => {
+    deleteItemCart(item.id);
+  };
+
   useEffect(() => {
     if (!profile) getCurrentUser();
   }, []);
@@ -142,13 +156,53 @@ const UserNavbar = ({
                         <table
                           style={{
                             width: "100%",
-                            border: "0",
+                            border: "none",
                             tableLayout: "fixed",
                           }}
                         >
                           <tr>
-                            <td>{item.name}</td>
-                            <td>${item.price}</td>
+                            {/* show a button here. Add an action to get item by id and increment count, change price */}
+
+                            <td
+                              style={{
+                                width: "70%",
+                              }}
+                            >
+                              <input
+                                type="number"
+                                placeholder={item.count}
+                                name="count"
+                                min="1"
+                                max="10"
+                                defaultValue={item.count}
+                                key={item.count}
+                                onChange={(val) => onChangeItemCount(val, item)}
+                                style={{
+                                  borderRadius: "3px",
+                                  textAlign: "center",
+                                }}
+                              />
+                              &nbsp; X &nbsp;
+                              {item.name}
+                            </td>
+                            <td
+                              style={{
+                                width: "20%",
+                              }}
+                            >
+                              ${item.calprice}
+                            </td>
+                            <td
+                              style={{
+                                width: "10%",
+                              }}
+                            >
+                              <i
+                                className="fas fa-trash "
+                                style={{ color: "black" }}
+                                onClick={() => deleteItem(item)}
+                              ></i>
+                            </td>
                           </tr>
                         </table>
                       );
@@ -193,6 +247,8 @@ UserNavbar.propTypes = {
   filterOnDeliveryMode: PropTypes.func.isRequired,
   userprofile: PropTypes.object.isRequired,
   getCurrentUser: PropTypes.func.isRequired,
+  editCart: PropTypes.func.isRequired,
+  deleteItemCart: PropTypes.func.isRequired,
 };
 const mapStateToProps = (state) => ({
   cart: state.cart,
@@ -201,5 +257,7 @@ const mapStateToProps = (state) => ({
 export default connect(mapStateToProps, {
   filterOnSearchString,
   filterOnDeliveryMode,
+  editCart,
+  deleteItemCart,
   getCurrentUser,
 })(UserNavbar);

@@ -54,6 +54,9 @@ const Orders = db.define(
     delivery_address: {
       type: Sequelize.STRING,
     },
+    notes: {
+      type: Sequelize.STRING,
+    },
   },
   {
     timestamps: false,

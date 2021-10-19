@@ -443,7 +443,8 @@ table {
   border: 1px solid black;
   width: fit-content;
   height: fit-content;
-  background-color: lightgrey;
+  border-radius: 5px;
+  background-color: whitesmoke;
 }
 
 .show > .dropdown-menu {

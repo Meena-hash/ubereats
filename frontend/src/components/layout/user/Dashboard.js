@@ -39,8 +39,8 @@ const Dashboard = ({
     else setDietaryType("clear filters");
   };
 
-  const viewRestaurantOnClick = (restaurant) => {
-    const filterRestaurantDish = dishes.filter(
+  const viewRestaurantOnClick = async (restaurant) => {
+    const filterRestaurantDish = await dishes.filter(
       (dish) => dish.restaurant_idx === restaurant.restaurantid
     );
     fetchSelectedRestaurantData(restaurant, filterRestaurantDish, history);

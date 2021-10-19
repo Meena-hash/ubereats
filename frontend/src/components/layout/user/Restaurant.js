@@ -88,9 +88,6 @@ const Restaurant = ({
     } else setDishesData(searchStringResult);
   }, [searchstring, foodType]);
 
-  // if (loading) {
-  //   return <Redirect to="/user/dashboard"> </Redirect>;
-  // }
   return loading && restaurantprofile === null ? (
     <Spinner />
   ) : (

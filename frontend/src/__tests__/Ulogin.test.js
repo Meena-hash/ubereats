@@ -7,7 +7,6 @@ import rootReducer from "../reducers";
 import { Provider } from "react-redux";
 import { BrowserRouter as Router } from "react-router-dom";
 import "@testing-library/jest-dom/extend-expect";
-import Favourites from "../components/layout/user/Favourites";
 const initialState = {
   auth: {
     user: {
@@ -28,7 +27,7 @@ const Wrapper = ({ children }) => (
 const password = "test";
 const username = "test@gmail.com";
 describe("User Login", () => {
-  it("fires an on change event for email field", async () => {
+  it("Render and match snapshot", async () => {
     render(
       <Router>
         <ULogin />
@@ -48,7 +47,7 @@ describe("User Login", () => {
 
 const onSubmitMock = jest.fn((e) => e.preventDefault());
 
-describe("Favourites Login", () => {
+describe("User mock email and password change", () => {
   it("Checks if there are fav elements in store", async () => {
     const { container } = render(
       <Router>
@@ -63,17 +62,7 @@ describe("Favourites Login", () => {
     fireEvent.change(screen.queryByPlaceholderText("Password"), {
       target: { value: password },
     });
-    console.log(container.firstChild);
-    fireEvent.click(container.firstChild);
-    // expect(onSubmitMock).toHaveBeenCalled();
-    // await ()=> expect(onSubmitMock).toHaveBeenCalled();
-  });
 
-  // fireEvent.click(screen.getByRole("button"));
-  // expect(onSubmitMock).toHaveBeenCalled();
-  // expect(onSubmitMock).toHaveBeenCalledWith(
-  //   { username, password },
-  //   expect.any(Function),
-  //   expect.any(Object)
-  // );
+    fireEvent.click(container.firstChild);
+  });
 });

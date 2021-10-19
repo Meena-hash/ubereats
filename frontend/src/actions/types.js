@@ -66,6 +66,8 @@ export const ADD_FAVOURITE = "ADD_FAVOURITE";
 export const ADD_ITEM_CART = "ADD_ITEM_CART";
 export const GET_CART = "GET_CART";
 export const CLEAR_CART = "CLEAR_CART";
+export const EDIT_ITEM_CART = "EDIT_ITEM_CART";
+export const DELETE_ITEM_CART = "DELETE_ITEM_CART";
 
 // delivery address
 export const ADD_DELIVERY_ADDRESS = "ADD_DELIVERY_ADDRESS";

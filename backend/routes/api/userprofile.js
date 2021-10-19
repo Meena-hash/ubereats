@@ -122,7 +122,7 @@ router.post("/address/me", auth, async (req, res) => {
 
 router.post("/orders", auth, async (req, res) => {
   try {
-    const { tip, restaurant_id_order, total, delivery_address, type } =
+    const { tip, restaurant_id_order, total, delivery_address, type, notes } =
       req.body.orderData;
     let orderFields = {};
     orderFields.tip = tip;
@@ -136,6 +136,7 @@ router.post("/orders", auth, async (req, res) => {
     else orderFields.delivery_status = "order received";
     orderFields.total = total;
     orderFields.delivery_address = delivery_address;
+    orderFields.notes = notes;
     let newOrderId = 0;
     await Orders.create(orderFields).then((result) => {
       newOrderId = result.id;
@@ -211,8 +212,12 @@ router.get("/get/past/orders", auth, async (req, res) => {
           model: OrderDish,
           required: true,
           as: "order_dishes",
-
-          attributes: { exclude: ["id", "dishId"] },
+          // attributes: [
+          //   "order_dishes.*",
+          //   [db.fn("COUNT", "order_dishes.dish_id"), "count"],
+          // ],
+          // group: ["order_dishes.orderId", "order_dishes.dish_id"],
+          attributes: { exclude: ["id", "dishId", "count"] },
         },
       ],
     });

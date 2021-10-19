@@ -24,6 +24,7 @@ const Checkout = ({
   }, []);
   const [tip, setTip] = useState(0);
   const [total, setTotal] = useState(0);
+  const [notes, setNotes] = useState("");
   const [deliveryAddr, setDeliveryAddr] = useState(addresses);
   const [currDeliveryAddr, setCurrDeliveryAddr] = useState("");
   const [show, setShow] = useState(false);
@@ -48,6 +49,9 @@ const Checkout = ({
 
   const onStreetChange = (val) => {
     setStreet(val.target.value);
+  };
+  const onNotesChange = (val) => {
+    setNotes(val.target.value);
   };
 
   const handleClose = () => {
@@ -84,6 +88,7 @@ const Checkout = ({
       : "delivery";
     orderFields.tip = tip;
     orderFields.total = total;
+    orderFields.notes = notes;
     orderFields.delivery_address =
       currDeliveryAddr.street +
       "," +
@@ -243,17 +248,10 @@ const Checkout = ({
                   return (
                     <tr>
                       <td>
-                        <select id="cars">
-                          <option value="1">1</option>
-                          <option value="2">2</option>
-                          <option value="3">3</option>
-                          <option value="1" selected>
-                            1
-                          </option>
-                        </select>
+                        <span className="boxed">&nbsp;{item.count}&nbsp;</span>{" "}
                         &nbsp;&nbsp; {item.name}
                       </td>
-                      <td>${item.price}</td>
+                      <td>${item.calprice}</td>
                     </tr>
                   );
                 })}
@@ -276,6 +274,8 @@ const Checkout = ({
             <input
               type="text"
               placeholder="Add a note for the restaurant"
+              name="notes"
+              onChange={(val) => onNotesChange(val)}
               style={{ width: "100%", height: "40px" }}
             />
           </div>
