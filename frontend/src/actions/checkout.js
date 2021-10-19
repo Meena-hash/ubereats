@@ -6,6 +6,7 @@ import {
   GET_DELIVERY_ADDRESSES,
   PLACE_ORDER,
   CLEAR_CART,
+  CANCEL_ORDER,
 } from "./types";
 
 export const getAllDeliveryAddress = () => async (dispatch) => {
@@ -78,5 +79,20 @@ export const placeOrder = (orderData, dishes, history) => async (dispatch) => {
   } catch (error) {
     console.log(error);
     dispatch(setAlert("Error", "danger"));
+  }
+};
+
+export const cancelOrder = (orderid) => async (dispatch) => {
+  try {
+    const res = await axios.delete(`/api/user/profile/cancel/order/${orderid}`);
+    console.log(res.status);
+    dispatch({
+      type: CANCEL_ORDER,
+    });
+    dispatch(getDeliveryHistory());
+    dispatch(setAlert("Order cancelled Successfully", "success"));
+  } catch (error) {
+    const errors = error.response.data;
+    dispatch(setAlert(errors.msg, "danger"));
   }
 };

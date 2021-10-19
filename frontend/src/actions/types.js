@@ -75,6 +75,7 @@ export const GET_DELIVERY_ADDRESSES = "GET_DELIVERY_ADDRESSES";
 
 // place order
 export const PLACE_ORDER = "PLACE_ORDER";
+export const CANCEL_ORDER = "CANCEL_ORDER";
 
 // delivery history
 export const DELIVERY_HISTORY_SUMMARY = "DELIVERY_HISTORY_SUMMARY";

@@ -212,11 +212,6 @@ router.get("/get/past/orders", auth, async (req, res) => {
           model: OrderDish,
           required: true,
           as: "order_dishes",
-          // attributes: [
-          //   "order_dishes.*",
-          //   [db.fn("COUNT", "order_dishes.dish_id"), "count"],
-          // ],
-          // group: ["order_dishes.orderId", "order_dishes.dish_id"],
           attributes: { exclude: ["id", "dishId", "count"] },
         },
       ],
@@ -227,6 +222,7 @@ router.get("/get/past/orders", auth, async (req, res) => {
     res.status(500).send("Server error");
   }
 });
+
 router.get("/get/past/orders/dishes/:order_id", auth, async (req, res) => {
   try {
     let dishes = await db.query(
@@ -235,6 +231,60 @@ router.get("/get/past/orders/dishes/:order_id", auth, async (req, res) => {
     return res.json(dishes);
   } catch (error) {
     console.log(error.message);
+    res.status(500).send("Server error");
+  }
+});
+
+router.delete("/cancel/order/:order_id", auth, async (req, res) => {
+  try {
+    let order = await Orders.findOne({
+      where: { id: req.params.order_id },
+      attributes: { exclude: ["restaurantProfileRestaurantid"] },
+    });
+    if (!order) {
+      return res
+        .status(400)
+        .json({ msg: "Order does not exist. Invalid request" });
+    }
+    if (order.userprofileid === req.user.id) {
+      let ordertype = order.type;
+      let orderUpdateFields = {};
+      if (ordertype === "deliver") {
+        if (order.delivery_status === "order received") {
+          orderUpdateFields.order_type = "cancelled";
+          orderUpdateFields.delivery_status = "cancelled";
+        } else {
+          return res.status(400).json({
+            msg: "Order cannot be cancelled. The restaurant is already processing your order. Please contact the restaurant",
+          });
+        }
+      } else if (ordertype === "pickup") {
+        if (order.pickup_status === "order received") {
+          orderUpdateFields.order_type = "cancelled";
+          orderUpdateFields.pickup_status = "cancelled";
+        } else {
+          return res.status(400).json({
+            msg: "Order cannot be cancelled. The restaurant is already processing your order. Please contact the restaurant",
+          });
+        }
+      }
+      if (orderUpdateFields) {
+        await Orders.update(orderUpdateFields, {
+          where: {
+            id: req.params.order_id,
+          },
+        });
+        order = await Orders.findOne({
+          where: { id: req.params.order_id },
+          attributes: { exclude: ["restaurantProfileRestaurantid"] },
+        });
+        return res.json(order);
+      }
+    } else {
+      return res.status(401).json({ msg: "Access not allowed" });
+    }
+  } catch (error) {
+    console.log(error);
     res.status(500).send("Server error");
   }
 });

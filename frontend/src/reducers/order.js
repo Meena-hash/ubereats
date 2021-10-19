@@ -26,6 +26,7 @@ export default function order(state = initialState, action) {
         pastorders: editOrders,
         loading: false,
       };
+
     case DELIVERY_HISTORY_SUMMARY:
       sessionStorage.setItem("pastOrders", JSON.stringify(payload));
       return {

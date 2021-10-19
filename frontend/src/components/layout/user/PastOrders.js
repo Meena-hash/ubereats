@@ -6,15 +6,17 @@ import { getDishesOfOrder } from "../../../actions/orderhistory";
 import { getCurrentUser } from "../../../actions/userprofile";
 import { getAllRestaurants, getAllDishes } from "../../../actions/dashboard";
 import { Button, Modal } from "react-bootstrap";
+import { cancelOrder } from "../../../actions/checkout";
 import Pagination from "../Pagination";
 const PastOrders = ({
   getCurrentUser,
   order: { pastorders, loading, dishesOfOrder },
-  auth: { user, urole, isAuthenticated },
-  dashboard: { restaurants, dishes },
+  auth: { isAuthenticated },
+  dashboard: { restaurants },
   getAllRestaurants,
   getDishesOfOrder,
   getAllDishes,
+  cancelOrder,
 }) => {
   const [uniqueOrders, setUniqueOrders] = useState(pastorders);
   const [show, setShow] = useState(false);
@@ -113,6 +115,7 @@ const PastOrders = ({
               {" "}
               All
             </i>
+
             <i
               className="fas fa-cart-plus navuserorder"
               onClick={(e) => {
@@ -303,15 +306,12 @@ const PastOrders = ({
               currentOrders.map((item) => {
                 return (
                   <>
-                    <div
-                      className="list-group-item list-group-item-action flex-column align-items-start "
-                      style={{ width: "100%", border: "none" }}
-                    >
+                    <div style={{ width: "100%", border: "none" }}>
                       {" "}
-                      <table style={{ width: "50%", border: "none" }}>
+                      <table style={{ width: "100%", border: "none" }}>
                         <tr style={{ border: "none" }}>
                           {" "}
-                          <td style={{ border: "none" }}>
+                          <td style={{ border: "none", width: "40%" }}>
                             <h5>
                               <i className="fas fa-signature"></i>{" "}
                               {item["restaurant_profile.name"]}
@@ -323,7 +323,7 @@ const PastOrders = ({
                               style={{ width: "90%" }}
                             />
                           </td>
-                          <td style={{ border: "none" }}>
+                          <td style={{ border: "none", width: "30%" }}>
                             <i className="fas fa-info-circle">
                               &nbsp;Order Info
                             </i>
@@ -392,6 +392,27 @@ const PastOrders = ({
                                 </li>
                               </ul>
                             </small>
+                          </td>
+                          <td style={{ border: "none", width: "30%" }}>
+                            <button
+                              type="button"
+                              className="btn-dark"
+                              style={{
+                                width: "80%",
+                                height: "30px",
+                              }}
+                              disabled={
+                                (item.delivery_status &&
+                                  item.delivery_status !== "order received") ||
+                                (item.pickup_status &&
+                                  item.pickup_status !== "order received")
+                              }
+                              onClick={() => {
+                                cancelOrder(item["order_dishes.orderId"]);
+                              }}
+                            >
+                              Cancel Order
+                            </button>
                           </td>
                         </tr>
                       </table>
@@ -559,6 +580,7 @@ PastOrders.propTypes = {
   order: PropTypes.object.isRequired,
   dashboard: PropTypes.object.isRequired,
   getDishesOfOrder: PropTypes.func.isRequired,
+  cancelOrder: PropTypes.func.isRequired,
 };
 const mapStateToProps = (state) => ({
   auth: state.auth,
@@ -571,4 +593,5 @@ export default connect(mapStateToProps, {
   getAllRestaurants,
   getAllDishes,
   getDishesOfOrder,
+  cancelOrder,
 })(PastOrders);
