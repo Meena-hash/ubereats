@@ -1,14 +1,19 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../../config/db");
-const auth = require("../../middleware/restaurant_auth");
 const RestaurantProfile = require("../../models/RestaurantProfile");
 const UserProfile = require("../../models/UserProfile");
 const Restaurant = require("../../models/Restaurant");
 const Dish = require("../../models/Dish");
 const Orders = require("../../models/Order");
 
-router.get("/", auth, async (req, res) => {
+const {
+  restaurantauth,
+  checkRestaurantAuth,
+} = require("../../middleware/restaurant_auth");
+checkRestaurantAuth();
+
+router.get("/", restaurantauth, async (req, res) => {
   try {
     const profile = await RestaurantProfile.findOne({
       where: {
@@ -28,7 +33,7 @@ router.get("/", auth, async (req, res) => {
 });
 
 // Pending - pictures and timings
-router.post("/basic", auth, async (req, res) => {
+router.post("/basic", restaurantauth, async (req, res) => {
   let restaurant = await Restaurant.findOne({
     where: { id: req.restaurant.id },
   });
@@ -87,7 +92,7 @@ router.post("/basic", auth, async (req, res) => {
 });
 
 // get all dishes by restaurant id
-router.get("/dish", auth, async (req, res) => {
+router.get("/dish", restaurantauth, async (req, res) => {
   try {
     let dishes = await Dish.findAll({
       where: {
@@ -101,7 +106,7 @@ router.get("/dish", auth, async (req, res) => {
   }
 });
 // dish
-router.post("/update/dish", auth, async (req, res) => {
+router.post("/update/dish", restaurantauth, async (req, res) => {
   const {
     id,
     name,
@@ -147,7 +152,7 @@ router.post("/update/dish", auth, async (req, res) => {
   }
 });
 
-router.post("/create/dish", auth, async (req, res) => {
+router.post("/create/dish", restaurantauth, async (req, res) => {
   const { name, ingredients, price, description, category, type } = req.body;
   let dishFields = {};
   dishFields.name = name;
@@ -176,7 +181,7 @@ router.post("/create/dish", auth, async (req, res) => {
   }
 });
 
-router.delete("/dish/:dish_id", auth, async (req, res) => {
+router.delete("/dish/:dish_id", restaurantauth, async (req, res) => {
   let dish = await Dish.findOne({ where: { id: req.params.dish_id } });
   if (!dish) {
     return res
@@ -196,7 +201,7 @@ router.delete("/dish/:dish_id", auth, async (req, res) => {
   }
 });
 
-router.get("/orders", auth, async (req, res) => {
+router.get("/orders", restaurantauth, async (req, res) => {
   try {
     UserProfile.hasMany(Orders);
     Orders.belongsTo(UserProfile, { foreignKey: "userprofileid" });
@@ -221,50 +226,54 @@ router.get("/orders", auth, async (req, res) => {
   }
 });
 
-router.put("/update/delivery/:order_id/:del_status", auth, async (req, res) => {
-  try {
-    UserProfile.hasMany(Orders);
-    Orders.belongsTo(UserProfile, { foreignKey: "userprofileid" });
-    let delivery = {};
-    let order = await Orders.findOne({
-      where: { id: req.params.order_id },
-      attributes: {
-        exclude: ["userProfileProfileid", "restaurantProfileRestaurantid"],
-      },
-    });
-    if (order.type === "deliver")
-      delivery.delivery_status = req.params.del_status;
-    else delivery.pickup_status = req.params.del_status;
-    if (req.params.del_status === "delivered") {
-      delivery.order_type = "delivered";
-    }
-    if (req.params.del_status === "cancelled") {
-      delivery.order_type = "cancelled";
-    }
-    order = await Orders.update(delivery, {
-      where: { id: req.params.order_id },
-    });
-    order = await Orders.findOne({
-      where: { id: req.params.order_id },
-      attributes: {
-        exclude: ["userProfileProfileid", "restaurantProfileRestaurantid"],
-      },
-      include: [
-        {
-          model: UserProfile,
-          as: "user_profile",
-          required: true,
+router.put(
+  "/update/delivery/:order_id/:del_status",
+  restaurantauth,
+  async (req, res) => {
+    try {
+      UserProfile.hasMany(Orders);
+      Orders.belongsTo(UserProfile, { foreignKey: "userprofileid" });
+      let delivery = {};
+      let order = await Orders.findOne({
+        where: { id: req.params.order_id },
+        attributes: {
+          exclude: ["userProfileProfileid", "restaurantProfileRestaurantid"],
         },
-      ],
-    });
+      });
+      if (order.type === "deliver")
+        delivery.delivery_status = req.params.del_status;
+      else delivery.pickup_status = req.params.del_status;
+      if (req.params.del_status === "delivered") {
+        delivery.order_type = "delivered";
+      }
+      if (req.params.del_status === "cancelled") {
+        delivery.order_type = "cancelled";
+      }
+      order = await Orders.update(delivery, {
+        where: { id: req.params.order_id },
+      });
+      order = await Orders.findOne({
+        where: { id: req.params.order_id },
+        attributes: {
+          exclude: ["userProfileProfileid", "restaurantProfileRestaurantid"],
+        },
+        include: [
+          {
+            model: UserProfile,
+            as: "user_profile",
+            required: true,
+          },
+        ],
+      });
 
-    return res.json([order]);
-  } catch (err) {
-    console.log(err);
-    res.status(500).send("Server error");
+      return res.json([order]);
+    } catch (err) {
+      console.log(err);
+      res.status(500).send("Server error");
+    }
   }
-});
-router.get("/get/order/dishes/:order_id", auth, async (req, res) => {
+);
+router.get("/get/order/dishes/:order_id", restaurantauth, async (req, res) => {
   try {
     let dishes = await db.query(
       `call ubereats.getOrderSummary(${req.params.order_id})`

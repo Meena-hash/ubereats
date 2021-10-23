@@ -4,22 +4,19 @@ var ExtractJwt = require("passport-jwt").ExtractJwt;
 const passport = require("passport");
 const config = require("config");
 
-function checkRestaurantAuth() {
+function checkAuth() {
   var opts = {
     jwtFromRequest: ExtractJwt.fromHeader("x-auth-token"),
     secretOrKey: "ubereats",
   };
   opts.passReqToCallback = true;
   passport.use(
-    "restaurant",
-    new JwtStrategy(opts, (req, jwt_payload, done) => {
-      req.restaurant = jwt_payload.restaurant;
-      done(null, req.restaurant);
+    new JwtStrategy(opts, (req, jwt_payload, callback) => {
+      req.user = jwt_payload;
+      callback(null, jwt_payload.user);
     })
   );
 }
 
-exports.checkRestaurantAuth = checkRestaurantAuth;
-exports.restaurantauth = passport.authenticate("restaurant", {
-  session: false,
-});
+exports.checkAuth = checkAuth;
+exports.auth = passport.authenticate("jwt", { session: false });

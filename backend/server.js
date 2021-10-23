@@ -1,6 +1,6 @@
 const express = require("express");
 const db = require("./config/db");
-
+const passport = require("passport");
 db.authenticate()
   .then(() => console.log("Connected"))
   .catch((err) => console.log("Not connected"));
@@ -8,7 +8,7 @@ db.authenticate()
 const app = express();
 
 app.use(express.json({ extended: false }));
-
+app.use(passport.initialize());
 app.get("/", (req, res) => res.send("API running"));
 
 app.use("/api/users", require("./routes/api/users"));

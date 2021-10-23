@@ -1,13 +1,18 @@
 const express = require("express");
 const router = express.Router();
-const auth = require("../../middleware/restaurant_auth");
 const Restaurant = require("../../models/Restaurant");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const config = require("config");
 const { check, validationResult } = require("express-validator");
-// @route   GET api/auth
-router.get("/", auth, async (req, res) => {
+const {
+  restaurantauth,
+  checkRestaurantAuth,
+} = require("../../middleware/restaurant_auth");
+
+checkRestaurantAuth();
+
+router.get("/", restaurantauth, async (req, res) => {
   try {
     const restaurant = await Restaurant.findOne({
       where: {
@@ -49,7 +54,6 @@ router.post(
           .status(400)
           .json({ errors: [{ msg: "Invalid Credentials" }] });
       }
-      console.log(restaurant);
       const payload = {
         restaurant: {
           id: restaurant.id,

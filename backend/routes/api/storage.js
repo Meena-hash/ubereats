@@ -3,11 +3,15 @@ var multer = require("multer");
 const cloudinary = require("cloudinary").v2;
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const config = require("config");
-const auth = require("../../middleware/restaurant_auth");
 const RestaurantProfile = require("../../models/RestaurantProfile");
 const Dish = require("../../models/Dish");
 const UserProfile = require("../../models/UserProfile");
 const router = express.Router();
+const {
+  restaurantauth,
+  checkRestaurantAuth,
+} = require("../../middleware/restaurant_auth");
+checkRestaurantAuth();
 
 // Account access information
 cloudinary.config({
@@ -29,34 +33,39 @@ const storage = new CloudinaryStorage({
 
 const parser = multer({ storage: storage });
 
-router.post("/upload", auth, parser.single("image"), async (req, res) => {
-  // upload the public id to db
-  try {
-    let profile = await RestaurantProfile.findOne({
-      where: { restaurantid: req.restaurant.id },
-    });
-    let profileimage = {};
-    profileimage.images = req.file.path;
-    if (profile) {
-      profile = await RestaurantProfile.update(profileimage, {
+router.post(
+  "/upload",
+  restaurantauth,
+  parser.single("image"),
+  async (req, res) => {
+    // upload the public id to db
+    try {
+      let profile = await RestaurantProfile.findOne({
         where: { restaurantid: req.restaurant.id },
       });
-      profile = await RestaurantProfile.findOne({
-        where: { restaurantid: req.restaurant.id },
-      });
-      return res.json(profile);
-    } else {
-      return res.status(400).json({ msg: "No profile found for the user" });
+      let profileimage = {};
+      profileimage.images = req.file.path;
+      if (profile) {
+        profile = await RestaurantProfile.update(profileimage, {
+          where: { restaurantid: req.restaurant.id },
+        });
+        profile = await RestaurantProfile.findOne({
+          where: { restaurantid: req.restaurant.id },
+        });
+        return res.json(profile);
+      } else {
+        return res.status(400).json({ msg: "No profile found for the user" });
+      }
+    } catch (err) {
+      console.log(err);
+      res.status(500).send(err);
     }
-  } catch (err) {
-    console.log(err);
-    res.status(500).send(err);
   }
-});
+);
 
 router.post(
   "/dish/upload/:dish_id",
-  auth,
+  restaurantauth,
   parser.single("image"),
   async (req, res) => {
     // upload the public id to db
@@ -87,7 +96,7 @@ router.post(
 
 router.post(
   "/user/upload/:user_id",
-  auth,
+  restaurantauth,
   parser.single("image"),
   async (req, res) => {
     // upload the public id to db

@@ -7,7 +7,7 @@ module.exports = new Sequelize(
   {
     host: config.get("mysqlHost"),
     dialect: "mysql",
-    // logging: false,
+    logging: false,
     pool: {
       max: 10,
       min: 0,

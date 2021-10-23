@@ -1,9 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../../config/db");
-const auth = require("../../middleware/auth");
 const Favourites = require("../../models/Favourites");
 const RestaurantProfile = require("../../models/RestaurantProfile");
+const { auth, checkAuth } = require("../../middleware/user_auth");
+checkAuth();
+
 router.post("/", auth, async (req, res) => {
   try {
     let favFields = {};

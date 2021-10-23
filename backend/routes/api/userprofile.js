@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const auth = require("../../middleware/auth");
 const DeliveryAddress = require("../../models/DeliveryAddress");
 const UserProfile = require("../../models/UserProfile");
 const User = require("../../models/User");
@@ -8,7 +7,8 @@ const Orders = require("../../models/Order");
 const OrderDish = require("../../models/OrderDish");
 const db = require("../../config/db");
 const RestaurantProfile = require("../../models/RestaurantProfile");
-
+const { auth, checkAuth } = require("../../middleware/user_auth");
+checkAuth();
 router.get("/", auth, async (req, res) => {
   try {
     const profile = await UserProfile.findOne({
