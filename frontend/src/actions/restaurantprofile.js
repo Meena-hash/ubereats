@@ -25,7 +25,7 @@ export const getCurrentProfile = () => async (dispatch) => {
       type: GET_PROFILE,
       payload: res.data,
     });
-    const dishes = await axios.get("/api/restaurant/profile/dish");
+    const dishes = await axios.get("/api/restaurant/dish");
     dispatch({
       type: GET_ALL_DISHES,
       payload: dishes.data,
@@ -85,7 +85,7 @@ export const createProfile =
 
 export const deleteDish = (id) => async (dispatch) => {
   try {
-    await axios.delete(`/api/restaurant/profile/dish/${id}`);
+    await axios.delete(`/api/restaurant/dish/${id}`);
     dispatch({
       type: DELETE_DISH,
       payload: id,
@@ -113,7 +113,7 @@ export const addDish = (formData, imageData, history) => async (dispatch) => {
       headers: { "Content-Type": "application/json" },
     };
     const res = await axios.post(
-      "/api/restaurant/profile/create/dish",
+      "/api/restaurant/dish/create",
       formData,
       config
     );
@@ -155,9 +155,9 @@ export const editDish = (formData, imageData, history) => async (dispatch) => {
     headers: { "Content-Type": "application/json" },
   };
   try {
-    dispatch(uploadImageDish(imageData, formData.id));
+    // dispatch(uploadImageDish(imageData, formData.id));
     const res = await axios.post(
-      "/api/restaurant/profile/update/dish",
+      "/api/restaurant/dish/update",
       formData,
       config
     );
@@ -178,7 +178,7 @@ export const getAllOrdersByRestaurant = () => async (dispatch) => {
     headers: { "Content-Type": "application/json" },
   };
   try {
-    const res = await axios.get("/api/restaurant/profile/orders", config);
+    const res = await axios.get("/api/restaurant/orders", config);
     dispatch({
       type: GET_ALL_ORDERS_BY_REST_ID,
       payload: res.data,
@@ -204,7 +204,7 @@ export const viewOrder = (orderId, history) => async (dispatch) => {
       headers: { "Content-Type": "application/json" },
     };
     const dishes = await axios.get(
-      `/api/restaurant/profile/get/order/dishes/${orderId}`,
+      `/api/restaurant/orders/get/order/dishes//${orderId}`,
       config
     );
     dispatch({
@@ -239,7 +239,7 @@ export const updateDeliveryStatus =
     };
     try {
       const res = await axios.put(
-        `/api/restaurant/profile/update/delivery/${order_id}/${delivery_status}`,
+        `/api/restaurant/orders/update/delivery/${order_id}/${delivery_status}`,
         config
       );
 

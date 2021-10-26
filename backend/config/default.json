@@ -6,5 +6,6 @@
     "jwtSecret": "ubereats",
     "cloud-name":"meena273",
     "api-key": "912573625963145",
-    "secret-key":"5c1yIXuUgsKcNBgp_E-9jbCDfDM"
+    "secret-key":"5c1yIXuUgsKcNBgp_E-9jbCDfDM",
+    "mongoURI": "mongodb+srv://admin:root12345@cluster0.ohnfs.mongodb.net/UberEats?retryWrites=true&w=majority"
 }

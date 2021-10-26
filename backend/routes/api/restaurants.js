@@ -1,6 +1,6 @@
 const express = require("express");
-const router = express.Router();
 const { check, validationResult } = require("express-validator");
+const router = express.Router();
 const Restaurant = require("../../models/Restaurant");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -25,7 +25,7 @@ router.post(
     }
     const { name, email, location, password } = req.body;
     try {
-      let restaurant = await Restaurant.findOne({ where: { email: email } });
+      let restaurant = await Restaurant.findOne({ email: email });
       if (restaurant) {
         return res
           .status(400)
@@ -42,11 +42,11 @@ router.post(
       await restaurant.save();
       const payload = {
         restaurant: {
-          id: restaurant.id,
+          id: restaurant._id,
         },
       };
       let profile = new RestaurantProfile({
-        restaurantid: restaurant.id,
+        restaurantid: restaurant._id,
         name: restaurant.name,
         location: restaurant.location,
         email: restaurant.email,

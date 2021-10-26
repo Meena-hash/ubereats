@@ -76,9 +76,7 @@ const PastOrders = ({
 
   useEffect(() => {
     setUniqueOrders([
-      ...new Map(
-        pastorders.map((item) => [item["order_dishes.orderId"], item])
-      ).values(),
+      ...new Map(pastorders.map((item) => [item["_id"], item])).values(),
     ]);
   }, [pastorders]);
 
@@ -104,10 +102,7 @@ const PastOrders = ({
                 uniqueOrders &&
                   setUniqueOrders([
                     ...new Map(
-                      pastorders.map((item) => [
-                        item["order_dishes.orderId"],
-                        item,
-                      ])
+                      pastorders.map((item) => [item["_id"], item])
                     ).values(),
                   ]);
               }}
@@ -122,10 +117,7 @@ const PastOrders = ({
                 e.preventDefault();
                 const rec = [
                   ...new Map(
-                    pastorders.map((item) => [
-                      item["order_dishes.orderId"],
-                      item,
-                    ])
+                    pastorders.map((item) => [item["_id"], item])
                   ).values(),
                 ];
                 rec &&
@@ -147,10 +139,7 @@ const PastOrders = ({
                 e.preventDefault();
                 const prep = [
                   ...new Map(
-                    pastorders.map((item) => [
-                      item["order_dishes.orderId"],
-                      item,
-                    ])
+                    pastorders.map((item) => [item["_id"], item])
                   ).values(),
                 ];
                 prep &&
@@ -172,10 +161,7 @@ const PastOrders = ({
                 e.preventDefault();
                 const ontw = [
                   ...new Map(
-                    pastorders.map((item) => [
-                      item["order_dishes.orderId"],
-                      item,
-                    ])
+                    pastorders.map((item) => [item["_id"], item])
                   ).values(),
                 ];
                 ontw &&
@@ -192,10 +178,7 @@ const PastOrders = ({
                 e.preventDefault();
                 const del = [
                   ...new Map(
-                    pastorders.map((item) => [
-                      item["order_dishes.orderId"],
-                      item,
-                    ])
+                    pastorders.map((item) => [item["_id"], item])
                   ).values(),
                 ];
                 del &&
@@ -213,10 +196,7 @@ const PastOrders = ({
                 e.preventDefault();
                 const pic = [
                   ...new Map(
-                    pastorders.map((item) => [
-                      item["order_dishes.orderId"],
-                      item,
-                    ])
+                    pastorders.map((item) => [item["_id"], item])
                   ).values(),
                 ];
                 pic &&
@@ -234,10 +214,7 @@ const PastOrders = ({
                 e.preventDefault();
                 const picdone = [
                   ...new Map(
-                    pastorders.map((item) => [
-                      item["order_dishes.orderId"],
-                      item,
-                    ])
+                    pastorders.map((item) => [item["_id"], item])
                   ).values(),
                 ];
                 picdone &&
@@ -255,10 +232,7 @@ const PastOrders = ({
                 e.preventDefault();
                 const cancelledpicdel = [
                   ...new Map(
-                    pastorders.map((item) => [
-                      item["order_dishes.orderId"],
-                      item,
-                    ])
+                    pastorders.map((item) => [item["_id"], item])
                   ).values(),
                 ];
                 cancelledpicdel &&
@@ -314,11 +288,11 @@ const PastOrders = ({
                           <td style={{ border: "none", width: "40%" }}>
                             <h5>
                               <i className="fas fa-signature"></i>{" "}
-                              {item["restaurant_profile.name"]}
+                              {item.restaurant_id_order[0].name}
                               <b></b>{" "}
                             </h5>
                             <img
-                              src={item["restaurant_profile.images"]}
+                              src={item.restaurant_id_order[0].images}
                               alt=""
                               style={{ width: "90%" }}
                             />
@@ -335,7 +309,7 @@ const PastOrders = ({
                               >
                                 <li>
                                   <i className="fas fa-id-card-alt"></i>&nbsp;
-                                  {item["order_dishes.orderId"]}
+                                  {item.id}
                                 </li>
 
                                 <li>
@@ -372,7 +346,7 @@ const PastOrders = ({
                                     }}
                                     onClick={() => {
                                       fetchOrderDishes(
-                                        item["order_dishes.orderId"],
+                                        item.id,
                                         item["delivery_address"],
                                         item["total"],
                                         item["tip"],
@@ -408,7 +382,7 @@ const PastOrders = ({
                                   item.pickup_status !== "order received")
                               }
                               onClick={() => {
-                                cancelOrder(item["order_dishes.orderId"]);
+                                cancelOrder(item["_id"]);
                               }}
                             >
                               Cancel Order

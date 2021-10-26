@@ -1,1 +1,6 @@
 node_modules/
+frontend/src/components/.DS_Store
+frontend/src/components/layout/.DS_Store
+frontend/src/components/layout/img/.DS_Store
+frontend/.DS_Store
+frontend/src/.DS_Store

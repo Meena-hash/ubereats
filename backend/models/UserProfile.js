@@ -1,52 +1,50 @@
-const Sequelize = require("sequelize");
-const db = require("../config/db");
+const mongoose = require("mongoose");
 const User = require("./User");
-const User_Profile = db.define(
-  "user_profile",
+const ProfileSchema = mongoose.Schema(
   {
     profileid: {
-      type: Sequelize.INTEGER,
-      references: "users", // <<< Note, its table's name, not object name
-      referencesKey: "id", // <<< Note, its a column name
-      primaryKey: true,
+      type: mongoose.Schema.Types.String,
+      ref: "user",
     },
+
     name: {
-      type: Sequelize.STRING,
+      type: String,
     },
     street: {
-      type: Sequelize.STRING,
+      type: String,
     },
     city: {
-      type: Sequelize.STRING,
+      type: String,
     },
     state: {
-      type: Sequelize.STRING,
+      type: String,
     },
     country: {
-      type: Sequelize.STRING,
+      type: String,
     },
     nickname: {
-      type: Sequelize.STRING,
+      type: String,
     },
     picture: {
-      type: Sequelize.STRING,
+      type: String,
     },
     email: {
-      type: Sequelize.STRING,
+      type: String,
       unique: true,
     },
     ph_no: {
-      type: Sequelize.STRING,
+      type: String,
     },
     about: {
-      type: Sequelize.STRING,
+      type: String,
     },
     dob: {
-      type: Sequelize.DATE,
+      type: Date,
     },
   },
   {
     timestamps: false,
+    collection: "user_profile",
   }
 );
-module.exports = User_Profile;
+module.exports = User_Profile = mongoose.model("user_profile", ProfileSchema);

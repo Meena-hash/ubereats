@@ -43,10 +43,10 @@ const UserNavbar = ({
   // Edit cart
   const onChangeItemCount = async (val, item) => {
     item[val.target.name] = val.target.value;
-    editCart(item.id, item.count);
+    editCart(item._id, item.count);
   };
   const deleteItem = (item) => {
-    deleteItemCart(item.id);
+    deleteItemCart(item._id);
   };
 
   useEffect(() => {

@@ -16,13 +16,13 @@ export const getAllDeliveryAddress = () => async (dispatch) => {
         "Content-Type": "application/json",
       },
     };
-    const res = await axios.get("/api/user/profile/address/me", config);
+    const res = await axios.get("/api/user/address/me", config);
     dispatch({
       type: GET_DELIVERY_ADDRESSES,
       payload: res.data,
     });
   } catch (error) {
-    dispatch(setAlert("Error", "danger"));
+    dispatch(setAlert(error, "danger"));
   }
 };
 export const addDeliveryAddress =
@@ -39,23 +39,24 @@ export const addDeliveryAddress =
         state: state,
         country: country,
       };
-      const res = await axios.post(
-        "/api/user/profile/address/me",
-        body,
-        config
-      );
+      const res = await axios.post("/api/user/address/me", body, config);
       dispatch({
         type: ADD_DELIVERY_ADDRESS,
         payload: res.data,
       });
     } catch (error) {
+      // console.log(error);
       console.log(error);
-      dispatch(setAlert("Error", "danger"));
+      const errors = error.response.data.errors;
+      if (errors) {
+        errors.forEach((error) => dispatch(setAlert(error.msg, "danger")));
+      }
     }
   };
 
 export const placeOrder = (orderData, dishes, history) => async (dispatch) => {
   try {
+    console.log("dishes", dishes);
     const config = {
       headers: {
         "Content-Type": "application/json",
@@ -65,7 +66,7 @@ export const placeOrder = (orderData, dishes, history) => async (dispatch) => {
       orderData,
       dishes,
     };
-    const res = await axios.post("/api/user/profile/orders", body, config);
+    const res = await axios.post("/api/user/orders", body, config);
     dispatch({
       type: PLACE_ORDER,
       payload: res.data,
@@ -84,7 +85,7 @@ export const placeOrder = (orderData, dishes, history) => async (dispatch) => {
 
 export const cancelOrder = (orderid) => async (dispatch) => {
   try {
-    const res = await axios.delete(`/api/user/profile/cancel/order/${orderid}`);
+    const res = await axios.delete(`/api/user/orders/cancel/${orderid}`);
     console.log(res.status);
     dispatch({
       type: CANCEL_ORDER,

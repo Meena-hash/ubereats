@@ -1,46 +1,41 @@
-const Sequelize = require("sequelize");
-const db = require("../config/db");
-const Dish = db.define(
-  "dish",
+const mongoose = require("mongoose");
+const DishSchema = mongoose.Schema(
+  // "dish",
   {
-    id: {
-      type: Sequelize.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
-    },
     name: {
-      type: Sequelize.STRING,
+      type: String,
     },
     ingredients: {
-      type: Sequelize.STRING,
+      type: String,
     },
     price: {
-      type: Sequelize.FLOAT,
+      type: Number,
     },
     description: {
-      type: Sequelize.STRING,
+      type: String,
     },
     category: {
-      type: Sequelize.STRING,
+      type: String,
     },
     updated_by: {
-      type: Sequelize.STRING,
+      type: String,
     },
+
     type: {
-      type: Sequelize.ENUM("veg", "non-veg", "vegan", "all"),
+      type: String,
+      enum: ["veg", "non-veg", "vegan", "all"],
     },
     images: {
-      type: Sequelize.STRING,
+      type: String,
     },
     restaurant_idx: {
-      type: Sequelize.INTEGER,
-      references: "restaurants",
-      referencesKey: "id",
+      type: mongoose.Schema.Types.String,
+      ref: "restaurant",
     },
   },
   {
     timestamps: false,
-    freezeTableName: true,
+    collection: "dish",
   }
 );
-module.exports = Dish;
+module.exports = Dish = mongoose.model("dish", DishSchema);

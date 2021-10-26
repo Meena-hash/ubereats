@@ -33,7 +33,7 @@ const UserProfile = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
-  if (!isAuthenticated) {
+  if (loading && !isAuthenticated) {
     return <Redirect to="/user/login"> </Redirect>;
   }
   return loading && profile === null ? (
@@ -92,12 +92,15 @@ const UserProfile = ({
             <div className="col-md-2">
               <div className="profile-work">
                 {/* <p>WORK LINK</p> */}
-                <i class="fas fa-heart">
-                  {" "}
-                  Favourites
-                  <Link to="/user/favourites"></Link>
-                </i>
-                <br />
+                {urole && urole === "user" && (
+                  <>
+                    <i class="fas fa-heart">
+                      {" "}
+                      <Link to="/user/favourites">Favourites</Link>
+                    </i>
+                    <br />
+                  </>
+                )}
               </div>
             </div>
             <div className="col-md-10">

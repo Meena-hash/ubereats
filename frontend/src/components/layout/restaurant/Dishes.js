@@ -28,6 +28,7 @@ const Dishes = ({
     setShow(false);
   };
   const edit = (id) => {
+    alert(id);
     getDishByID(id);
   };
   const handleShow = () => {
@@ -106,19 +107,19 @@ const Dishes = ({
                         </b>
                         <i
                           className="fas fa-trash-alt"
-                          onClick={() => deleteDish(item.id)}
+                          onClick={() => deleteDish(item._id)}
                         ></i>
 
                         <i
                           className="fas fa-edit"
                           style={{ color: "black" }}
                           onClick={() => {
-                            edit(item.id);
+                            edit(item["_id"]);
 
                             handleShow();
                           }}
                         />
-                        {!loading && dish && dish[0].id === item.id ? (
+                        {!loading && dish && dish[0]._id === item._id ? (
                           <Fragment>
                             <Modal show={show} onHide={handleClose}>
                               <Modal.Header>

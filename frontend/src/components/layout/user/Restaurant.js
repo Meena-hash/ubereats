@@ -165,7 +165,7 @@ const Restaurant = ({
                         {!loading &&
                           show &&
                           itemToAdd &&
-                          itemToAdd.id === item.id && (
+                          itemToAdd._id === item._id && (
                             <Fragment>
                               <Modal show={show} onHide={handleClose}>
                                 <Modal.Header>

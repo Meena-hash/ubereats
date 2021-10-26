@@ -1,34 +1,32 @@
-const Sequelize = require("sequelize");
-const db = require("../config/db");
-const Restaurants = db.define(
-  "restaurant",
+const mongoose = require("mongoose");
+const RestaurantsSchema = mongoose.Schema(
   {
     id: {
-      type: Sequelize.INTEGER,
-      autoIncrement: true,
+      type: String,
       primaryKey: true,
     },
     name: {
-      type: Sequelize.STRING,
+      type: String,
       allowNull: false,
       unique: true,
     },
     location: {
-      type: Sequelize.STRING,
+      type: String,
       allowNull: false,
     },
     email: {
-      type: Sequelize.STRING,
+      type: String,
       allowNull: false,
       unique: true,
     },
     password: {
-      type: Sequelize.STRING,
+      type: String,
       allowNull: false,
     },
   },
   {
     timestamps: false,
+    collection: "restaurant",
   }
 );
-module.exports = Restaurants;
+module.exports = Restaurants = mongoose.model("restaurant", RestaurantsSchema);

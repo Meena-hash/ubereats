@@ -104,7 +104,7 @@ const Orders = ({
                   <div className="list-group">
                     <div className="list-group-item list-group-item-action flex-column align-items-start">
                       <h4>
-                        {item["user_profile.name"]}
+                        {item.userprofileid[0].name}
                         <small className="text-muted">
                           {" "}
                           <i
@@ -112,7 +112,7 @@ const Orders = ({
                             style={{ color: "black" }}
                             onClick={() => {
                               getUserByID(
-                                item["user_profile.profileid"],
+                                item.userprofileid[0].profileid,
                                 "restaurant",
                                 history
                               );
@@ -131,7 +131,7 @@ const Orders = ({
                           <i
                             className="fas fa-edit"
                             style={{ color: "black" }}
-                            onClick={() => viewOrder(item.id, history)}
+                            onClick={() => viewOrder(item._id, history)}
                           ></i>
                         </small>
                       </div>

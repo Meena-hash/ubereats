@@ -1,24 +1,27 @@
-const Sequelize = require("sequelize");
-const db = require("../config/db");
-const Favourites = db.define(
-  "favourites",
+const mongoose = require("mongoose");
+const FavSchema = mongoose.Schema(
   {
     customer_id_fav: {
-      type: Sequelize.INTEGER,
-      references: "user_profiles",
-      referencesKey: "profileid",
-
+      type: mongoose.Schema.Types.String,
+      ref: "user_profile",
       primaryKey: true,
     },
     restaurant_id_fav: {
-      type: Sequelize.INTEGER,
-      references: "restaurant_profiles",
-      referencesKey: "restaurantid",
+      type: mongoose.Schema.Types.ObjectId,
+      // ref: "restaurant_profile",
+
+      // foreignField: "restaurantid",
     },
   },
   {
     timestamps: false,
-    freezeTableName: true,
+    toObject: { virtuals: true },
+    collection: "favourites",
   }
 );
-module.exports = Favourites;
+FavSchema.virtual("restaurant_id", {
+  ref: "restaurant_profile",
+  localField: "restaurant_id_fav",
+  foreignField: "restaurantid",
+});
+module.exports = Favourites = mongoose.model("favourites", FavSchema);

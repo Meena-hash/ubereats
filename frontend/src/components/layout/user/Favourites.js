@@ -15,7 +15,7 @@ const Favourites = ({
   history,
 }) => {
   const [favRestaurants, setFavRestaurants] = useState(favlist);
-  const viewRestaurantOnClick = (restaurant) => {
+  const viewRestaurantOnClick = async (restaurant) => {
     const rest = {
       restaurantid: restaurant["restaurant_profile.restaurantid"],
       name: restaurant["restaurant_profile.name"],
@@ -28,9 +28,10 @@ const Favourites = ({
       to_time: restaurant["restaurant_profile.to_time"],
       mode: restaurant["restaurant_profile.mode"],
     };
-    const filterRestaurantDish = dishes.filter(
+    const filterRestaurantDish = await dishes.filter(
       (dish) => dish.restaurant_idx === rest.restaurantid
     );
+    console.log(dishes);
     fetchSelectedRestaurantData(rest, filterRestaurantDish, history);
   };
   useEffect(() => {

@@ -1,30 +1,33 @@
-const Sequelize = require("sequelize");
-const db = require("../config/db");
-const DeliveryAddress = db.define(
-  "user_delivery_adr",
+const mongoose = require("mongoose");
+const DeliveryAddressSchema = mongoose.Schema(
   {
     street: {
-      type: Sequelize.STRING,
+      type: String,
+      required: true,
+      unique: true,
+      dropDups: true,
     },
     city: {
-      type: Sequelize.STRING,
+      type: String,
     },
     state: {
-      type: Sequelize.STRING,
+      type: String,
     },
     country: {
-      type: Sequelize.STRING,
+      type: String,
     },
     customer_idx: {
-      type: Sequelize.INTEGER,
-      references: "user_profiles",
-      referencesKey: "profileid",
+      type: mongoose.Schema.Types.String,
+      ref: "user_profile",
       primaryKey: true,
     },
   },
   {
     timestamps: false,
-    freezeTableName: true,
+    collection: "user_delivery_adr",
   }
 );
-module.exports = DeliveryAddress;
+module.exports = DeliveryAddress = mongoose.model(
+  "user_delivery_adr",
+  DeliveryAddressSchema
+);

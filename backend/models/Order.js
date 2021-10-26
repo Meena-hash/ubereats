@@ -1,67 +1,79 @@
-const Sequelize = require("sequelize");
-const db = require("../config/db");
-const Orders = db.define(
-  "orders",
+const mongoose = require("mongoose");
+const OrdersSchema = mongoose.Schema(
   {
-    id: {
-      type: Sequelize.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
-    },
     tip: {
-      type: Sequelize.INTEGER,
+      type: Number,
     },
-    userprofileid: {
-      type: Sequelize.INTEGER,
-      references: "user_profiles",
-      referencesKey: "profileid",
+    // userprofileid
+    uid: {
+      type: mongoose.Schema.Types.String,
+      ref: "user_profile",
+      // referencesKey: "profileid",
     },
-    restaurant_id_order: {
-      type: Sequelize.INTEGER,
-      references: "restaurant_profiles",
-      referencesKey: "restaurantid",
+    // restaurant_id_order
+    restaurantid: {
+      type: mongoose.Schema.Types.String,
+      ref: "restaurant_profile",
+      // referencesKey: "restaurantid",
     },
+
     date: {
-      type: Sequelize.DATE,
+      type: Date,
     },
     total: {
-      type: Sequelize.FLOAT,
+      type: Number,
     },
     order_type: {
-      type: Sequelize.ENUM("new", "delivered", "cancelled"),
+      type: String,
+      enum: ["new", "delivered", "cancelled"],
     },
     type: {
-      type: Sequelize.ENUM("deliver", "pickup"),
+      type: String,
+      enum: ["deliver", "pickup"],
     },
     delivery_status: {
-      type: Sequelize.ENUM(
+      type: String,
+      enum: [
         "order received",
         "preparing",
         "on the way",
         "delivered",
-        "cancelled"
-      ),
+        "cancelled",
+      ],
     },
     pickup_status: {
-      type: Sequelize.ENUM(
+      type: String,
+      enum: [
         "order received",
         "preparing",
         "pick up ready",
         "pickedup",
-        "cancelled"
-      ),
+        "cancelled",
+      ],
     },
     delivery_address: {
-      type: Sequelize.STRING,
+      type: String,
     },
     notes: {
-      type: Sequelize.STRING,
+      type: String,
     },
   },
   {
     timestamps: false,
-    freezeTableName: true,
+    collection: "orders",
+    toObject: { virtuals: true },
+    toJSON: { virtuals: true },
   }
 );
+OrdersSchema.virtual("userprofileid", {
+  ref: "user_profile",
+  localField: "uid",
+  foreignField: "profileid",
+});
+OrdersSchema.virtual("restaurant_id_order", {
+  ref: "restaurant_profile",
+  localField: "restaurantid",
+  foreignField: "restaurantid",
+});
 
-module.exports = Orders;
+module.exports = Orders = mongoose.model("orders", OrdersSchema);

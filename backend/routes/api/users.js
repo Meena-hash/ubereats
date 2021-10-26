@@ -1,11 +1,12 @@
 const express = require("express");
-const router = express.Router();
 const { check, validationResult } = require("express-validator");
-const User = require("../../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const config = require("config");
 const UserProfile = require("../../models/UserProfile");
+const User = require("../../models/User");
+
+const router = express.Router();
 router.post(
   "/",
   [
@@ -23,7 +24,7 @@ router.post(
     }
     const { name, email, password } = req.body;
     try {
-      let user = await User.findOne({ where: { email: email } });
+      let user = await User.findOne({ email: email });
       if (user) {
         return res
           .status(400)
@@ -37,6 +38,7 @@ router.post(
       const salt = await bcrypt.genSalt(10);
       user.password = await bcrypt.hash(password, salt);
       await user.save();
+
       let profileid = user.id;
       const userProfile = new UserProfile({ name, email, profileid });
       await userProfile.save();

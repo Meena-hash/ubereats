@@ -1,30 +1,26 @@
-const Sequelize = require("sequelize");
-const db = require("../config/db");
-const OrderDish = db.define(
-  "order_dish",
+const mongoose = require("mongoose");
+const OrderDishSchema = mongoose.Schema(
   {
     orderId: {
-      type: Sequelize.INTEGER,
-      references: "orders",
-      referencesKey: "id",
+      type: mongoose.Schema.Types.String,
+      ref: "order",
     },
     dish_id: {
-      type: Sequelize.INTEGER,
-      references: "dish",
-      referencesKey: "id",
+      type: mongoose.Schema.Types.String,
+      ref: "dish",
       primaryKey: true,
     },
     count: {
-      type: Sequelize.INTEGER,
+      type: Number,
     },
     price: {
-      type: Sequelize.FLOAT,
+      type: Number,
     },
   },
   {
     timestamps: false,
-    freezeTableName: true,
+    collection: "order_dish",
   }
 );
 
-module.exports = OrderDish;
+module.exports = OrderDish = mongoose.model("order_dish", OrderDishSchema);

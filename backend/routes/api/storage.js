@@ -41,17 +41,17 @@ router.post(
     // upload the public id to db
     try {
       let profile = await RestaurantProfile.findOne({
-        where: { restaurantid: req.restaurant.id },
+        restaurantid: req.restaurant.id,
       });
       let profileimage = {};
       profileimage.images = req.file.path;
       if (profile) {
-        profile = await RestaurantProfile.update(profileimage, {
-          where: { restaurantid: req.restaurant.id },
-        });
-        profile = await RestaurantProfile.findOne({
-          where: { restaurantid: req.restaurant.id },
-        });
+        profile = await RestaurantProfile.findOneAndUpdate(
+          { restaurantid: req.restaurant.id },
+          { $set: profileimage },
+          { new: true }
+        );
+
         return res.json(profile);
       } else {
         return res.status(400).json({ msg: "No profile found for the user" });
@@ -70,18 +70,20 @@ router.post(
   async (req, res) => {
     // upload the public id to db
     try {
-      let dish = await Dish.findOne({
-        where: { id: req.params.dish_id },
-      });
+      let dish = await Dish.findOne({ _id: req.params.dish_id });
       let dishimage = {};
       dishimage.images = req.file.path;
       if (dish) {
-        dish = await Dish.update(dishimage, {
-          where: { id: req.params.dish_id },
-        });
-        dish = await Dish.findOne({
-          where: { id: req.params.dish_id },
-        });
+        // { restaurantid: req.restaurant.id },
+        // { $set: profileimage },
+        // { new: true }
+        dish = await Dish.findOneAndUpdate(
+          { id: req.params.dish_id },
+          {
+            $set: dishimage,
+          },
+          { new: true }
+        );
         await dish.save();
         return res.json(dish);
       } else {
@@ -102,19 +104,20 @@ router.post(
     // upload the public id to db
     try {
       let profile = await UserProfile.findOne({
-        where: {
-          profileid: req.params.user_id,
-        },
+        profileid: req.params.user_id,
       });
       let profileimage = {};
       profileimage.picture = req.file.path;
       if (profile) {
-        profile = await UserProfile.update(profileimage, {
-          where: { profileid: req.params.user_id },
-        });
-        profile = await UserProfile.findOne({
-          where: { profileid: req.params.user_id },
-        });
+        // { restaurantid: req.restaurant.id },
+        // { $set: profileimage },
+        // { new: true }
+        profile = await UserProfile.findOneAndUpdate(
+          { profileid: req.params.user_id },
+          { $set: profileimage },
+          { new: true }
+        );
+
         await profile.save();
         return res.json(profile);
       } else {

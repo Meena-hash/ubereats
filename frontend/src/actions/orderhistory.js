@@ -13,7 +13,7 @@ export const getDeliveryHistory = () => async (dispatch) => {
       },
     };
 
-    const res = await axios.get("/api/user/profile/get/past/orders", config);
+    const res = await axios.get("/api/user/orders/past", config);
     dispatch({
       type: DELIVERY_HISTORY_SUMMARY,
       payload: res.data,
@@ -34,7 +34,7 @@ export const getDishesOfOrder = (orderid) => async (dispatch) => {
       },
     };
     const res = await axios.get(
-      `/api/user/profile/get/past/orders/dishes/${orderid}`,
+      `/api/restaurant/orders/get/order/dishes/${orderid}`,
       config
     );
     dispatch({

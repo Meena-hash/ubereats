@@ -1,46 +1,46 @@
-const Sequelize = require("sequelize");
-const db = require("../config/db");
-const Restaurant_Profile = db.define(
-  "restaurant_profile",
+const mongoose = require("mongoose");
+const RestaurantProfileSchema = mongoose.Schema(
   {
     restaurantid: {
-      type: Sequelize.INTEGER,
-      references: "restaurants",
-      referencesKey: "id",
-      primaryKey: true,
+      type: mongoose.Schema.Types.String,
+      ref: "restaurant",
     },
     name: {
-      type: Sequelize.STRING,
-      // primaryKey: true,
+      type: String,
       unique: true,
     },
     location: {
-      type: Sequelize.STRING,
+      type: String,
     },
     description: {
-      type: Sequelize.STRING,
+      type: String,
     },
     images: {
-      type: Sequelize.STRING,
+      type: String,
     },
     email: {
-      type: Sequelize.STRING,
+      type: String,
     },
     ph_no: {
-      type: Sequelize.STRING,
+      type: String,
     },
     from_time: {
-      type: Sequelize.TIME,
+      type: String,
     },
     to_time: {
-      type: Sequelize.TIME,
+      type: String,
     },
     mode: {
-      type: Sequelize.ENUM("delivery", "pickup", "both"),
+      type: String,
+      enum: ["delivery", "pickup", "both"],
     },
   },
   {
     timestamps: false,
+    collection: "restaurant_profile",
   }
 );
-module.exports = Restaurant_Profile;
+module.exports = Restaurant_Profile = mongoose.model(
+  "restaurant_profile",
+  RestaurantProfileSchema
+);

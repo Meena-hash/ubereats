@@ -41,7 +41,7 @@ export default function restprofReducer(state = initialState, action) {
       return {
         ...state,
         loading: false,
-        dish: state.dishes.filter((dish) => dish.id === payload),
+        dish: state.dishes.filter((dish) => dish._id === payload),
       };
     case GET_DISHES_OF_ORDER:
       return { ...state, loading: false, dishesOfOrder: payload };
@@ -66,7 +66,7 @@ export default function restprofReducer(state = initialState, action) {
         loading: false,
         dishes: [
           payload,
-          ...state.dishes.filter((dish) => dish.id !== payload.id),
+          ...state.dishes.filter((dish) => dish._id !== payload.id),
         ],
       };
 
@@ -90,7 +90,7 @@ export default function restprofReducer(state = initialState, action) {
       return {
         ...state,
         loading: false,
-        dishes: state.dishes.filter((dish) => dish.id !== payload),
+        dishes: state.dishes.filter((dish) => dish._id !== payload),
       };
     default:
       return state;

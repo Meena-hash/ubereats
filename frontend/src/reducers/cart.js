@@ -22,8 +22,10 @@ export default function cart(state = initialState, action) {
       let items = [];
       if (JSON.parse(sessionStorage.getItem("cartItemsOfUser"))) {
         items = JSON.parse(sessionStorage.getItem("cartItemsOfUser"));
+
         var checkIfExists = items.filter(function (item) {
-          return item.id === payload.items.id;
+          console.log("reducer", item);
+          return item._id === payload.items._id;
         });
         if (checkIfExists !== [] && checkIfExists.length > 0) {
           checkIfExists[0].count = checkIfExists[0].count + 1;
@@ -93,7 +95,7 @@ export default function cart(state = initialState, action) {
       var cartItems = JSON.parse(sessionStorage.getItem("cartItemsOfUser"));
 
       var editItem = cartItems.filter(function (item) {
-        return item.id === payload.id;
+        return item._id === payload.id;
       });
       editItem = editItem[0];
 
@@ -127,7 +129,7 @@ export default function cart(state = initialState, action) {
     case DELETE_ITEM_CART:
       var itemsInCart = JSON.parse(sessionStorage.getItem("cartItemsOfUser"));
       itemsInCart = itemsInCart.filter(function (value, index, arr) {
-        return value.id !== payload;
+        return value._id !== payload;
       });
       sessionStorage.setItem("cartItemsOfUser", JSON.stringify(itemsInCart));
       sessionStorage.setItem(

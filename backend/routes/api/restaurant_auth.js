@@ -15,11 +15,8 @@ checkRestaurantAuth();
 router.get("/", restaurantauth, async (req, res) => {
   try {
     const restaurant = await Restaurant.findOne({
-      where: {
-        id: req.restaurant.id,
-      },
-      attributes: ["id", "name", "email"],
-    });
+      _id: req.restaurant.id,
+    }).select(["_id", "name", "email"]);
     res.json(restaurant);
   } catch (error) {
     console.log(error.message);
@@ -40,7 +37,7 @@ router.post(
     }
     const { email, password } = req.body;
     try {
-      let restaurant = await Restaurant.findOne({ where: { email: email } });
+      let restaurant = await Restaurant.findOne({ email: email });
       if (!restaurant) {
         return res
           .status(400)
@@ -56,7 +53,7 @@ router.post(
       }
       const payload = {
         restaurant: {
-          id: restaurant.id,
+          id: restaurant._id,
         },
       };
       jwt.sign(
