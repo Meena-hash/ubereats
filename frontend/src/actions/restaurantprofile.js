@@ -116,11 +116,11 @@ export const addDish = (formData, imageData, history) => async (dispatch) => {
     dispatch(setAlert("Dish Created", "success"));
     history.push("/restaurant/profile");
   } catch (error) {
-    const errors = error.response.data;
+    const errors = error.response.data.errors;
     if (errors) {
       errors.forEach((error) => dispatch(setAlert(error.msg, "danger")));
     }
-    history.push("/restaurant/profile");
+    history.push("/restaurant/add/dishes");
   }
 };
 

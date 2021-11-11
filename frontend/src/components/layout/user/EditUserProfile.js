@@ -87,11 +87,10 @@ const EditUserProfile = ({
   };
   return urole === "user" ? (
     <Fragment>
-      <form className="form profile" onSubmit={(e) => onSubmit(e)}>
+      <form className="form" onSubmit={(e) => onSubmit(e)}>
         <center> </center>
         <div className="form-group">
           <div>
-            {/* /onClick={() => editProfilePic()} */}
             <input
               type="file"
               accept="image/*"
@@ -106,6 +105,11 @@ const EditUserProfile = ({
           </div>
         </div>
         <div className="form-group">
+          <label>
+            <h4>
+              <b>Name:</b>
+            </h4>
+          </label>
           <input
             type="text"
             placeholder="User Name"
@@ -115,6 +119,11 @@ const EditUserProfile = ({
           />
         </div>
         <div className="form-group">
+          <label>
+            <h4>
+              <b>DOB:</b>
+            </h4>
+          </label>
           <input
             type="date"
             id="birthday"
@@ -124,6 +133,11 @@ const EditUserProfile = ({
           />
         </div>
         <div className="form-group">
+          <label>
+            <h4>
+              <b>Street:</b>
+            </h4>
+          </label>
           <input
             type="text"
             placeholder="Street"
@@ -133,6 +147,11 @@ const EditUserProfile = ({
           />
         </div>
         <div className="form-group">
+          <label>
+            <h4>
+              <b>City:</b>
+            </h4>
+          </label>
           <input
             type="text"
             placeholder="City"
@@ -142,6 +161,11 @@ const EditUserProfile = ({
           />
         </div>
         <div className="form-group">
+          <label>
+            <h4>
+              <b>Country:</b>
+            </h4>
+          </label>
           <CountryDropdown
             class="dropdown"
             value={country}
@@ -149,6 +173,11 @@ const EditUserProfile = ({
           />
         </div>
         <div className="form-group">
+          <label>
+            <h4>
+              <b>Region:</b>
+            </h4>
+          </label>
           <RegionDropdown
             class="dropdown"
             country={country}
@@ -157,6 +186,11 @@ const EditUserProfile = ({
           />
         </div>
         <div className="form-group">
+          <label>
+            <h4>
+              <b>Contact Number:</b>
+            </h4>
+          </label>
           <PhoneInput
             countrySelectProps={{ unicodeFlags: true }}
             placeholder="Enter phone number"
@@ -165,6 +199,11 @@ const EditUserProfile = ({
           />
         </div>
         <div className="form-group">
+          <label>
+            <h4>
+              <b>Nickname:</b>
+            </h4>
+          </label>
           <input
             type="text"
             placeholder="NickName"
@@ -174,6 +213,11 @@ const EditUserProfile = ({
           />
         </div>
         <div className="form-group">
+          <label>
+            <h4>
+              <b>Tell us about yourself:</b>
+            </h4>
+          </label>
           <input
             type="text"
             placeholder="About"
@@ -184,6 +228,11 @@ const EditUserProfile = ({
         </div>
 
         <div className="form-group">
+          <label>
+            <h4>
+              <b>Email:</b>
+            </h4>
+          </label>
           <input
             type="text"
             placeholder="Email"
@@ -197,6 +246,8 @@ const EditUserProfile = ({
           {" "}
           <input type="submit" className="btn btn-primary my-1" />
         </center>
+        <br></br>
+        <br></br>
       </form>
     </Fragment>
   ) : (

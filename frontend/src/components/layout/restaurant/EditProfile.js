@@ -93,14 +93,13 @@ const EditProfile = ({
     <Spinner />
   ) : !loading && urole === "restaurant" ? (
     <Fragment>
-      <form className="form profile" onSubmit={(e) => onSubmit(e)}>
+      <form className="form" onSubmit={(e) => onSubmit(e)}>
         <center>
           {" "}
-          <h1 className="large text-primary">Edit Your Profile</h1>
+          <h2>Edit Your Profile</h2>
         </center>
         <div className="form-group">
           <div>
-            {/* /onClick={() => editProfilePic()} */}
             <input
               type="file"
               accept="image/*"
@@ -121,8 +120,12 @@ const EditProfile = ({
           style={{ background: "green", color: "white" }}
           value="Upload Image"
         />
-        {/* <button onClick={handleSubmit} value="Submit" /> */}
         <div className="form-group">
+          <label>
+            <h4>
+              <b>Name:</b>
+            </h4>
+          </label>
           <input
             type="text"
             placeholder="Restaurant Name"
@@ -132,6 +135,11 @@ const EditProfile = ({
           />
         </div>
         <div className="form-group">
+          <label>
+            <h4>
+              <b>Location:</b>
+            </h4>
+          </label>
           <input
             type="text"
             placeholder="location"
@@ -140,11 +148,13 @@ const EditProfile = ({
             onChange={(e) => onChange(e)}
           />
         </div>
-        {/* <div className="form-group">
-          <input type="text" placeholder="Timing" name="Timing" />
-        </div> */}
 
         <div className="form-group">
+          <label>
+            <h4>
+              <b>Description:</b>
+            </h4>
+          </label>
           <textarea
             placeholder="A short description"
             name="description"
@@ -153,6 +163,11 @@ const EditProfile = ({
           ></textarea>
         </div>
         <div className="form-group">
+          <label>
+            <h4>
+              <b>Mode:</b>
+            </h4>
+          </label>
           <select name="mode" onChange={(e) => onChange(e)}>
             <option value="0">
               {mode.charAt(0).toUpperCase() + mode.slice(1)}
@@ -163,7 +178,7 @@ const EditProfile = ({
           </select>
         </div>
         <div className="form-group">
-          <i className="fas fa-clock"> From &nbsp;</i>
+          <i className="fas fa-clock"> Open From &nbsp;</i>
           <input
             type="time"
             name="from_time"
@@ -174,7 +189,7 @@ const EditProfile = ({
           />
         </div>
         <div className="form-group">
-          <i className="fas fa-clock"> To &nbsp;</i>
+          <i className="fas fa-clock"> Closes At &nbsp;</i>
           <input
             type="time"
             name="to_time"
@@ -197,6 +212,11 @@ const EditProfile = ({
         {displayContactInformation && (
           <Fragment>
             <div className="form-group">
+              <label>
+                <h4>
+                  <b>Phone Number:</b>
+                </h4>
+              </label>
               <input
                 type="text"
                 placeholder="Phone Number"
@@ -207,6 +227,11 @@ const EditProfile = ({
             </div>
 
             <div className="form-group">
+              <label>
+                <h4>
+                  <b>Email:</b>
+                </h4>
+              </label>
               <input
                 type="text"
                 placeholder="Email"
@@ -221,6 +246,7 @@ const EditProfile = ({
           {" "}
           <input type="submit" className="btn btn-primary my-1" />
         </center>
+        <br></br>
       </form>
     </Fragment>
   ) : (

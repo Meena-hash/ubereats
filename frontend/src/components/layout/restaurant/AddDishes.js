@@ -54,10 +54,10 @@ const AddDishes = ({
     <Spinner />
   ) : !loading && urole === "restaurant" ? (
     <Fragment>
-      <form className="form profile" onSubmit={(e) => onSubmit(e)}>
+      <form className="form" onSubmit={(e) => onSubmit(e)}>
         <center>
           {" "}
-          <h1 className="large text-primary">Add a Dish</h1>
+          <h1 className="large">Add a Dish</h1>
         </center>
         <div className="form-group">
           <div>
@@ -138,6 +138,8 @@ const AddDishes = ({
           <input type="submit" className="btn btn-primary my-1" />
         </center>
       </form>
+      <br></br>
+      <br></br>
     </Fragment>
   ) : (
     <Fragment></Fragment>
