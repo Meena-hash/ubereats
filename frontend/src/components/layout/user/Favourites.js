@@ -28,10 +28,11 @@ const Favourites = ({
       to_time: restaurant["restaurant_profile.to_time"],
       mode: restaurant["restaurant_profile.mode"],
     };
+
     const filterRestaurantDish = await dishes.filter(
-      (dish) => dish.restaurant_idx === rest.restaurantid
+      (dish) =>
+        dish.restaurant_idx === restaurant["restaurant_profile.restaurantid"]
     );
-    console.log(dishes);
     fetchSelectedRestaurantData(rest, filterRestaurantDish, history);
   };
   useEffect(() => {
@@ -43,6 +44,7 @@ const Favourites = ({
     getAllRestaurants();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   useEffect(() => {
     setFavRestaurants(favlist);
     // eslint-disable-next-line react-hooks/exhaustive-deps

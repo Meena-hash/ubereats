@@ -1,12 +1,7 @@
 const express = require("express");
 const { check, validationResult } = require("express-validator");
 const router = express.Router();
-const Restaurant = require("../../models/Restaurant");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const config = require("config");
-const RestaurantProfile = require("../../models/RestaurantProfile");
-
+var kafka = require("../../kafka/client");
 router.post(
   "/",
   [
@@ -23,42 +18,26 @@ router.post(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const { name, email, location, password } = req.body;
+
     try {
-      let restaurant = await Restaurant.findOne({ email: email });
-      if (restaurant) {
-        return res
-          .status(400)
-          .json({ errors: [{ msg: "Restaurant already exists" }] });
-      }
-      restaurant = new Restaurant({
-        name,
-        email,
-        location,
-        password,
-      });
-      const salt = await bcrypt.genSalt(10);
-      restaurant.password = await bcrypt.hash(password, salt);
-      await restaurant.save();
-      const payload = {
-        restaurant: {
-          id: restaurant._id,
-        },
-      };
-      let profile = new RestaurantProfile({
-        restaurantid: restaurant._id,
-        name: restaurant.name,
-        location: restaurant.location,
-        email: restaurant.email,
-      });
-      await profile.save();
-      jwt.sign(
-        payload,
-        config.get("jwtSecret"),
-        { expiresIn: 3600000 },
-        (err, token) => {
-          if (err) throw err;
-          res.json({ token });
+      kafka.make_request(
+        "restaurant-signup",
+        req.body,
+        function (err, results) {
+          if (err) {
+            res.json({
+              status: "error",
+              msg: "System Error, Try Again.",
+            });
+          } else {
+            res_status = results.status;
+            if (res_status) {
+              res.status(res_status).json(results.errors);
+            } else {
+              res.status(200).json(results);
+            }
+            res.end();
+          }
         }
       );
     } catch (error) {

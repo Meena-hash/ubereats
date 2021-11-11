@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import Spinner from "../Spinner";
 import { uploadImageDish } from "../../../actions/restaurantprofile";
+import deliveryboy from "../img/deliveryboy.jpg";
 const initialState = {
   name: "",
   ingredients: "",
@@ -35,7 +36,7 @@ const AddDishes = ({
   };
   const [values, setValues] = useState({
     imagePreviewUrl: formData.images,
-    picFile: null,
+    picFile: deliveryboy,
   });
   let fileInput = React.createRef();
 

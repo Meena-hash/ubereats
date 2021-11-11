@@ -24,7 +24,6 @@ export default function cart(state = initialState, action) {
         items = JSON.parse(sessionStorage.getItem("cartItemsOfUser"));
 
         var checkIfExists = items.filter(function (item) {
-          console.log("reducer", item);
           return item._id === payload.items._id;
         });
         if (checkIfExists !== [] && checkIfExists.length > 0) {

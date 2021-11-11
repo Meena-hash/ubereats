@@ -1,10 +1,5 @@
 const express = require("express");
-
-const User = require("../../models/User");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const config = require("config");
-const passport = require("passport");
+var kafka = require("../../kafka/client");
 const { check, validationResult } = require("express-validator");
 const { auth, checkAuth } = require("../../middleware/user_auth");
 
@@ -14,13 +9,23 @@ checkAuth();
 
 router.get("/", auth, async (req, res) => {
   try {
-    const user = await User.findOne({
-      where: {
-        id: req.user.id,
-      },
-      attributes: ["id", "name", "email"],
+    kafka.make_request("get-user", req.user.id, function (err, results) {
+      if (err) {
+        res.json({
+          status: "error",
+          msg: "System Error, Try Again.",
+        });
+      } else {
+        res_status = results.status;
+        if (res_status) {
+          res.status(res_status).json(results.errors);
+        } else {
+          res.status(200).json(results);
+        }
+
+        res.end();
+      }
     });
-    res.json(user);
   } catch (error) {
     console.log(error.message);
     res.status(500).send("Server error");
@@ -38,40 +43,23 @@ router.post(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const { email, password } = req.body;
-    try {
-      let user = await User.findOne({ where: { email: email } });
-      if (!user) {
-        return res
-          .status(400)
-          .json({ errors: [{ msg: "Invalid Credentials" }] });
-      }
-
-      const isMatch = await bcrypt.compare(password, user.password);
-
-      if (!isMatch) {
-        return res
-          .status(400)
-          .json({ errors: [{ msg: "Invalid Credentials" }] });
-      }
-      const payload = {
-        user: {
-          id: user.id,
-        },
-      };
-      jwt.sign(
-        payload,
-        config.get("jwtSecret"),
-        { expiresIn: 3600000 },
-        (err, token) => {
-          if (err) throw err;
-          res.json({ token });
+    kafka.make_request("validate-login", req.body, function (err, results) {
+      if (err) {
+        res.json({
+          status: "error",
+          msg: "System Error, Try Again.",
+        });
+      } else {
+        res_status = results.status;
+        if (res_status) {
+          res.status(res_status).json(results.errors);
+        } else {
+          res.status(200).json(results);
         }
-      );
-    } catch (error) {
-      console.log(error.message);
-      res.status(500).send("Server error");
-    }
+
+        res.end();
+      }
+    });
   }
 );
 

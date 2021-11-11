@@ -24,6 +24,7 @@ export const loadRestaurantUser = () => async (dispatch) => {
       payload: res.data,
     });
   } catch (error) {
+    dispatch(setAlert("User load failed", "danger"));
     dispatch({
       type: AUTH_ERROR,
     });
@@ -46,7 +47,7 @@ export const register =
       });
       dispatch(loadRestaurantUser());
     } catch (err) {
-      const errors = err.response.data.errors;
+      const errors = err.response.data;
       if (errors) {
         errors.forEach((error) => dispatch(setAlert(error.msg, "danger")));
       }
@@ -71,7 +72,7 @@ export const login = (email, password) => async (dispatch) => {
 
     dispatch(loadRestaurantUser());
   } catch (error) {
-    const errors = error.response.data.errors;
+    const errors = error.response.data;
     if (errors) {
       errors.forEach((error) => dispatch(setAlert(error.msg, "danger")));
     }

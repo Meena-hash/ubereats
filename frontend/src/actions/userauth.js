@@ -23,6 +23,10 @@ export const loadUser = () => async (dispatch) => {
       payload: res.data,
     });
   } catch (error) {
+    const errors = error.response.data;
+    if (errors) {
+      errors.forEach((error) => dispatch(setAlert(error.msg, "danger")));
+    }
     dispatch({
       type: AUTH_ERROR,
     });
@@ -50,6 +54,7 @@ export const register = (name, email, password) => async (dispatch) => {
     dispatch({
       type: USER_REGISTER_FAIL,
     });
+    dispatch(setAlert("Invalid credentials", "danger"));
   }
 };
 
@@ -67,7 +72,15 @@ export const login = (email, password) => async (dispatch) => {
       payload: res.data,
     });
     dispatch(loadUser());
-  } catch (error) {}
+  } catch (error) {
+    const errors = error.response.data;
+    if (errors) {
+      errors.forEach((error) => dispatch(setAlert(error.msg, "danger")));
+    }
+    dispatch({
+      type: AUTH_ERROR,
+    });
+  }
 };
 export const logoutUser = (history) => async (dispatch) => {
   try {

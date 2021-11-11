@@ -1,48 +1,29 @@
 const express = require("express");
 const router = express.Router();
-const db = require("../../config/db");
-const Favourites = require("../../models/Favourites");
-const RestaurantProfile = require("../../models/RestaurantProfile");
+var kafka = require("../../kafka/client");
 const { auth, checkAuth } = require("../../middleware/user_auth");
 checkAuth();
 
 router.post("/", auth, async (req, res) => {
   try {
-    let favFields = {};
-    favFields.customer_id_fav = req.user.id;
-    favFields.restaurant_id_fav = req.body.restaurant_id;
-    let favourites = await Favourites.findOne({
-      customer_id_fav: req.user.id,
-      restaurant_id_fav: req.body.restaurant_id,
+    req.body.id = req.user.id;
+    kafka.make_request("add-favourite", req.body, function (err, results) {
+      if (err) {
+        res.json({
+          status: "error",
+          msg: "System Error, Try Again.",
+        });
+      } else {
+        res_status = results.status;
+        if (res_status) {
+          res.status(res_status).json(results.errors);
+        } else {
+          res.status(200).json(results);
+        }
+
+        res.end();
+      }
     });
-
-    if (!favourites) {
-      favourites = new Favourites(favFields);
-      await favourites.save();
-    }
-    favourites = await Favourites.find({
-      customer_id_fav: req.user.id,
-    });
-
-    for (let i in favourites) {
-      restaurant = await RestaurantProfile.findOne({
-        restaurantid: favourites[i].restaurant_id_fav,
-      });
-      favourites[i]._doc["restaurant_profile.restaurantid"] =
-        restaurant.restaurantid;
-      favourites[i]._doc["restaurant_profile.name"] = restaurant.name;
-      favourites[i]._doc["restaurant_profile.location"] = restaurant.location;
-      favourites[i]._doc["restaurant_profile.description"] =
-        restaurant.description;
-      favourites[i]._doc["restaurant_profile.images"] = restaurant.images;
-      favourites[i]._doc["restaurant_profile.email"] = restaurant.email;
-      favourites[i]._doc["restaurant_profile.ph_no"] = restaurant.ph_no;
-      favourites[i]._doc["restaurant_profile.from_time"] = restaurant.from_time;
-      favourites[i]._doc["restaurant_profile.to_time"] = restaurant.to_time;
-      favourites[i]._doc["restaurant_profile.mode"] = restaurant.mode;
-    }
-
-    return res.json(favourites);
   } catch (error) {
     console.log(error.message);
     res.status(500).send("Server error");
@@ -51,26 +32,24 @@ router.post("/", auth, async (req, res) => {
 
 router.get("/", auth, async (req, res) => {
   try {
-    let favourites = await Favourites.find({
-      customer_id_fav: req.user.id,
-    });
-    for (let i in favourites) {
-      let restaurant = await RestaurantProfile.findOne({
-        restaurantid: favourites[i].restaurant_id_fav,
-      });
-      favourites[i]._doc["restaurant_profile.restaurantid"] = restaurant.id;
-      favourites[i]._doc["restaurant_profile.name"] = restaurant.name;
-      favourites[i]._doc["restaurant_profile.location"] = restaurant.location;
-      favourites[i]._doc["restaurant_profile.description"] =
-        restaurant.description;
-      favourites[i]._doc["restaurant_profile.email"] = restaurant.email;
-      favourites[i]._doc["restaurant_profile.ph_no"] = restaurant.ph_no;
-      favourites[i]._doc["restaurant_profile.from_time"] = restaurant.from_time;
-      favourites[i]._doc["restaurant_profile.to_time"] = restaurant.to_time;
-      favourites[i]._doc["restaurant_profile.mode"] = restaurant.mode;
-    }
+    req.body.id = req.user.id;
+    kafka.make_request("get-favourite", req.body, function (err, results) {
+      if (err) {
+        res.json({
+          status: "error",
+          msg: "System Error, Try Again.",
+        });
+      } else {
+        res_status = results.status;
+        if (res_status) {
+          res.status(res_status).json(results.errors);
+        } else {
+          res.status(200).json(results);
+        }
 
-    return res.json(favourites);
+        res.end();
+      }
+    });
   } catch (error) {
     console.log(error.message);
     res.status(500).send("Server error");

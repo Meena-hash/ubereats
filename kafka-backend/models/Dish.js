@@ -16,6 +16,7 @@ const DishSchema = mongoose.Schema(
     },
     category: {
       type: String,
+      default: "Main Course",
     },
     updated_by: {
       type: String,

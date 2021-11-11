@@ -1,9 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const Restaurant = require("../../models/Restaurant");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const config = require("config");
+var kafka = require("../../kafka/client");
 const { check, validationResult } = require("express-validator");
 const {
   restaurantauth,
@@ -14,10 +11,27 @@ checkRestaurantAuth();
 
 router.get("/", restaurantauth, async (req, res) => {
   try {
-    const restaurant = await Restaurant.findOne({
-      _id: req.restaurant.id,
-    }).select(["_id", "name", "email"]);
-    res.json(restaurant);
+    kafka.make_request(
+      "get-restaurant",
+      req.restaurant.id,
+      function (err, results) {
+        if (err) {
+          res.json({
+            status: "error",
+            msg: "System Error, Try Again.",
+          });
+        } else {
+          res_status = results.status;
+          if (res_status) {
+            res.status(res_status).json(results.errors);
+          } else {
+            res.status(200).json(results);
+          }
+
+          res.end();
+        }
+      }
+    );
   } catch (error) {
     console.log(error.message);
     res.status(500).send("Server error");
@@ -35,41 +49,27 @@ router.post(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const { email, password } = req.body;
-    try {
-      let restaurant = await Restaurant.findOne({ email: email });
-      if (!restaurant) {
-        return res
-          .status(400)
-          .json({ errors: [{ msg: "Invalid Credentials" }] });
-      }
+    kafka.make_request(
+      "validate-rest-login",
+      req.body,
+      function (err, results) {
+        if (err) {
+          res.json({
+            status: "error",
+            msg: "System Error, Try Again.",
+          });
+        } else {
+          res_status = results.status;
+          if (res_status) {
+            res.status(res_status).json(results.errors);
+          } else {
+            res.status(200).json(results);
+          }
 
-      const isMatch = await bcrypt.compare(password, restaurant.password);
-
-      if (!isMatch) {
-        return res
-          .status(400)
-          .json({ errors: [{ msg: "Invalid Credentials" }] });
-      }
-      const payload = {
-        restaurant: {
-          id: restaurant._id,
-        },
-      };
-      jwt.sign(
-        payload,
-        config.get("jwtSecret"),
-        { expiresIn: 3600000 },
-        (err, token) => {
-          if (err) throw err;
-          res.json({ token });
+          res.end();
         }
-      );
-    } catch (error) {
-      console.log(error.message);
-      res.status(500).send("Server error");
-    }
+      }
+    );
   }
 );
-
 module.exports = router;

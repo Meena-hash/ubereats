@@ -35,7 +35,7 @@ const ViewOrder = ({
               alt=""
               style={{ width: "100%", height: "300px" }}
             />
-            <h2>Order #{order[0].id}</h2>
+            <h2>Order #{order[0]._id}</h2>
             {order[0].type === "deliver" ? (
               <>
                 <small style={{ color: "green" }}>

@@ -21,7 +21,7 @@ export const getAllRestaurants = () => async (dispatch) => {
       payload: res.data,
     });
   } catch (error) {
-    dispatch(setAlert("Error", "danger"));
+    dispatch(setAlert("Could not fetch restaurants", "danger"));
   }
 };
 
@@ -38,7 +38,7 @@ export const getAllDishes = () => async (dispatch) => {
       payload: res.data,
     });
   } catch (error) {
-    dispatch(setAlert("Error", "danger"));
+    dispatch(setAlert("Could not fetch dishes", "danger"));
   }
 };
 

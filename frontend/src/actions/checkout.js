@@ -45,9 +45,7 @@ export const addDeliveryAddress =
         payload: res.data,
       });
     } catch (error) {
-      // console.log(error);
-      console.log(error);
-      const errors = error.response.data.errors;
+      const errors = error.response.data;
       if (errors) {
         errors.forEach((error) => dispatch(setAlert(error.msg, "danger")));
       }
@@ -56,7 +54,6 @@ export const addDeliveryAddress =
 
 export const placeOrder = (orderData, dishes, history) => async (dispatch) => {
   try {
-    console.log("dishes", dishes);
     const config = {
       headers: {
         "Content-Type": "application/json",
@@ -79,14 +76,13 @@ export const placeOrder = (orderData, dishes, history) => async (dispatch) => {
     history.push("/user/dashboard");
   } catch (error) {
     console.log(error);
-    dispatch(setAlert("Error", "danger"));
+    dispatch(setAlert("Order placing failed", "danger"));
   }
 };
 
 export const cancelOrder = (orderid) => async (dispatch) => {
   try {
-    const res = await axios.delete(`/api/user/orders/cancel/${orderid}`);
-    console.log(res.status);
+    await axios.delete(`/api/user/orders/cancel/${orderid}`);
     dispatch({
       type: CANCEL_ORDER,
     });

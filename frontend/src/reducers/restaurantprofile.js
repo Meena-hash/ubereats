@@ -66,7 +66,7 @@ export default function restprofReducer(state = initialState, action) {
         loading: false,
         dishes: [
           payload,
-          ...state.dishes.filter((dish) => dish._id !== payload.id),
+          ...state.dishes.filter((dish) => dish._id !== payload._id),
         ],
       };
 
@@ -79,7 +79,10 @@ export default function restprofReducer(state = initialState, action) {
       return {
         ...state,
         loading: false,
-        orders: [payload, ...state.orders.filter((or) => or.id !== payload.id)],
+        orders: [
+          payload[0],
+          ...state.orders.filter((or) => or.id !== payload.id),
+        ],
         order: payload,
       };
     case PROFILE_ERROR:

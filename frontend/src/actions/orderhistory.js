@@ -22,7 +22,7 @@ export const getDeliveryHistory = () => async (dispatch) => {
     dispatch({ type: LOAD_DELIVERY_HISTORY });
   } catch (error) {
     console.log(error);
-    dispatch(setAlert("Error", "danger"));
+    dispatch(setAlert("Could not load history", "danger"));
   }
 };
 
@@ -43,6 +43,6 @@ export const getDishesOfOrder = (orderid) => async (dispatch) => {
     });
   } catch (error) {
     console.log(error);
-    dispatch(setAlert("Error", "danger"));
+    dispatch(setAlert("Could not load dishes", "danger"));
   }
 };

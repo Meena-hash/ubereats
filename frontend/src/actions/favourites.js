@@ -13,7 +13,9 @@ export const getUserFavourites = () => async (dispatch) => {
       type: GET_CURRENTUSER_FAVOURITES,
       payload: res.data,
     });
-  } catch (error) {}
+  } catch (error) {
+    dispatch(setAlert("Could not fetch favourites", "danger"));
+  }
 };
 
 export const addFavourite = (restaurant_id) => async (dispatch) => {
@@ -30,5 +32,7 @@ export const addFavourite = (restaurant_id) => async (dispatch) => {
       payload: res.data,
     });
     dispatch(setAlert("Favourite added", "success"));
-  } catch (error) {}
+  } catch (error) {
+    dispatch(setAlert("Could not add fav", "danger"));
+  }
 };

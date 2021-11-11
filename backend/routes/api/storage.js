@@ -3,15 +3,16 @@ var multer = require("multer");
 const cloudinary = require("cloudinary").v2;
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const config = require("config");
-const RestaurantProfile = require("../../models/RestaurantProfile");
-const Dish = require("../../models/Dish");
-const UserProfile = require("../../models/UserProfile");
+var kafka = require("../../kafka/client");
+
 const router = express.Router();
 const {
   restaurantauth,
   checkRestaurantAuth,
 } = require("../../middleware/restaurant_auth");
 checkRestaurantAuth();
+const { auth, checkAuth } = require("../../middleware/user_auth");
+checkAuth();
 
 // Account access information
 cloudinary.config({
@@ -38,27 +39,33 @@ router.post(
   restaurantauth,
   parser.single("image"),
   async (req, res) => {
-    // upload the public id to db
-    try {
-      let profile = await RestaurantProfile.findOne({
-        restaurantid: req.restaurant.id,
-      });
-      let profileimage = {};
-      profileimage.images = req.file.path;
-      if (profile) {
-        profile = await RestaurantProfile.findOneAndUpdate(
-          { restaurantid: req.restaurant.id },
-          { $set: profileimage },
-          { new: true }
-        );
-
-        return res.json(profile);
-      } else {
-        return res.status(400).json({ msg: "No profile found for the user" });
+    if (req && req.file && req.file.path) {
+      let msg = {
+        id: req.restaurant.id,
+        path: req.file.path,
+      };
+      // upload the public id to db
+      try {
+        kafka.make_request("upload-rest-image", msg, function (err, results) {
+          if (err) {
+            res.json({
+              status: "error",
+              msg: "System Error, Try Again.",
+            });
+          } else {
+            res_status = results.status;
+            if (res_status) {
+              res.status(res_status).json(results.errors);
+            } else {
+              res.status(200).json(results);
+            }
+            res.end();
+          }
+        });
+      } catch (err) {
+        console.log(err);
+        res.status(500).send(err);
       }
-    } catch (err) {
-      console.log(err);
-      res.status(500).send(err);
     }
   }
 );
@@ -69,64 +76,69 @@ router.post(
   parser.single("image"),
   async (req, res) => {
     // upload the public id to db
-    try {
-      let dish = await Dish.findOne({ _id: req.params.dish_id });
-      let dishimage = {};
-      dishimage.images = req.file.path;
-      if (dish) {
-        // { restaurantid: req.restaurant.id },
-        // { $set: profileimage },
-        // { new: true }
-        dish = await Dish.findOneAndUpdate(
-          { id: req.params.dish_id },
-          {
-            $set: dishimage,
-          },
-          { new: true }
-        );
-        await dish.save();
-        return res.json(dish);
-      } else {
-        return res.status(400).json({ msg: "No profile found for the user" });
+    if (req && req.file && req.file.path) {
+      msg = {
+        dish_id: req.params.dish_id,
+        path: req.file.path,
+      };
+      try {
+        kafka.make_request("upload-dish-image", msg, function (err, results) {
+          if (err) {
+            res.json({
+              status: "error",
+              msg: "System Error, Try Again.",
+            });
+          } else {
+            res_status = results.status;
+            if (res_status) {
+              res.status(res_status).json(results.errors);
+            } else {
+              res.status(200).json(results);
+            }
+            res.end();
+          }
+        });
+      } catch (err) {
+        console.log(err);
+        res.status(500).send(err);
       }
-    } catch (err) {
-      console.log(err);
-      res.status(500).send(err);
     }
   }
 );
 
 router.post(
   "/user/upload/:user_id",
-  restaurantauth,
+  auth,
   parser.single("image"),
   async (req, res) => {
-    // upload the public id to db
-    try {
-      let profile = await UserProfile.findOne({
-        profileid: req.params.user_id,
-      });
-      let profileimage = {};
-      profileimage.picture = req.file.path;
-      if (profile) {
-        // { restaurantid: req.restaurant.id },
-        // { $set: profileimage },
-        // { new: true }
-        profile = await UserProfile.findOneAndUpdate(
-          { profileid: req.params.user_id },
-          { $set: profileimage },
-          { new: true }
-        );
-
-        await profile.save();
-        return res.json(profile);
-      } else {
-        return res.status(400).json({ msg: "No profile found for the user" });
+    if (req && req.file && req.file.path) {
+      let msg = {
+        user_id: req.params.user_id,
+        path: req.file.path,
+      };
+      try {
+        kafka.make_request("upload-user-image", msg, function (err, results) {
+          if (err) {
+            res.json({
+              status: "error",
+              msg: "System Error, Try Again.",
+            });
+          } else {
+            res_status = results.status;
+            if (res_status) {
+              res.status(res_status).json(results.errors);
+            } else {
+              res.status(200).json(results);
+            }
+            res.end();
+          }
+        });
+      } catch (err) {
+        console.log(err);
+        res.status(500).send(err);
       }
-    } catch (err) {
-      console.log(err);
-      res.status(500).send(err);
     }
+    // upload the public id to db
   }
 );
 

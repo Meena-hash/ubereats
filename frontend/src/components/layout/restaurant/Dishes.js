@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { Button, Modal } from "react-bootstrap";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import PropTypes from "prop-types";
+import deliveryboy from "../img/deliveryboy.jpg";
 import {
   getDishByID,
   getCurrentProfile,
@@ -28,7 +29,6 @@ const Dishes = ({
     setShow(false);
   };
   const edit = (id) => {
-    alert(id);
     getDishByID(id);
   };
   const handleShow = () => {
@@ -49,7 +49,7 @@ const Dishes = ({
   // image
   const [values, setValues] = useState({
     imagePreviewUrl: "",
-    picFile: null,
+    picFile: deliveryboy,
   });
   let fileInput = React.createRef();
 
@@ -61,7 +61,7 @@ const Dishes = ({
       setValues({ ...values, picFile: inFile, imagePreviewUrl: reader.result });
     };
     reader.readAsDataURL(inFile);
-    // fileInput.current.click();
+    fileInput.current.click();
   };
 
   return (

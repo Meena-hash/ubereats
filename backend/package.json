@@ -7,7 +7,8 @@
     "start": "node server",
     "server": "nodemon server",
     "client": "npm start --prefix ../frontend",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "kafka": "npm start server --prefix ../kafka-backend",
+    "dev": "concurrently \"npm run server\" \"npm run client\" \"npm run kafka\" "
   },
   "author": "Meena Priyadharshini",
   "license": "ISC",
@@ -21,6 +22,8 @@
     "express-validator": "^6.12.1",
     "gravatar": "^1.8.2",
     "jsonwebtoken": "^8.5.1",
+    "kafka-node": "^5.0.0",
+    "kafkajs": "^1.15.0",
     "mongoose": "^6.0.5",
     "multer": "^1.4.3",
     "multer-storage-cloudinary": "^4.0.0",

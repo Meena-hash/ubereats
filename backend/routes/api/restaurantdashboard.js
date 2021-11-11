@@ -1,12 +1,25 @@
 const express = require("express");
 const router = express.Router();
-const db = require("../../config/db");
-const RestaurantProfile = require("../../models/RestaurantProfile");
-const Dish = require("../../models/Dish");
+var kafka = require("../../kafka/client");
 router.get("/restaurants", async (req, res) => {
   try {
-    const restaurants = await RestaurantProfile.find();
-    res.json(restaurants);
+    kafka.make_request("get-restaurants", null, function (err, results) {
+      if (err) {
+        res.json({
+          status: "error",
+          msg: "System Error, Try Again.",
+        });
+      } else {
+        res_status = results.status;
+        if (res_status) {
+          res.status(res_status).json(results.errors);
+        } else {
+          res.status(200).json(results);
+        }
+
+        res.end();
+      }
+    });
   } catch (error) {
     console.log(err.message);
     res.status(500).send("Server error");
@@ -15,8 +28,23 @@ router.get("/restaurants", async (req, res) => {
 
 router.get("/dishes", async (req, res) => {
   try {
-    let dishes = await Dish.find();
-    return res.json(dishes);
+    kafka.make_request("get-dishes", null, function (err, results) {
+      if (err) {
+        res.json({
+          status: "error",
+          msg: "System Error, Try Again.",
+        });
+      } else {
+        res_status = results.status;
+        if (res_status) {
+          res.status(res_status).json(results.errors);
+        } else {
+          res.status(200).json(results);
+        }
+
+        res.end();
+      }
+    });
   } catch (error) {
     console.log(error.message);
     res.status(500).send("Server error");

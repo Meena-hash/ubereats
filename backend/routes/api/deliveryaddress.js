@@ -1,19 +1,31 @@
 const express = require("express");
 const { check, validationResult } = require("express-validator");
-const DeliveryAddress = require("../../models/DeliveryAddress");
 const { auth, checkAuth } = require("../../middleware/user_auth");
-
+var kafka = require("../../kafka/client");
 const router = express.Router();
 checkAuth();
 
 router.get("/me", auth, async (req, res) => {
   try {
-    const addresses = await DeliveryAddress.find({
-      customer_idx: req.user.id,
+    kafka.make_request("get-address", req.user.id, function (err, results) {
+      if (err) {
+        res.json({
+          status: "error",
+          msg: "System Error, Try Again.",
+        });
+      } else {
+        res_status = results.status;
+        if (res_status) {
+          res.status(res_status).json(results.errors);
+        } else {
+          res.status(200).json(results);
+        }
+
+        res.end();
+      }
     });
-    return res.json(addresses);
-  } catch (err) {
-    console.log(err.message);
+  } catch (error) {
+    console.log(error.message);
     res.status(500).send("Server error");
   }
 });
@@ -34,27 +46,28 @@ router.post(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    try {
-      const { street, city, country, state } = req.body;
-      let addressFields = {};
-      addressFields.street = street;
-      addressFields.city = city;
-      addressFields.country = country;
-      addressFields.state = state;
-      addressFields.customer_idx = req.user.id;
-      let isExists = await DeliveryAddress.findOne({ street });
-      if (isExists) {
-        return res
-          .status(400)
-          .json({ errors: [{ msg: "Address already exists" }] });
+    req.body.id = req.user.id;
+    kafka.make_request(
+      "add-delivery-address",
+      req.body,
+      function (err, results) {
+        if (err) {
+          res.json({
+            status: "error",
+            msg: "System Error, Try Again.",
+          });
+        } else {
+          res_status = results.status;
+          if (res_status) {
+            res.status(res_status).json(results.errors);
+          } else {
+            res.status(200).json(results);
+          }
+
+          res.end();
+        }
       }
-      const address = new DeliveryAddress(addressFields);
-      await address.save();
-      return res.json(addressFields);
-    } catch (err) {
-      console.log(err.message);
-      res.status(500).send("Server error");
-    }
+    );
   }
 );
 

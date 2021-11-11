@@ -1,10 +1,6 @@
 const express = require("express");
 const { check, validationResult } = require("express-validator");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const config = require("config");
-const UserProfile = require("../../models/UserProfile");
-const User = require("../../models/User");
+var kafka = require("../../kafka/client");
 
 const router = express.Router();
 router.post(
@@ -22,45 +18,23 @@ router.post(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const { name, email, password } = req.body;
-    try {
-      let user = await User.findOne({ email: email });
-      if (user) {
-        return res
-          .status(400)
-          .json({ errors: [{ msg: "User already exists" }] });
-      }
-      user = new User({
-        name,
-        email,
-        password,
-      });
-      const salt = await bcrypt.genSalt(10);
-      user.password = await bcrypt.hash(password, salt);
-      await user.save();
-
-      let profileid = user.id;
-      const userProfile = new UserProfile({ name, email, profileid });
-      await userProfile.save();
-      const payload = {
-        user: {
-          id: user.id,
-        },
-      };
-
-      jwt.sign(
-        payload,
-        config.get("jwtSecret"),
-        { expiresIn: 3600000 },
-        (err, token) => {
-          if (err) throw err;
-          res.json({ token });
+    kafka.make_request("user-signup", req.body, function (err, results) {
+      if (err) {
+        res.json({
+          status: "error",
+          msg: "System Error, Try Again.",
+        });
+      } else {
+        res_status = results.status;
+        if (res_status) {
+          res.status(res_status).json(results.errors);
+        } else {
+          res.status(200).json(results);
         }
-      );
-    } catch (error) {
-      console.log(error.message);
-      res.status(500).send("Server error");
-    }
+
+        res.end();
+      }
+    });
   }
 );
 

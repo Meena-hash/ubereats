@@ -44,6 +44,7 @@ export const getCurrentProfile = () => async (dispatch) => {
         status: error.response,
       },
     });
+    dispatch(setAlert("fetching profile failed", "danger"));
   }
 };
 
@@ -69,7 +70,7 @@ export const createProfile =
       );
       history.push("/restaurant/profile");
     } catch (error) {
-      const errors = error.response.data.errors;
+      const errors = error.response.data;
       if (errors) {
         errors.forEach((error) => dispatch(setAlert(error.msg, "danger")));
       }
@@ -93,17 +94,7 @@ export const deleteDish = (id) => async (dispatch) => {
     dispatch(setAlert("Dish deleted", "success"));
     // dispatch(getCurrentProfile());
   } catch (error) {
-    const errors = error.response.data.errors;
-    if (errors) {
-      errors.forEach((error) => dispatch(setAlert(error.msg, "danger")));
-    }
-    dispatch({
-      type: PROFILE_ERROR,
-      payload: {
-        msg: error.response.statusText,
-        status: error.response.status,
-      },
-    });
+    dispatch(setAlert("deleting dish failed", "danger"));
   }
 };
 
@@ -121,11 +112,15 @@ export const addDish = (formData, imageData, history) => async (dispatch) => {
       type: ADD_DISH,
       payload: res.data,
     });
-    dispatch(uploadImageDish(imageData, res.data.id));
+    if (imageData) dispatch(uploadImageDish(imageData, res.data.id));
     dispatch(setAlert("Dish Created", "success"));
     history.push("/restaurant/profile");
   } catch (error) {
-    console.log(error);
+    const errors = error.response.data;
+    if (errors) {
+      errors.forEach((error) => dispatch(setAlert(error.msg, "danger")));
+    }
+    history.push("/restaurant/profile");
   }
 };
 
@@ -136,17 +131,7 @@ export const getDishByID = (dishid) => async (dispatch) => {
       payload: dishid,
     });
   } catch (error) {
-    const errors = error.response.data.errors;
-    if (errors) {
-      errors.forEach((error) => dispatch(setAlert(error.msg, "danger")));
-    }
-    dispatch({
-      type: PROFILE_ERROR,
-      payload: {
-        msg: error.response.statusText,
-        status: error.response.status,
-      },
-    });
+    dispatch(setAlert("fetching dish failed", "danger"));
   }
 };
 
@@ -155,7 +140,7 @@ export const editDish = (formData, imageData, history) => async (dispatch) => {
     headers: { "Content-Type": "application/json" },
   };
   try {
-    // dispatch(uploadImageDish(imageData, formData.id));
+    if (imageData) dispatch(uploadImageDish(imageData, formData._id));
     const res = await axios.post(
       "/api/restaurant/dish/update",
       formData,
@@ -170,6 +155,7 @@ export const editDish = (formData, imageData, history) => async (dispatch) => {
     history.push("/restaurant/profile");
   } catch (error) {
     console.log(error);
+    dispatch(setAlert("Editing dish failed", "danger"));
   }
 };
 
@@ -184,17 +170,7 @@ export const getAllOrdersByRestaurant = () => async (dispatch) => {
       payload: res.data,
     });
   } catch (error) {
-    const errors = error.response.data.errors;
-    if (errors) {
-      errors.forEach((error) => dispatch(setAlert(error.msg, "danger")));
-    }
-    dispatch({
-      type: PROFILE_ERROR,
-      payload: {
-        msg: error.response.statusText,
-        status: error.response.status,
-      },
-    });
+    dispatch(setAlert("fetching orders failed", "danger"));
   }
 };
 
@@ -218,17 +194,7 @@ export const viewOrder = (orderId, history) => async (dispatch) => {
     history.push("/restaurant/view/order");
   } catch (error) {
     console.log(error);
-    // const errors = error.response.data.errors;
-    // if (errors) {
-    //   errors.forEach((error) => dispatch(setAlert(error.msg, "danger")));
-    // }
-    // dispatch({
-    //   type: PROFILE_ERROR,
-    //   payload: {
-    //     msg: error.response.statusText,
-    //     status: error.response.status,
-    //   },
-    // });
+    dispatch(setAlert("viewing order failed", "danger"));
   }
 };
 
@@ -260,9 +226,12 @@ export const uploadImageRestaurant =
       });
       history.push("/restaurant/profile");
     } catch (error) {
-      // alert(
-      //   "Error occurred while uploading picture, try uploading a smaller image size or try again later."
-      // );
+      dispatch(
+        setAlert(
+          "Error occurred while uploading picture, try uploading a smaller image size or try again later.",
+          "danger"
+        )
+      );
     }
   };
 
@@ -274,8 +243,11 @@ export const uploadImageDish = (formData, dish_id) => async (dispatch) => {
       payload: res.data,
     });
   } catch (error) {
-    // alert(
-    //   "Error occurred while uploading picture, try uploading a smaller image size or try again later."
-    // );
+    dispatch(
+      setAlert(
+        "Error occurred while uploading picture, try uploading a smaller image size or try again later.",
+        "danger"
+      )
+    );
   }
 };

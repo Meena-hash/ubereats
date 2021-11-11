@@ -2,15 +2,12 @@ const express = require("express");
 const db = require("./config/db");
 const connectDb = require("./config/db-mongo");
 const passport = require("passport");
-connectDb();
-db.authenticate()
-  .then(() => console.log("Connected"))
-  .catch((err) => console.log("Not connected"));
 
 const app = express();
 
 app.use(express.json({ extended: false }));
 app.use(passport.initialize());
+
 app.get("/", (req, res) => res.send("API running"));
 
 app.use("/api/users", require("./routes/api/users"));
@@ -24,7 +21,7 @@ app.use("/api/restaurant/auth", require("./routes/api/restaurant_auth"));
 app.use("/api/restaurant/profile", require("./routes/api/restaurantprofile"));
 app.use("/api/restaurant/dish", require("./routes/api/restaurantdish"));
 app.use("/api/restaurant/orders", require("./routes/api/restaurantorder"));
-
+// app.use("/test", require("./routes/api/kafka-test"));
 app.use("/api/image", require("./routes/api/storage"));
 
 app.use("/api/dashboard", require("./routes/api/restaurantdashboard"));
