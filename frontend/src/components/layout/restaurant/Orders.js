@@ -10,6 +10,7 @@ import {
 import { getUserByID } from "../../../actions/userprofile";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import Pagination from "../Pagination";
 
 const Orders = ({
   getCurrentProfile,
@@ -30,6 +31,21 @@ const Orders = ({
     setOrderData(orders);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orders]);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [ordersPerPage, setOrdersPerPage] = useState(5);
+  const indexOfLastOrder = currentPage * ordersPerPage;
+  const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
+  const currentOrders = orderData.slice(indexOfFirstOrder, indexOfLastOrder);
+
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const changeOrdersPerPage = (number) => {
+    setCurrentPage(1);
+    setOrdersPerPage(number);
+  };
   return loading && orders === null ? (
     <Spinner />
   ) : !loading && orders && urole === "restaurant" ? (
@@ -96,62 +112,86 @@ const Orders = ({
           </div>
           <br />
           <h5>{filter}</h5>
-          {orderData &&
-            orderData.map((item) => {
-              return (
-                <>
-                  <hr />
-                  <div className="list-group">
-                    <div
-                      className="list-group-item list-group-item-action flex-column align-items-start"
-                      style={{ border: "0" }}
-                    >
-                      <h4>
-                        {item.userprofileid[0].name}
-                        <small className="text-muted">
-                          {" "}
-                          <i
-                            class="fas fa-eye"
-                            style={{ color: "black" }}
-                            onClick={() => {
-                              getUserByID(
-                                item.userprofileid[0].profileid,
-                                "restaurant",
-                                history
-                              );
-                            }}
-                          >
-                            {" "}
-                            View Profile
-                          </i>
-                        </small>
-                      </h4>
-
-                      <div className="d-flex w-100 justify-content-between">
-                        <h5>OrderId:{item.id}</h5>
-                        <small className="text-muted">
-                          {" "}
-                          <i
-                            className="fas fa-edit"
-                            style={{ color: "black" }}
-                            onClick={() => viewOrder(item._id, history)}
-                          >
-                            Edit Order
-                          </i>
-                        </small>
-                      </div>
-                      <p className="mb-1">
-                        Date: {new Date(item.date).toString().slice(0, 16)}
-                      </p>
-                      <small>Total: {item.total}$</small>
-                      <br />
-                      <small>Tip: {item.tip}$</small>
-                    </div>
+          <div className="list-group">
+            <select
+              className="form-select form-select-lg sm"
+              id="pages"
+              onChange={(val) => {
+                changeOrdersPerPage(val.target.value);
+              }}
+              style={{ width: "10%" }}
+            >
+              {" "}
+              <option value="2">2</option>
+              <option value="5" selected>
+                5
+              </option>
+              <option value="10">10</option>
+            </select>
+            <hr />
+            <Pagination
+              ordersPerPage={ordersPerPage}
+              totalOrders={orderData.length}
+              paginate={paginate}
+            ></Pagination>
+            {orderData &&
+              currentOrders &&
+              currentOrders.map((item) => {
+                return (
+                  <>
                     <hr />
-                  </div>
-                </>
-              );
-            })}
+                    <div className="list-group">
+                      <div
+                        className="list-group-item list-group-item-action flex-column align-items-start"
+                        style={{ border: "0" }}
+                      >
+                        <h4>
+                          {item.userprofileid[0].name}
+                          <small className="text-muted">
+                            {" "}
+                            <i
+                              class="fas fa-eye"
+                              style={{ color: "black" }}
+                              onClick={() => {
+                                getUserByID(
+                                  item.userprofileid[0].profileid,
+                                  "restaurant",
+                                  history
+                                );
+                              }}
+                            >
+                              {" "}
+                              View Profile
+                            </i>
+                          </small>
+                        </h4>
+
+                        <div className="d-flex w-100 justify-content-between">
+                          <h5>OrderId:{item.id}</h5>
+                          <small className="text-muted">
+                            {" "}
+                            <i
+                              className="fas fa-edit"
+                              style={{ color: "black" }}
+                              onClick={() => viewOrder(item._id, history)}
+                            >
+                              Edit Order
+                            </i>
+                          </small>
+                        </div>
+                        <p className="mb-1">
+                          Date: {new Date(item.date).toString().slice(0, 16)}
+                        </p>
+                        <small>Total: {item.total}$</small>
+                        <br />
+                        <small>Tip: {item.tip}$</small>
+                      </div>
+                      <hr />
+                    </div>
+                  </>
+                );
+              })}
+          </div>
         </>
       </>
     </div>

@@ -90,6 +90,8 @@ export const cancelOrder = (orderid) => async (dispatch) => {
     dispatch(setAlert("Order cancelled Successfully", "success"));
   } catch (error) {
     const errors = error.response.data;
-    dispatch(setAlert(errors.msg, "danger"));
+    if (errors) {
+      errors.forEach((error) => dispatch(setAlert(error.msg, "danger")));
+    }
   }
 };
