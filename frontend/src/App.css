@@ -400,6 +400,12 @@ post-form .post-form-header {
   max-height: 100%;
   vertical-align: auto;
 }
+.btn-dark.disabled,
+.btn-dark:disabled {
+  color: grey;
+  background-color: whitesmoke;
+  border-color: whitesmoke;
+}
 /* Clear floats after image containers */
 .row::after {
   content: "";

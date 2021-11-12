@@ -83,7 +83,7 @@ const Restaurant = ({
 
     if (foodType !== null && dishesData && dishesData !== null) {
       setDishesData(
-        searchStringResult.filter((item) => item.type.includes(foodType))
+        searchStringResult.filter((item) => item.type === foodType)
       );
     } else setDishesData(searchStringResult);
   }, [searchstring, foodType]);

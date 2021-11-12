@@ -4,7 +4,6 @@ import { withRouter } from "react-router-dom/cjs/react-router-dom.min";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import Spinner from "../Spinner";
-import { uploadImageDish } from "../../../actions/restaurantprofile";
 import deliveryboy from "../img/deliveryboy.jpg";
 const initialState = {
   name: "",
@@ -19,7 +18,6 @@ const AddDishes = ({
   auth: { urole, user, loading },
   addDish,
   history,
-  uploadImageDish,
 }) => {
   useEffect(() => {
     getCurrentProfile();
@@ -150,13 +148,11 @@ AddDishes.prototypes = {
   addDish: PropTypes.func.isRequired,
   getCurrentProfile: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
-  uploadImageDish: PropTypes.func.isRequired,
 };
 const mapStateToProps = (state) => ({
   auth: state.auth,
 });
 export default connect(mapStateToProps, {
-  uploadImageDish,
   getCurrentProfile,
   addDish,
 })(withRouter(AddDishes));

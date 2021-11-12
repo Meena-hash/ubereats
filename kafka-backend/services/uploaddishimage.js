@@ -1,6 +1,6 @@
 const Dish = require("../models/Dish");
 async function handle_request(msg, callback) {
-  let dish = await Dish.findOne({ _id: msg.dish_id });
+  let dish = await Dish.findById(msg.dish_id);
 
   let dishimage = {};
   dishimage.images = msg.path;

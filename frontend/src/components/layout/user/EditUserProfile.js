@@ -88,9 +88,15 @@ const EditUserProfile = ({
   return urole === "user" ? (
     <Fragment>
       <form className="form" onSubmit={(e) => onSubmit(e)}>
-        <center> </center>
+        <br />
         <div className="form-group">
           <div>
+            <label>
+              <h4>
+                <b>Profile Pic:</b>
+              </h4>
+            </label>
+            <br />
             <input
               type="file"
               accept="image/*"

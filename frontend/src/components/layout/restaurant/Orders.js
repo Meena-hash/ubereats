@@ -102,7 +102,10 @@ const Orders = ({
                 <>
                   <hr />
                   <div className="list-group">
-                    <div className="list-group-item list-group-item-action flex-column align-items-start">
+                    <div
+                      className="list-group-item list-group-item-action flex-column align-items-start"
+                      style={{ border: "0" }}
+                    >
                       <h4>
                         {item.userprofileid[0].name}
                         <small className="text-muted">
@@ -132,14 +135,19 @@ const Orders = ({
                             className="fas fa-edit"
                             style={{ color: "black" }}
                             onClick={() => viewOrder(item._id, history)}
-                          ></i>
+                          >
+                            Edit Order
+                          </i>
                         </small>
                       </div>
-                      <p className="mb-1">Date: {item.date}</p>
-                      <small className="text-muted">Total: {item.total}$</small>
+                      <p className="mb-1">
+                        Date: {new Date(item.date).toString().slice(0, 16)}
+                      </p>
+                      <small>Total: {item.total}$</small>
                       <br />
-                      <small className="text-muted">Tip: {item.tip}$</small>
+                      <small>Tip: {item.tip}$</small>
                     </div>
+                    <hr />
                   </div>
                 </>
               );

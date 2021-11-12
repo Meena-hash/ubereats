@@ -59,7 +59,7 @@ router.post(
         } else {
           res_status = results.status;
           if (res_status) {
-            res.status(res_status).json(results.errors);
+            res.status(res_status).json(results);
           } else {
             res.status(200).json(results);
           }

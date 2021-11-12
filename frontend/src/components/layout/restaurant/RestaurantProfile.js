@@ -60,6 +60,8 @@ const RestaurantProfile = ({
             <br />
             <i className="fas fa-envelope-open"> {profile.email}</i>
             <Dishes />
+            <br />
+            <br />
           </Fragment>
         ) : (
           <Fragment>

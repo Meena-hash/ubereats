@@ -27,6 +27,8 @@ const ProfileSchema = mongoose.Schema(
     },
     picture: {
       type: String,
+      default:
+        "https://res.cloudinary.com/meena273/image/upload/v1633912634/images/xjm9ulwljbsnudpswa6q.jpg",
     },
     email: {
       type: String,
@@ -39,7 +41,9 @@ const ProfileSchema = mongoose.Schema(
       type: String,
     },
     dob: {
-      type: Date,
+      type: String,
+      min: "1920-01-01",
+      max: "2020-12-31",
     },
   },
   {

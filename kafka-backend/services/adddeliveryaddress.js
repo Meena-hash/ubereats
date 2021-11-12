@@ -9,7 +9,7 @@ async function handle_request(msg, callback) {
     addressFields.country = country;
     addressFields.state = state;
     addressFields.customer_idx = msg.id;
-    let isExists = await DeliveryAddress.findOne({ street });
+    let isExists = await DeliveryAddress.findOne({ street: street });
     if (isExists) {
       callback(null, {
         status: 400,
@@ -19,10 +19,11 @@ async function handle_request(msg, callback) {
           },
         ],
       });
+    } else {
+      const address = new DeliveryAddress(addressFields);
+      await address.save();
+      callback(null, address);
     }
-    const address = new DeliveryAddress(addressFields);
-    await address.save();
-    callback(null, address);
   } catch (error) {
     console.log(error);
     callback(null, {

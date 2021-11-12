@@ -17,6 +17,8 @@ const RestaurantProfileSchema = mongoose.Schema(
     },
     images: {
       type: String,
+      default:
+        "https://res.cloudinary.com/meena273/image/upload/v1636663024/images/RestTeam_evgprv.jpg",
     },
     email: {
       type: String,

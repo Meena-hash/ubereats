@@ -320,7 +320,7 @@ const PastOrders = ({
                                 <li>
                                   {" "}
                                   <i className="fas fa-calendar-day"></i>&nbsp;
-                                  {new Date(item.date).toString().slice(0, 10)}
+                                  {new Date(item.date).toString()}
                                 </li>
                                 <li>
                                   <i className="fas fa-truck-pickup"></i>&nbsp;

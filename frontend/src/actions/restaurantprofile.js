@@ -112,7 +112,7 @@ export const addDish = (formData, imageData, history) => async (dispatch) => {
       type: ADD_DISH,
       payload: res.data,
     });
-    if (imageData) dispatch(uploadImageDish(imageData, res.data.id));
+    if (imageData) dispatch(uploadImageDish(imageData, res.data._id));
     dispatch(setAlert("Dish Created", "success"));
     history.push("/restaurant/profile");
   } catch (error) {

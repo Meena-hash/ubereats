@@ -50,9 +50,13 @@ const UserProfile = ({
           <div className="row">
             <div className="col-md-2">
               <div className="profile-img">
-                <img src={profile.picture} alt="" style={{ width: "50%" }} />{" "}
-                <hr />
+                <img
+                  src={profile.picture}
+                  alt="Profile pic"
+                  style={{ width: "70%" }}
+                />
               </div>
+              <br />
             </div>
             <div className="col-md-8">
               <div className="profile-head">
@@ -75,7 +79,7 @@ const UserProfile = ({
                 </ul>
               </div>
             </div>
-            {urole && urole === "user" && (
+            {/* urole && urole === "user" && 
               <div className="col-md-2">
                 <div>
                   <a href="/user/edit/profile">
@@ -83,10 +87,8 @@ const UserProfile = ({
                       Edit Profile
                     </i>
                   </a>
-                  {/* <input type="file" name="file" /> */}
                 </div>
-              </div>
-            )}
+              </div> */}
           </div>
           <div className="row">
             <div className="col-md-2">
@@ -94,16 +96,23 @@ const UserProfile = ({
                 {/* <p>WORK LINK</p> */}
                 {urole && urole === "user" && (
                   <>
-                    <i class="fas fa-heart">
-                      {" "}
-                      <Link to="/user/favourites">Favourites</Link>
-                    </i>
-                    <br />
+                    <a href="/user/edit/profile">
+                      <i className="fas fa-edit" style={{ color: "black" }}>
+                        Edit Profile
+                      </i>
+                    </a>
+                    <hr />
+                    <a href="/user/favourites">
+                      <i class="fas fa-heart" style={{ color: "black" }}>
+                        &nbsp;Favourites
+                      </i>
+                    </a>
                   </>
                 )}
               </div>
             </div>
-            <div className="col-md-10">
+
+            <div className="col-md-8">
               <div className="tab-content profile-tab" id="myTabContent">
                 <div
                   className="tab-pane fade show active"
