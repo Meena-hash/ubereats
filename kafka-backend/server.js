@@ -40,6 +40,7 @@ function handleTopicRequest(topic_name, fname) {
     console.log("--------");
     console.log("message received for " + topic_name + " ", fname);
     var data = JSON.parse(message.value);
+    console.log("req", data);
     fname.handle_request(data.data, function (err, res) {
       var payloads = [
         {

@@ -278,6 +278,8 @@ const Checkout = ({
               onChange={(val) => onNotesChange(val)}
               style={{ width: "100%", height: "40px" }}
             />
+            <br />
+            <br />
           </div>
 
           <div
