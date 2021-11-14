@@ -37,8 +37,8 @@ function handleTopicRequest(topic_name, fname) {
   var producer = connection.getProducer();
 
   consumer.on("message", function (message) {
+    console.log("--------");
     console.log("message received for " + topic_name + " ", fname);
-
     var data = JSON.parse(message.value);
     fname.handle_request(data.data, function (err, res) {
       var payloads = [

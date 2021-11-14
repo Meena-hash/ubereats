@@ -8,7 +8,6 @@ const connectDb = require("../config/db-mongo");
 async function handle_request(logindata, callback) {
   const { email, password } = logindata;
   try {
-    await connectDb();
     let user = await User.findOne({ email: email });
     if (!user) {
       callback(null, { status: 400, errors: [{ msg: "Invalid Credentials" }] });
