@@ -3,7 +3,7 @@ const User = require("../models/User");
 async function handle_request(msg, callback) {
   try {
     const user = await User.findOne({
-      id: msg,
+      _id: msg,
     }).select(["_id", "name", "email"]);
     callback(null, user);
   } catch (error) {
