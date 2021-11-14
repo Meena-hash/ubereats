@@ -4,7 +4,7 @@ async function handle_request(msg, callback) {
   try {
     const restaurant = await Restaurant.findOne({
       _id: msg,
-    }).select(["_id", "name", "email"]);
+    }).select(["_id", "name", "email", "picture"]);
     callback(null, restaurant);
   } catch (error) {
     console.log(error);

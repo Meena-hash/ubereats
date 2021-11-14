@@ -22,6 +22,9 @@ const Navbar = ({
 }) => {
   const [sidebar, setSidebar] = useState(false);
   const showSidebar = () => setSidebar(!sidebar);
+  const [imageurl, setImageUrl] = useState(
+    "https://res.cloudinary.com/meena273/image/upload/v1632983730/images/u0kagcear0u1pziltwwr.jpg"
+  );
   const guestLinks = <ul></ul>;
   const authData = (
     <>
@@ -47,7 +50,11 @@ const Navbar = ({
           </li>
           <div style={{ marginLeft: "2rem" }}>
             <Col xs="2">
-              <img src={avatar} alt="Avatar" className="avatar" />
+              <img
+                src={user && user.picture ? user.picture : imageurl}
+                alt="Avatar"
+                className="avatar"
+              />
             </Col>
             <Row>
               <Col xs="2">{user && user.name}</Col>
@@ -115,9 +122,15 @@ const Navbar = ({
               ></AiIcons.AiOutlineClose>
             </Link>
           </li>
+          <br />
+          <br />
           <div style={{ marginLeft: "2rem" }}>
             <Col xs="2">
-              <img src={avatar} alt="Avatar" className="avatar" />
+              <img
+                src={user && user.picture ? user.picture : imageurl}
+                alt="Avatar"
+                className="avatar"
+              />
             </Col>
             <Row>
               <Col xs="2">{user && user.name}</Col>
