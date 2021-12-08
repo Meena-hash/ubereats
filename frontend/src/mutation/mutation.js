@@ -43,4 +43,90 @@ const loginRestaurant = gql`
     }
   }
 `;
-export { addRestaurantMutation, addUserMutation, loginUser, loginRestaurant };
+
+const updateUserProfile = gql`
+  mutation updateProfile(
+    $name: String!
+    $street: String!
+    $city: String!
+    $state: String!
+    $country: String!
+    $nickname: String!
+    $about: String!
+    $dob: String!
+    $email: String!
+    $ph_no: String!
+  ) {
+    updateProfile(
+      profile: {
+        name: $name
+        street: $street
+        city: $city
+        state: $state
+        country: $country
+        nickname: $nickname
+        about: $about
+        dob: $dob
+        email: $email
+        ph_no: $ph_no
+      }
+    ) {
+      name
+      street
+      city
+      state
+      country
+      nickname
+      about
+      dob
+      email
+      ph_no
+    }
+  }
+`;
+
+const addDish = gql`
+  mutation addDish(
+    $name: String!
+    $ingredients: String!
+    $price: Int!
+    $description: String!
+    $category: String!
+    $updated_by: String!
+    $type: String!
+    $images: String!
+    $restaurant_idx: String!
+  ) {
+    addDish(
+      dishInput: {
+        name: $name
+        ingredients: $ingredients
+        price: $price
+        description: $description
+        category: $category
+        updated_by: $updated_by
+        type: $type
+        images: $images
+        restaurant_idx: $restaurant_idx
+      }
+    ) {
+      name
+      ingredients
+      price
+      description
+      category
+      updated_by
+      type
+      images
+      restaurant_idx
+    }
+  }
+`;
+export {
+  addRestaurantMutation,
+  addUserMutation,
+  loginUser,
+  loginRestaurant,
+  updateUserProfile,
+  addDish,
+};

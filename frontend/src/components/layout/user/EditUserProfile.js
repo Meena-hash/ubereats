@@ -6,6 +6,10 @@ import { CountryDropdown, RegionDropdown } from "react-country-region-selector";
 import { getCurrentUser, editUserProfile } from "../../../actions/userprofile";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
+import { useMutation } from "@apollo/client";
+import { useDispatch } from "react-redux";
+import { updateUserProfile } from "../../../mutation/mutation";
+import { USER_LOADED } from "../../../actions/types";
 const initialState = {
   id: "",
   name: "",
@@ -26,6 +30,7 @@ const EditUserProfile = ({
   auth: { urole },
   history,
 }) => {
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState(initialState);
   const {
     name,
@@ -39,17 +44,30 @@ const EditUserProfile = ({
     email,
     ph_no,
   } = formData;
-
-  useEffect(() => {
-    if (!profile) getCurrentUser();
-    if (!loading && profile) {
-      const profileData = { ...initialState };
-      for (const key in profile) {
-        if (key in profileData) profileData[key] = profile[key];
-      }
-      setFormData(profileData);
-    }
-  }, [loading, getCurrentUser, profile]);
+  let [mutationResponse] = useMutation(updateUserProfile, {
+    variables: {
+      name: name,
+      dob: dob,
+      street: street,
+      city: city,
+      country: country,
+      state: state,
+      nickname: nickname,
+      about: about,
+      email: email,
+      ph_no: ph_no,
+    },
+  });
+  // useEffect(() => {
+  //   if (!profile) getCurrentUser();
+  //   if (!loading && profile) {
+  //     const profileData = { ...initialState };
+  //     for (const key in profile) {
+  //       if (key in profileData) profileData[key] = profile[key];
+  //     }
+  //     setFormData(profileData);
+  //   }
+  // }, [loading, getCurrentUser, profile]);
   // image
   const [values, setValues] = useState({
     imagePreviewUrl: formData.images,
@@ -79,11 +97,16 @@ const EditUserProfile = ({
   };
   const onChange = async (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-    const imageData = new FormData();
-    imageData.append("image", values.picFile);
-    editUserProfile(formData, imageData, history);
+    // const imageData = new FormData();
+    // imageData.append("image", values.picFile);
+    // editUserProfile(formData, imageData, history);
+    const response = mutationResponse();
+    dispatch({
+      type: USER_LOADED,
+      payload: (await response).data.updateUserProfile,
+    });
   };
   return urole === "user" ? (
     <Fragment>

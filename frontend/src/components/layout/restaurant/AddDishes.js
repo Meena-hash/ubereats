@@ -1,10 +1,14 @@
 import React, { Fragment, useState, useEffect } from "react";
-import { addDish, getCurrentProfile } from "../../../actions/restaurantprofile";
+// import { addDish, getCurrentProfile } from "../../../actions/restaurantprofile";
 import { withRouter } from "react-router-dom/cjs/react-router-dom.min";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import Spinner from "../Spinner";
 import deliveryboy from "../img/deliveryboy.jpg";
+import { useMutation } from "@apollo/client";
+import { useDispatch } from "react-redux";
+import { addDish } from "../../../mutation/mutation";
+import { ADD_DISH } from "../../../actions/types";
 const initialState = {
   name: "",
   ingredients: "",
@@ -13,24 +17,36 @@ const initialState = {
   category: "",
   type: "",
 };
-const AddDishes = ({
-  getCurrentProfile,
-  auth: { urole, user, loading },
-  addDish,
-  history,
-}) => {
-  useEffect(() => {
-    getCurrentProfile();
-  }, [getCurrentProfile]);
+const AddDishes = ({}) => {
+  const dispatch = useDispatch();
+  // useEffect(() => {
+  //   getCurrentProfile();
+  // }, [getCurrentProfile]);
   const [formData, setFormData] = useState(initialState);
   const { name, ingredients, price, description, category, type } = formData;
   const onChange = async (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
-  const onSubmit = (e) => {
+  let [mutationResponse] = useMutation(addDish, {
+    variables: {
+      name: name,
+      ingredients: ingredients,
+      price: price,
+      description: description,
+      category: category,
+      type: type,
+    },
+  });
+  const onSubmit = async (e) => {
     e.preventDefault();
-    const picFormData = new FormData();
-    picFormData.append("image", values.picFile);
-    addDish(formData, picFormData, history);
+
+    // const picFormData = new FormData();
+    // picFormData.append("image", values.picFile);
+    // addDish(formData, picFormData, history);
+    const response = mutationResponse();
+    dispatch({
+      type: ADD_DISH,
+      payload: (await response).data.updateUserProfile,
+    });
   };
   const [values, setValues] = useState({
     imagePreviewUrl: formData.images,
@@ -48,9 +64,7 @@ const AddDishes = ({
     reader.readAsDataURL(inFile);
     // fileInput.current.click();
   };
-  return loading && user === null ? (
-    <Spinner />
-  ) : !loading && urole === "restaurant" ? (
+  return (
     <Fragment>
       <form className="form" onSubmit={(e) => onSubmit(e)}>
         <center>
@@ -139,8 +153,6 @@ const AddDishes = ({
       <br></br>
       <br></br>
     </Fragment>
-  ) : (
-    <Fragment></Fragment>
   );
 };
 
@@ -153,6 +165,6 @@ const mapStateToProps = (state) => ({
   auth: state.auth,
 });
 export default connect(mapStateToProps, {
-  getCurrentProfile,
+  // getCurrentProfile,
   addDish,
 })(withRouter(AddDishes));
