@@ -3,13 +3,17 @@ import ReactDOM from "react-dom";
 import { Container } from "react-bootstrap";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-
+import ApolloClient from "apollo-boost";
+import { ApolloProvider } from "@apollo/client";
+const client = new ApolloClient({
+  uri: "http://localhost:5000/graphql",
+});
 ReactDOM.render(
-  <React.StrictMode>
+  <ApolloProvider client={client}>
     <Container fluid>
       <App />
     </Container>
-  </React.StrictMode>,
+  </ApolloProvider>,
 
   document.getElementById("root")
 );

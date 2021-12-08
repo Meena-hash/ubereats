@@ -43,6 +43,7 @@ export default function authReducer(state = initialState, action) {
       };
     case RESTAURANT_REGISTER_SUCCESS:
     case RESTAURANT_LOGIN_SUCCESS:
+      console.log("payload is", payload);
       localStorage.setItem("token", payload.token);
       localStorage.setItem("urole", "restaurant");
       return {

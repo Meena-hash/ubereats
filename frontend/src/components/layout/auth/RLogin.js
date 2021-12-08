@@ -3,7 +3,12 @@ import { Link, Redirect } from "react-router-dom/cjs/react-router-dom.min";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { login } from "../../../actions/restaurantauth";
+import { useMutation } from "@apollo/client";
+import { RESTAURANT_LOGIN_SUCCESS } from "../../../actions/types";
+import { loginRestaurant } from "../../../mutation/mutation";
+import { useDispatch } from "react-redux";
 const RLogin = ({ login, isAuthenticated }) => {
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -11,10 +16,20 @@ const RLogin = ({ login, isAuthenticated }) => {
   const { email, password } = formData;
   const onChange = async (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
-
+  let [mutationResponse] = useMutation(loginRestaurant, {
+    variables: {
+      email: email,
+      password: password,
+    },
+  });
   const onSubmit = async (e) => {
     e.preventDefault();
-    login(email, password);
+    // login(email, password);
+    const response = mutationResponse();
+    dispatch({
+      type: RESTAURANT_LOGIN_SUCCESS,
+      payload: (await response).data.loginRestaurant,
+    });
   };
   if (isAuthenticated) {
     return <Redirect to="/restaurant/profile"> </Redirect>;

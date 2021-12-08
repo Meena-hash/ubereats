@@ -1,9 +1,13 @@
 import React, { Fragment, useState } from "react";
+import { useMutation } from "@apollo/client";
 import { Link, Redirect } from "react-router-dom/cjs/react-router-dom.min";
 import { setAlert } from "../../../actions/alert";
 import { connect } from "react-redux";
 import { register } from "../../../actions/userauth";
 import PropTypes from "prop-types";
+import { useDispatch } from "react-redux";
+import { addUserMutation } from "../../../mutation/mutation";
+import { USER_REGISTER_SUCCESS } from "../../../actions/types";
 const URegister = ({ setAlert, register, isAuthenticated }) => {
   const [formData, setFormData] = useState({
     name: "",
@@ -11,15 +15,28 @@ const URegister = ({ setAlert, register, isAuthenticated }) => {
     password: "",
     password2: "",
   });
+
+  const dispatch = useDispatch();
   const { name, email, password, password2 } = formData;
   const onChange = async (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  let [mutationResponse] = useMutation(addUserMutation, {
+    variables: {
+      name: name,
+      email: email,
+      password: password,
+    },
+  });
   const onSubmit = async (e) => {
     e.preventDefault();
     if (password !== password2) {
       setAlert("Passwords do not match", "danger");
     } else {
-      register(name, email, password);
+      const response = mutationResponse();
+      dispatch({
+        type: USER_REGISTER_SUCCESS,
+        payload: (await response).data.createUser,
+      });
     }
   };
   if (isAuthenticated) {

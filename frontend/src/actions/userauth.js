@@ -11,6 +11,8 @@ import {
 } from "./types";
 import { setAlert } from "./alert";
 import setAuthToken from "../utils/setAuthToken";
+import { gql } from "apollo-boost";
+import { Query } from "@apollo/client";
 
 export const loadUser = () => async (dispatch) => {
   if (localStorage.token) {

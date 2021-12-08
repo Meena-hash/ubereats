@@ -1,9 +1,17 @@
 import React, { Fragment, useState } from "react";
 import { Link, Redirect } from "react-router-dom/cjs/react-router-dom.min";
 import { connect } from "react-redux";
+import { useMutation } from "@apollo/client";
 import { login } from "../../../actions/userauth";
 import PropTypes from "prop-types";
+import { USER_LOGIN_SUCCESS } from "../../../actions/types";
+import { useDispatch } from "react-redux";
+import { loginUser } from "../../../mutation/mutation";
+import { useQuery } from "@apollo/client";
+import { getUser } from "../../../queries/queries";
+import { USER_LOADED } from "../../../actions/types";
 const ULogin = ({ login, isAuthenticated }) => {
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -11,9 +19,31 @@ const ULogin = ({ login, isAuthenticated }) => {
   const { email, password } = formData;
   const onChange = async (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  let [mutationResponse] = useMutation(loginUser, {
+    variables: {
+      email: email,
+      password: password,
+    },
+  });
+
+  const { data } = useQuery(getUser, {
+    variables: {
+      userid: "617738bec5e438dafecc2242",
+    },
+  });
+  // const userinfo = useLazyQuery(getUser);
   const onSubmit = async (e) => {
     e.preventDefault();
-    login(email, password);
+    const response = mutationResponse();
+    dispatch({
+      type: USER_LOGIN_SUCCESS,
+      payload: (await response).data.login,
+    });
+    dispatch({
+      type: USER_LOADED,
+      payload: data,
+    });
+    // login(email, password);
   };
   if (isAuthenticated) {
     return <Redirect to="/user/dashboard"> </Redirect>;

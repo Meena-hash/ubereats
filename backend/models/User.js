@@ -15,6 +15,9 @@ const UserSchema = new mongoose.Schema(
       type: String,
       allowNull: false,
     },
+    picture: {
+      type: String,
+    },
   },
   {
     timestamps: false,

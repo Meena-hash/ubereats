@@ -1,11 +1,16 @@
 import React, { Fragment, useState } from "react";
+import { useMutation } from "@apollo/client";
 import { connect } from "react-redux";
 import { Link, Redirect } from "react-router-dom/cjs/react-router-dom.min";
 import { setAlert } from "../../../actions/alert";
 import { register } from "../../../actions/restaurantauth";
 import PropTypes from "prop-types";
+import { useDispatch } from "react-redux";
+import { addRestaurantMutation } from "../../../mutation/mutation";
+import { RESTAURANT_REGISTER_SUCCESS } from "../../../actions/types";
 
-const RRegister = ({ setAlert, register, isAuthenticated }) => {
+const RRegister = ({ setAlert, isAuthenticated }) => {
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -16,12 +21,24 @@ const RRegister = ({ setAlert, register, isAuthenticated }) => {
   const { name, email, location, password, password2 } = formData;
   const onChange = async (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  let [mutationResponse] = useMutation(addRestaurantMutation, {
+    variables: {
+      name: name,
+      email: email,
+      password: password,
+      location: location,
+    },
+  });
   const onSubmit = async (e) => {
     e.preventDefault();
     if (password !== password2) {
       setAlert("Passwords do not match", "danger");
     } else {
-      register(name, email, password, location);
+      const response = mutationResponse();
+      dispatch({
+        type: RESTAURANT_REGISTER_SUCCESS,
+        payload: (await response).data.createRestaurant,
+      });
     }
   };
   if (isAuthenticated) {
@@ -111,5 +128,6 @@ RRegister.propTypes = {
 
 const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
+  // addRestaurantMutation,
 });
 export default connect(mapStateToProps, { setAlert, register })(RRegister);
