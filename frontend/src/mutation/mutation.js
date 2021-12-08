@@ -122,6 +122,25 @@ const addDish = gql`
     }
   }
 `;
+const updateOrder = gql`
+  mutation updateOrder($orderid: String!, $del_status: String!) {
+    updateOrder(
+      orderStatusInput: { orderid: $orderid, del_status: $del_status }
+    ) {
+      tip
+      uid
+      restaurantid
+      date
+      total
+      order_type
+      type
+      delivery_status
+      pickup_status
+      delivery_address
+      notes
+    }
+  }
+`;
 export {
   addRestaurantMutation,
   addUserMutation,
@@ -129,4 +148,5 @@ export {
   loginRestaurant,
   updateUserProfile,
   addDish,
+  updateOrder,
 };
