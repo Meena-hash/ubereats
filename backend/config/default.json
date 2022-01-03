@@ -1,10 +1,11 @@
 {
-    "mysqlHost": "uber-eats.cnq82wvpmctf.us-east-2.rds.amazonaws.com",
-    "user": "admin",
-    "password": "Friends95",
-    "database": "ubereats",
-    "jwtSecret": "ubereats",
-    "cloud-name":"meena273",
-    "api-key": "912573625963145",
-    "secret-key":"5c1yIXuUgsKcNBgp_E-9jbCDfDM"
+    "mysqlHost": "",
+    "user": "",
+    "password": "",
+    "database": "",
+    "jwtSecret": "",
+    "cloud-name":"",
+    "api-key": "",
+    "secret-key":"",
+    "mongoURI": ""
 }
